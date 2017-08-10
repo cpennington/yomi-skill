@@ -1,0 +1,5 @@
+jupyter
+ipython[notebook]
+skills
+NumPy
+Pandas
