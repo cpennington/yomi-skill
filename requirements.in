@@ -1,0 +1,8 @@
+-e git+https://github.com/edx/bootstrapped.git@unpin-dependencies#egg=bootstrapped
+pandas
+numpy
+skills
+plotnine
+matplotlib
+jupyter
+ipython[notebook]
