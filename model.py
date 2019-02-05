@@ -3,7 +3,12 @@ import pandas
 import io
 import hashlib
 import pickle
-from historical_record import as_boolean_win_record, fetch_historical_record
+from historical_record import (
+    as_boolean_win_record,
+    fetch_historical_record,
+    fetch_historical_elo,
+    as_player_elo,
+)
 from character import *
 import logging
 import shutil
@@ -13,13 +18,16 @@ from arviz.data import InferenceData
 import arviz
 import xarray
 from cached_property import cached_property
-
+import numpy
+from datetime import datetime
 
 class YomiModel:
-    def __init__(self, model_filename, pars):
+    def __init__(self, games, model_filename, pars):
+        self.games = games
         self.model_filename = model_filename
         self.model_name, _ = os.path.splitext(self.model_filename)
         self.pars = pars
+        self.model
 
     @cached_property
     def base_dir(self):
@@ -50,12 +58,8 @@ class YomiModel:
             shutil.copy(self.model_filename, hashed_stan)
             model = pystan.StanModel(file=self.model_filename)
             with open(pickled_model, 'wb') as model_file:
-                pickle.dump(model, model_file)
+                pickle.dump(model, model_file, protocol=-1)
             return model
-
-    @cached_property
-    def games(self):
-        return as_boolean_win_record(fetch_historical_record())
 
     @cached_property
     def player_index(self):
@@ -107,6 +111,10 @@ class YomiModel:
             in sorted(self.player_tournament_index.items(), key=lambda x: x[1])
         ]
 
+        elo_diff = self.games.elo_before_1 - self.games.elo_before_2
+        elo_pct_p1_win = 1/(1 + (-elo_diff/1135.77).rpow(10))
+        elo_logit = numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
+
         return {
             'NPT': len(self.player_tournament_index),
             'NG': len(self.games),
@@ -124,6 +132,7 @@ class YomiModel:
             'char2': self.games.character_2.apply(self.character_index.get),
             'player1': self.games.player_1.apply(self.player_index.get),
             'player2': self.games.player_2.apply(self.player_index.get),
+            'elo_logit': elo_logit,
         }
 
     @cached_property
@@ -215,25 +224,25 @@ class YomiModelChain:
 
             os.makedirs(os.path.dirname(self.fit_filename), exist_ok=True)
             with open(self.fit_filename, 'wb') as fit_file:
-                pickle.dump(fit, fit_file)
+                pickle.dump(fit, fit_file, protocol=-1)
 
         return fit
 
     @cached_property
-    def csv_filename(self):
-        return f'{self._file_base}.csv'
+    def parquet_filename(self):
+        return f'{self._file_base}.parquet'
 
     @property
     def dataframe(self):
         try:
-            fit_results = pandas.DataFrame.from_csv(self.csv_filename)
+            fit_results = pandas.read_parquet(self.parquet_filename)
             for par in self.model.pars:
                 assert any(col.startswith(par) for col in fit_results.columns), f"No parameter {par} found in exported data"
         except (FileNotFoundError, AssertionError):
             logging.info("Dataframe loading failed", exc_info=True)
             fit_results = self.fit.to_dataframe(permuted=False)
-            os.makedirs(os.path.dirname(self.csv_filename), exist_ok=True)
-            fit_results.to_csv(self.csv_filename)
+            os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
+            fit_results.to_parquet(self.parquet_filename, compression='gzip')
         return fit_results
 
     @cached_property

@@ -90,6 +90,7 @@ class YomiRender:
         player_chart = (
             ggplot(player_skill, aes(x='tournament', y='skill'))
             + geom_violin()
+            + geom_line(player_skill.groupby('tournament').median().reset_index().dropna())
             + theme(
                 figure_size=(player_skill.tournament.nunique()*.2, 2),
                 axis_text_x=element_text(rotation=90),
@@ -104,6 +105,7 @@ class YomiRender:
         player_chart = (
             ggplot(player_skill, aes(x='tournament', y='raw_skill'))
             + geom_violin()
+            + geom_line(player_skill.groupby('tournament').median().reset_index().dropna())
             + theme(
                 figure_size=(player_skill.tournament.nunique()*.2, 2),
                 axis_text_x=element_text(rotation=90),

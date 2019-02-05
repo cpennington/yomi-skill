@@ -13,3 +13,4 @@ plotly
 pystan
 arviz
 cached-property
+fastparquet

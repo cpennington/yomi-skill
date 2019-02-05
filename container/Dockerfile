@@ -1,6 +1,6 @@
 FROM python:3.7-slim-stretch
 
-RUN apt-get update && apt-get -y install git build-essential
+RUN apt-get update && apt-get -y install git build-essential libsnappy-dev
 
 WORKDIR /code
 
@@ -11,6 +11,6 @@ RUN pip install -U pip-tools
 
 RUN pip-sync /tmp/requirements.txt
 
-EXPOSE 8888
+EXPOSE 9999
 
-ENTRYPOINT ["jupyter-lab", "--ip=0.0.0.0", "--allow-root", "--port=8888"]
+ENTRYPOINT ["jupyter-lab", "--ip=0.0.0.0", "--allow-root", "--port=9999"]
