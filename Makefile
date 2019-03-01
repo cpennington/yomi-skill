@@ -12,4 +12,8 @@ lab: build
 		jupyter
 
 shell: build
-	docker run -it  --mount="type=bind,src=$(PWD),dst=/src" --entrypoint /bin/bash jupyter
+	docker run -it  --mount="type=bind,src=$(PWD),dst=/code" --entrypoint /bin/bash jupyter
+
+matchups: build
+	docker run -it  --mount="type=bind,src=$(PWD),dst=/code" --entrypoint /code/render_matchup_comparator.py jupyter
+

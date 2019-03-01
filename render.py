@@ -318,7 +318,8 @@ class YomiRender:
         with open('matchup-comparator-template.html') as template_file:
             template = template_file.read()
 
-        with open(f'{self.base_folder}/matchup-comparator.html', 'w') as outfile:
+        outfile_name = f'{self.base_folder}/matchup-comparator.html'
+        with open(outfile_name, 'w') as outfile:
             outfile.write(
                 template
                 .replace('$MATCHUP_DATA', matchups.to_json(orient='records'))
@@ -326,3 +327,4 @@ class YomiRender:
                 .replace('$PLAYER_SKILL', json.dumps(player_data))
                 .replace('$ELO_SCALE', json.dumps({'mean': summary.elo_logit_scale['mean'], 'std': summary.elo_logit_scale['std']}))
             )
+        return outfile_name
