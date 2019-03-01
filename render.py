@@ -298,16 +298,16 @@ class YomiRender:
         del(player_char_skill['index'])
 
         player_elo = self.model.games[
-            ['match_date', 'set_number', 'player_1', 'elo_before_1']
+            ['match_date', 'player_1', 'elo_before_1']
         ].rename(
             columns={'player_1': 'player', 'elo_before_1': 'elo_before'}
         ).append(
             self.model.games[
-                ['match_date', 'set_number', 'player_2', 'elo_before_2']
+                ['match_date', 'player_2', 'elo_before_2']
             ].rename(
                 columns={'player_2': 'player', 'elo_before_2': 'elo_before'}
             )
-        ).sort_values(['match_date', 'set_number']).groupby('player').elo_before.last()
+        ).sort_values(['match_date']).groupby('player').elo_before.last()
 
         player_data = defaultdict(dict)
         for row in player_char_skill.itertuples():
