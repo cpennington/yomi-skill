@@ -20,6 +20,7 @@ parameters {
 transformed parameters {
     vector[NPT] pooled_skill_adjust = skill_adjust * skill_adjust_variance;
     vector[NPT] skill;
+    vector[NG] win_chance;
 
     for (t in 1:NPT) {
         if (prev_tournament[t] == 0)
@@ -28,20 +29,21 @@ transformed parameters {
             skill[t] = skill[prev_tournament[t]] + pooled_skill_adjust[t];
     }
 
+    win_chance = (skill[pt1] - skill[pt2]) +  non_mirror .* mu[mup];
 }
 model {
     skill_adjust ~ std_normal();
     mu ~ normal(0, 0.5);
     skill_adjust_variance ~ std_normal();
 
-    win ~ bernoulli_logit((skill[pt1] - skill[pt2]) +  non_mirror .* mu[mup]);
+    win ~ bernoulli_logit(win_chance);
 }
 generated quantities{
     vector[NG] log_lik;
     vector[NG] win_hat;
 
     for (n in 1:NG) {
-        log_lik[n] = bernoulli_logit_lpmf(win[n] | (skill[pt1[n]] - skill[pt2[n]]) + non_mirror[n] * mu[mup[n]]);
-        win_hat[n] = bernoulli_logit_rng((skill[pt1[n]] - skill[pt2[n]]) + non_mirror[n] * mu[mup[n]]);
+        log_lik[n] = bernoulli_logit_lpmf(win[n] | win_chance[n]);
+        win_hat[n] = bernoulli_logit_rng(win_chance[n]);
     }
 }

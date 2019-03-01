@@ -1,0 +1,131 @@
+<html>
+
+    <head>
+        <script type="text/json" id="matchup-data">$MATCHUP_DATA</script>
+        <script type='text/json' id='characters'>$CHARACTERS</script>
+        <script type='text/json' id='player-skill'>$PLAYER_SKILL</script>
+        <script type='text/json' id='elo-scale'>$ELO_SCALE</script>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.0.0-rc3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.29"></script>
+        <script src="https://cdn.jsdelivr.net/npm/gaussian@1.1.0/lib/gaussian.js"></script>
+    </head>
+
+    <body>
+        <label for="player">Choose a player:</label>
+        <input list="players" id="player" name="player" />
+        <label for="opponent">an opponent:</label>
+        <input list="players" id="opponent" name="opponent" />
+        <button id="graph" onclick="return doGraph();">Graph</button>
+        <datalist id="players"></datalist>
+        <div id="vis"></div>
+        <script>
+            const matchupData = JSON.parse(document.getElementById('matchup-data').innerText);
+            const characters = JSON.parse(document.getElementById('characters').innerText);
+            const playerSkill = JSON.parse(document.getElementById('player-skill').innerText);
+            const eloScale = JSON.parse(document.getElementById('elo-scale').innerText);
+            const eloScaleDist = gaussian(eloScale.mean, eloScale.std * eloScale.std);
+            const playerInput = document.getElementById('player');
+            const opponentInput = document.getElementById('opponent');
+            const playersList = document.getElementById('players');
+            const increment = 5;
+
+            Array.forEach(Object.keys(playerSkill), function (p) {
+                var opt = document.createElement('option');
+                opt.value = p;
+                playersList.appendChild(opt);
+            });
+
+            var xs = [];
+            for (x = 0; x <= 100; x += increment) {
+                xs.push(x);
+            }
+
+            function log_odds(win_chance) {
+                return Math.log(win_chance / (1 - win_chance));
+            }
+            function normal_dist(mean, std, x) {
+                variance = std * std;
+
+                return (1 / Math.sqrt(2 * Math.PI * variance)) * Math.exp(-Math.pow(x - mean, 2) / (2 * variance));
+            }
+            function mu_pdf(mu, player, opponent) {
+                var pdf = Array.filter(
+                    Array.map(xs, function (x) {
+                        var dist = gaussian(mu.mean, mu.std * mu.std);
+                        if (player && opponent) {
+                            const pSkill = playerSkill[player][mu.c1];
+                            const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
+                            const oSkill = playerSkill[opponent][mu.c2];
+                            const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
+
+                            const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
+                            eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77))
+                            eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin))
+
+                            dist = dist.add(pSkillDist).sub(oSkillDist).add(eloScaleDist.scale(eloLogit));
+                        }
+                        const upper = dist.cdf(log_odds((x + increment / 2) / 100));
+                        const lower = dist.cdf(log_odds((x - increment / 2) / 100));
+                        return {
+                            c1: mu.c1,
+                            c2: mu.c2,
+                            win_chance: x,
+                            p: (player && opponent) ? -(upper - lower) * 100 : (upper - lower) * 100,
+                            type: (player && opponent) ? "match" : "global"
+                        };
+                    }),
+                    function (d) {
+                        return Math.abs(d.p) > 0.1;
+                    }
+                );
+                if (pdf.length > 0) {
+                    cum_p = 0;
+                    for (idx in pdf) {
+                        cum_p += pdf[idx].p / 100 * pdf[idx].win_chance / 100;
+                    };
+                    for (idx in pdf) {
+                        pdf[idx].cum_p = Math.abs(cum_p * 100);
+                    }
+                }
+                return pdf;
+            }
+
+            function comparePlayers(player, opponent) {
+                values = Array.concat.apply(null, Array.map(matchupData, function (v) {
+                    const pdf = mu_pdf(v);
+                    const playerPdf = mu_pdf(v, player, opponent);
+                    return pdf.concat(playerPdf);
+                }));
+
+                var vlSpec = {
+                    $schema: 'https://vega.github.io/schema/vega-lite/v2.0.json',
+                    description: 'A simple bar chart with embedded data.',
+                    width: 50,
+                    height: 40,
+                    data: {
+                        values: values
+                    },
+                    mark: {
+                        type: 'bar',
+                    },
+                    encoding: {
+                        x: { field: 'win_chance', type: 'quantitative' },
+                        y: { field: 'p', type: 'quantitative' },
+                        row: { field: 'c1', type: 'ordinal' },
+                        column: { field: 'c2', type: 'ordinal' },
+                        color: { field: 'cum_p', type: 'quantitative', scale: { scheme: "redyellowgreen" } },
+                        detail: { field: 'type', type: 'nominal' }
+                    }
+                };
+
+                vegaEmbed('#vis', vlSpec);
+            }
+
+            function doGraph(event) {
+                comparePlayers(playerInput.value, opponentInput.value);
+            }
+        </script>
+    </body>
+
+</html>

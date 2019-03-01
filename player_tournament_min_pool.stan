@@ -23,23 +23,25 @@ parameters {
 transformed parameters {
     vector[NP] player_skill;
     vector[NPT] skill;
+    vector[NG] win_chance;
 
     player_skill = global_player_skill * player_variance;
     skill = player_skill[tp] + skill_in_tournament * tournament_variance;
+    win_chance = (skill[pt1] - skill[pt2]) +  non_mirror .* mu[mup];
 }
 model {
     global_player_skill ~ std_normal();
     skill_in_tournament ~ std_normal();
     mu ~ normal(0, 0.5);
 
-    win ~ bernoulli_logit((skill[pt1] - skill[pt2]) +  non_mirror .* mu[mup]);
+    win ~ bernoulli_logit(win_chance);
 }
 generated quantities{
     vector[NG] log_lik;
     vector[NG] win_hat;
 
     for (n in 1:NG) {
-        log_lik[n] = bernoulli_logit_lpmf(win[n] | (skill[pt1[n]] - skill[pt2[n]]) + non_mirror[n] * mu[mup[n]]);
-        win_hat[n] = bernoulli_logit_rng((skill[pt1[n]] - skill[pt2[n]]) + non_mirror[n] * mu[mup[n]]);
+        log_lik[n] = bernoulli_logit_lpmf(win[n] | win_chance[n]);
+        win_hat[n] = bernoulli_logit_rng(win_chance[n] );
     }
 }

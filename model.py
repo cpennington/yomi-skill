@@ -19,19 +19,14 @@ import arviz
 import xarray
 from cached_property import cached_property
 import numpy
-from datetime import datetime
 
 class YomiModel:
-    def __init__(self, games, model_filename, pars):
+    def __init__(self, games, data_dir, model_filename, pars):
         self.games = games
         self.model_filename = model_filename
         self.model_name, _ = os.path.splitext(self.model_filename)
         self.pars = pars
-        self.model
-
-    @cached_property
-    def base_dir(self):
-        return f"models/{self.model_name}/{self.model_hash}"
+        self.data_dir = data_dir
 
     @cached_property
     def model_hash(self):
@@ -44,8 +39,9 @@ class YomiModel:
 
     @cached_property
     def model(self):
-        pickled_model = f"{self.base_dir}/{self.model_hash}.model"
-        hashed_stan = f"{self.base_dir}/{self.model_hash}.stan"
+        model_dir = f"models/{self.model_name}"
+        pickled_model = f"{model_dir}/{self.model_name}-{self.model_hash[:6]}.model"
+        hashed_stan = f"{model_dir}/{self.model_name}-{self.model_hash[:6]}.stan"
 
         os.makedirs(os.path.dirname(pickled_model), exist_ok=True)
         os.makedirs(os.path.dirname(hashed_stan), exist_ok=True)
@@ -115,6 +111,10 @@ class YomiModel:
         elo_pct_p1_win = 1/(1 + (-elo_diff/1135.77).rpow(10))
         elo_logit = numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
 
+        elo_sum = (self.games.elo_before_1 + self.games.elo_before_2)
+        scaled_weights = 0.25 + 1.75 * (elo_sum - elo_sum.min()) / (elo_sum.max() - elo_sum.min())
+        normalized_weights = scaled_weights / scaled_weights.sum() * len(self.games)
+
         return {
             'NPT': len(self.player_tournament_index),
             'NG': len(self.games),
@@ -133,6 +133,8 @@ class YomiModel:
             'player1': self.games.player_1.apply(self.player_index.get),
             'player2': self.games.player_2.apply(self.player_index.get),
             'elo_logit': elo_logit,
+            # Scale so that mininum elo sum gets 0.25 weight, max sum gets 2 weight
+            'obs_weights': normalized_weights,
         }
 
     @cached_property
@@ -157,6 +159,20 @@ class YomiModel:
             else:
                 dataframe = dataframe.append(sample.dataframe)
         return dataframe
+
+    def summary_dataframe(self, warmup=1000, min_samples=1000):
+        parquet_filename = f'{self.data_dir}/{self.model_name}-{self.model_hash[:6]}/warmup-{warmup}/summary-{min_samples}-samples.parquet'
+        try:
+            logging.info(f"Loading parquet {parquet_filename}")
+            summary_results = pandas.read_parquet(parquet_filename)
+            for par in self.pars:
+                assert any(col.startswith(par) for col in summary_results.columns), f"No parameter {par} found in exported data"
+        except (FileNotFoundError, AssertionError):
+            logging.info("Dataframe loading failed", exc_info=True)
+            summary_results = self.sample_dataframe(warmup=warmup, min_samples=min_samples).agg(['mean', 'std'])
+            os.makedirs(os.path.dirname(parquet_filename), exist_ok=True)
+            summary_results.to_parquet(parquet_filename, compression='gzip')
+        return summary_results
 
     def sample_infdata(self, warmup=1000, min_samples=1000):
         inf_data = None
@@ -195,7 +211,7 @@ class YomiModelChain:
 
     @cached_property
     def _file_base(self):
-        return f'{self.model.base_dir}/fits/warmup-{self.warmup}/{self.model.data_hash}/{self.index}'
+        return f'{self.model.data_dir}/{self.model.model_name}-{self.model.model_hash[:6]}/warmup-{self.warmup}/{self.index}'
 
     @cached_property
     def fit_filename(self):
@@ -235,6 +251,7 @@ class YomiModelChain:
     @property
     def dataframe(self):
         try:
+            logging.info(f"Loading parquet {self.parquet_filename}")
             fit_results = pandas.read_parquet(self.parquet_filename)
             for par in self.model.pars:
                 assert any(col.startswith(par) for col in fit_results.columns), f"No parameter {par} found in exported data"
