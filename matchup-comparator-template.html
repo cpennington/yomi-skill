@@ -4,25 +4,14 @@
     <script type="text/json" id="matchup-data">$MATCHUP_DATA</script>
     <script type='text/json' id='characters'>$CHARACTERS</script>
     <script type='text/json' id='player-skill'>$PLAYER_SKILL</script>
-    <script type='text/json' id='elo-scale'>$ELO_SCALE</script><script src="https://cdn.jsdelivr.net/npm/vega@5.0.0-rc3"></script>
+    <script type='text/json' id='elo-scale'>$ELO_SCALE</script>
+    <script src="https://cdn.jsdelivr.net/npm/vega@5.0.0-rc3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.29"></script>
     <script src="https://cdn.jsdelivr.net/npm/gaussian@1.1.0/lib/gaussian.js"></script>
     <style>
         #loading {
             display: none;
-            position: relative;
-            width: 200px;
-            height: 200px;
-        }
-
-        #loading-text {
-            left: 50%;
-            top: 50%;
-            -webkit-transform: translate(-50%, -50%);
-            -moz-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            position: absolute;
         }
 
         @keyframes rotate {
@@ -36,6 +25,7 @@
         }
 
         #arrows {
+            height: 20px;
             transform-origin: center center;
             animation-name: rotate;
             animation-duration: 5s;
@@ -54,14 +44,9 @@
             <input list="players" id="opponent" name="opponent" />
             <button id="graph" onclick="return doGraph();">Graph</button>
             <datalist id="players"></datalist>
+            <span id="loading"><img id="arrows" src="loading.svg" /></span>
         </div>
-        <div>
-            <div id="loading">
-                <img id="arrows" src="loading.svg" width="200" />
-                <span id="loading-text">Loading...</span>
-            </div>
-            <div id="vis"></div>
-        </div>
+        <div id="vis"></div>
     </div>
     <script>
         const matchupData = JSON.parse(document.getElementById('matchup-data').innerText);
@@ -138,7 +123,7 @@
         }
 
         function comparePlayers(player, opponent) {
-            loading.style.display = 'block';
+            loading.style.display = 'inline';
             vis.style.display = 'none';
 
             setTimeout(function () {
