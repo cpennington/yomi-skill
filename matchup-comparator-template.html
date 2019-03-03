@@ -59,7 +59,7 @@
         const playersList = document.getElementById('players');
         const loading = document.getElementById('loading');
         const vis = document.getElementById('vis');
-        const increment = 5;
+        const increment = 0.05;
 
         Array.forEach(Object.keys(playerSkill), function (p) {
             var opt = document.createElement('option');
@@ -68,7 +68,7 @@
         });
 
         var xs = [];
-        for (x = 0; x <= 100; x += increment) {
+        for (x = 0; x <= 1; x += increment) {
             xs.push(x);
         }
 
@@ -82,41 +82,42 @@
         }
         function mu_pdf(mu, player, opponent) {
             var pdf = Array.filter(
-            Array.map(xs, function (x) {
-                var dist = gaussian(mu.mean, mu.std * mu.std);
-                if (player && opponent) {
-                    const pSkill = playerSkill[player][mu.c1];
-                    const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
-                    const oSkill = playerSkill[opponent][mu.c2];
-                    const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
+                Array.map(xs, function (x) {
+                    var dist = gaussian(mu.mean, mu.std * mu.std);
+                    if (player && opponent) {
+                        const pSkill = playerSkill[player][mu.c1];
+                        const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
+                        const oSkill = playerSkill[opponent][mu.c2];
+                        const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
 
-                    const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
-                    eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77))
-                    eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin))
+                        const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
+                        eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77))
+                        eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin))
 
-                    dist = dist.add(pSkillDist).sub(oSkillDist).add(eloScaleDist.scale(eloLogit));
+                        dist = dist.add(pSkillDist).sub(oSkillDist).add(eloScaleDist.scale(eloLogit));
+                    }
+                    const upper = dist.cdf(log_odds((x + increment / 2)));
+                    const lower = dist.cdf(log_odds((x - increment / 2)));
+                    return {
+                        c1: mu.c1,
+                        c2: mu.c2,
+                        mu: Math.round(x * 100) / 10 + "-" + (10 - Math.round(x * 100) / 10),
+                        win_chance: x,
+                        p: (player && opponent) ? -(upper - lower) : (upper - lower),
+                        type: (player && opponent) ? "match" : "global"
+                    };
+                }),
+                function (d) {
+                    return Math.abs(d.p) > 0.005;
                 }
-                const upper = dist.cdf(log_odds((x + increment / 2) / 100));
-                const lower = dist.cdf(log_odds((x - increment / 2) / 100));
-                return {
-                    c1: mu.c1,
-                    c2: mu.c2,
-                    win_chance: x,
-                    p: (player && opponent) ? -(upper - lower) * 100 : (upper - lower) * 100,
-                    type: (player && opponent) ? "match" : "global"
-                };
-            }),
-            function (d) {
-                return Math.abs(d.p) > 0.1;
-            }
             );
             if (pdf.length > 0) {
                 cum_p = 0;
                 for (idx in pdf) {
-                    cum_p += pdf[idx].p / 100 * pdf[idx].win_chance / 100;
+                    cum_p += pdf[idx].p * pdf[idx].win_chance;
                 };
                 for (idx in pdf) {
-                    pdf[idx].cum_p = Math.abs(cum_p * 100);
+                    pdf[idx].cum_p = Math.abs(cum_p);
                 }
             }
             return pdf;
@@ -136,22 +137,51 @@
 
                 var vlSpec = {
                     $schema: 'https://vega.github.io/schema/vega-lite/v2.0.json',
-                    description: 'A simple bar chart with embedded data.',
-                    width: 50,
-                    height: 40,
                     data: {
                         values: values
                     },
-                    mark: {
-                        type: 'bar',
+                    facet: {
+                        row: { field: 'c1', type: 'ordinal', header: { title: player ? player + " playing " : "Playing" } },
+                        column: { field: 'c2', type: 'ordinal', header: { title: opponent ? "Against " + opponent + " as" : "Against" } },
                     },
-                    encoding: {
-                        x: { field: 'win_chance', type: 'quantitative' },
-                        y: { field: 'p', type: 'quantitative' },
-                        row: { field: 'c1', type: 'ordinal' },
-                        column: { field: 'c2', type: 'ordinal' },
-                        color: { field: 'cum_p', type: 'quantitative', scale: { scheme: "redyellowgreen" } },
-                        detail: { field: 'type', type: 'nominal' }
+                    spacing: {
+                        row: 2,
+                        column: 2
+                    },
+                    spec: {
+                        width: 50,
+                        height: 40,
+                        mark: {
+                            type: 'bar',
+                        },
+                        encoding: {
+                            x: {
+                                title: 'Matchup Estimate',
+                                field: 'mu',
+                                type: 'ordinal',
+                                axis: {
+                                    labels: true,
+                                    title: null,
+                                    values: ["5-5"]
+                                },
+                            },
+                            y: {
+                                title: 'Likelyhood of Matchup Estimate',
+                                field: 'p',
+                                type: 'quantitative',
+                                axis: { labels: false, title: null },
+                                format: '.0%'
+                            },
+                            color: {
+                                title: 'Overall Win Chance',
+                                field: 'cum_p',
+                                type: 'quantitative',
+                                scale: { scheme: "redyellowgreen" },
+                                format: '.0%',
+                                legend: { format: '.0%' }
+                            },
+                            detail: { field: 'type', type: 'nominal' }
+                        }
                     }
                 };
 
@@ -164,6 +194,8 @@
         function doGraph(event) {
             comparePlayers(playerInput.value, opponentInput.value);
         }
+
+        doGraph();
     </script>
 </body>
 
