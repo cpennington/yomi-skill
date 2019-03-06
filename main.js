@@ -133,7 +133,7 @@ function comparePlayers(player, opponent) {
             }
           },
           y: {
-            title: "Likelyhood of Matchup Estimate",
+            title: "Likelihood of Matchup Estimate",
             field: "p",
             type: "quantitative",
             axis: { labels: false, title: null },
@@ -149,7 +149,7 @@ function comparePlayers(player, opponent) {
                 "rgb(230, 164, 230)",
                 "rgb(255, 61, 61)"
               ],
-              domain: [0.2, 0.8]
+              domain: [0.3, 0.7]
             },
             format: ".0%",
             legend: { format: ".0%" }
