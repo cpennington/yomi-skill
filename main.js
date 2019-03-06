@@ -149,9 +149,7 @@ function comparePlayers(player, opponent) {
                 "rgb(230, 164, 230)",
                 "rgb(255, 61, 61)"
               ],
-              domainMin: 0.3,
-              domainMid: 0.5,
-              domainMax: 0.7
+              domain: [0.2, 0.8]
             },
             format: ".0%",
             legend: { format: ".0%" }
