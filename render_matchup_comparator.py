@@ -14,18 +14,10 @@ if __name__ == "__main__":
         hist_games,
         fit_dir,
         "char_skill_elo_skill_deficit.stan",
-        [
-            'mu', 'char_skill', 'elo_logit_scale',
-            'log_lik', 'win_hat',
-        ]
+        ["mu", "char_skill", "elo_logit_scale", "log_lik", "win_hat"],
     )
 
-    render = YomiRender(
-        data_name,
-        model,
-        1500,
-        2000,
-    )
+    render = YomiRender(data_name, model, 1500, 2000)
 
     filename = render.render_matchup_comparator()
     print(filename)
