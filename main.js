@@ -93,73 +93,152 @@ function comparePlayers(player, opponent) {
     });
 
     var vlSpec = {
-      $schema: "https://vega.github.io/schema/vega-lite/v2.0.json",
+      $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
         values: values
       },
-      facet: {
-        row: {
-          field: "c1",
-          type: "ordinal",
-          header: { title: player ? player + " playing " : "Playing" }
+      transform: [
+        {
+          joinaggregate: [{ op: "mean", field: "cum_p", as: "c1_avg_cum_p" }],
+          groupby: ["c1"]
         },
-        column: {
-          field: "c2",
-          type: "ordinal",
-          header: {
-            title: opponent ? "Against " + opponent + " as" : "Against"
-          }
+        {
+          joinaggregate: [{ op: "mean", field: "cum_p", as: "c2_avg_cum_p" }],
+          groupby: ["c2"]
         }
-      },
-      spacing: {
-        row: 2,
-        column: 2
-      },
-      spec: {
-        width: 50,
-        height: 40,
-        mark: {
-          type: "bar"
-        },
-        encoding: {
-          x: {
-            title: "Matchup Estimate",
-            field: "mu",
-            type: "ordinal",
-            axis: {
-              labels: true,
-              title: null,
-              values: ["5-5"]
+      ],
+      resolve: { scale: { color: "independent" } },
+      hconcat: [
+        {
+          facet: {
+            row: {
+              field: "c1",
+              type: "ordinal",
+              header: { title: player ? player + " playing " : "Playing" }
+            },
+            column: {
+              field: "c2",
+              type: "ordinal",
+              header: {
+                title: opponent ? "Against " + opponent + " as" : "Against"
+              }
             }
           },
-          y: {
-            title: "Likelihood of Matchup Estimate",
-            field: "p",
-            type: "quantitative",
-            axis: { labels: false, title: null },
-            format: ".0%"
+          spacing: {
+            row: 2,
+            column: 2
           },
-          color: {
-            title: "Overall Win Chance",
-            field: "cum_p",
-            type: "quantitative",
-            scale: {
-              scheme: [
-                "rgb(48, 48, 255)",
-                "rgb(230, 164, 230)",
-                "rgb(255, 61, 61)"
-              ],
-              domain: [0.3, 0.7]
+          spec: {
+            width: 50,
+            height: 40,
+            mark: {
+              type: "bar"
             },
-            format: ".0%",
-            legend: { format: ".0%" }
+            encoding: {
+              x: {
+                title: "Matchup Estimate",
+                field: "mu",
+                type: "ordinal",
+                axis: {
+                  labels: true,
+                  title: null,
+                  values: ["5-5"]
+                }
+              },
+              y: {
+                title: "Likelihood of Matchup Estimate",
+                field: "p",
+                type: "quantitative",
+                axis: { labels: false, title: null },
+                format: ".0%"
+              },
+              color: {
+                title: "Overall Win Chance",
+                field: "cum_p",
+                type: "quantitative",
+                scale: {
+                  scheme: [
+                    "rgb(48, 48, 255)",
+                    "rgb(230, 164, 230)",
+                    "rgb(255, 61, 61)"
+                  ],
+                  domain: [0.3, 0.7]
+                },
+                format: ".0%",
+                legend: { format: ".0%" }
+              },
+              detail: { field: "type", type: "nominal" }
+            }
+          }
+        },
+
+        {
+          facet: {
+            row: {
+              field: "c1",
+              type: "ordinal",
+              header: { title: player ? player + " playing " : "Playing" }
+            }
           },
-          detail: { field: "type", type: "nominal" }
+          spacing: {
+            row: 2,
+            column: 2
+          },
+          spec: {
+            width: 50,
+            height: 40,
+            mark: {
+              type: "bar"
+            },
+            encoding: {
+              x: {
+                title: "Matchup Estimate",
+                field: "mu",
+                type: "ordinal",
+                axis: {
+                  labels: true,
+                  title: null,
+                  values: ["5-5"]
+                }
+              },
+              y: {
+                title: "Likelihood of Matchup Estimate",
+                aggregate: "mean",
+                field: "p",
+                type: "quantitative",
+                axis: { labels: false, title: null },
+                format: ".0%"
+              },
+              color: {
+                title: "Overall Win Chance",
+                aggregate: "mean",
+                field: "c1_avg_cum_p",
+                type: "quantitative",
+                scale: {
+                  scheme: [
+                    "rgb(48, 48, 255)",
+                    "rgb(230, 164, 230)",
+                    "rgb(255, 61, 61)"
+                  ],
+                  domain: [0.3, 0.7]
+                },
+                format: ".0%",
+                legend: { format: ".0%" }
+              },
+              detail: { field: "type", type: "nominal" }
+            }
+          }
         }
-      }
+      ]
     };
 
-    vegaEmbed("#vis", vlSpec);
+    console.log(JSON.stringify(vlSpec));
+
+    vegaEmbed("#vis", vlSpec)
+      .then(function(embed) {
+        window.embed = embed;
+      })
+      .catch(console.error);
     loading.style.display = "none";
     vis.style.display = "block";
   }, 10);
