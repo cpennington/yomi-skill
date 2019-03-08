@@ -16,7 +16,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc3"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@3.29"></script>
     <script src="https://cdn.jsdelivr.net/npm/gaussian@1.1.0/lib/gaussian.js"></script>
-    <link rel="stylesheet" type="text/css" href="theme.css">
+    <link rel="stylesheet" type="text/css" href="theme.css" />
   </head>
 
   <body>
@@ -30,9 +30,17 @@
         <datalist id="players"></datalist>
         <span id="loading"><img id="arrows" src="loading.svg"/></span>
       </div>
-      <div id="vis"></div>
+      <div id="vis">
+        <div>
+          <div id="c1-c2"></div>
+          <div id="c1-total"></div>
+        </div>
+        <div>
+          <div id="c2-total"></div>
+          <div id="total"></div>
+        </div>
+      </div>
     </div>
     <script src="main.js"></script>
   </body>
 </html>
-
