@@ -5,17 +5,19 @@
 #    pip-compile --output-file container/requirements.txt container/requirements.in
 #
 -e git+https://github.com/edx/bootstrapped.git@unpin-dependencies#egg=bootstrapped
-arviz==0.3.2
+arviz==0.3.3
+attrs==19.1.0             # via bacon-replay-analyzer, jsonschema
 backcall==0.1.0           # via ipython
+bacon-replay-analyzer==0.0.1.dev8
 bleach==3.1.0             # via nbconvert
 cached-property==1.5.1
-certifi==2018.11.29       # via requests
+certifi==2019.3.9         # via requests
 cftime==1.0.3.4           # via netcdf4
 chardet==3.0.4            # via requests
 click==7.0                # via pip-tools
 cycler==0.10.0            # via matplotlib
-cython==0.29.4            # via pystan
-decorator==4.3.2          # via ipython, plotly, traitlets
+cython==0.29.6            # via pystan
+decorator==4.4.0          # via ipython, plotly, traitlets
 defusedxml==0.5.0         # via nbconvert
 descartes==1.1.0          # via plotnine
 entrypoints==0.3          # via nbconvert
@@ -23,11 +25,11 @@ fastparquet==0.2.1
 idna==2.8                 # via requests
 ipykernel==5.1.0          # via ipywidgets, jupyter, jupyter-console, notebook, qtconsole
 ipython-genutils==0.2.0   # via nbformat, notebook, qtconsole, traitlets
-ipython[notebook]==7.2.0
+ipython[notebook]==7.3.0
 ipywidgets==7.4.2         # via ipython, jupyter
-jedi==0.13.2              # via ipython
+jedi==0.13.3              # via ipython
 jinja2==2.10              # via nbconvert, notebook
-jsonschema==2.6.0         # via jupyterlab-server, nbformat
+jsonschema==3.0.1         # via jupyterlab-server, nbformat
 jupyter-client==5.2.4     # via ipykernel, jupyter-console, notebook, qtconsole
 jupyter-console==6.0.0    # via jupyter
 jupyter-core==4.4.0       # via jupyter-client, nbconvert, nbformat, notebook, qtconsole
@@ -35,54 +37,55 @@ jupyter==1.0.0
 jupyterlab-server==0.2.0  # via jupyterlab
 jupyterlab==0.35.4
 kiwisolver==1.0.1         # via matplotlib
-llvmlite==0.27.0          # via numba
-markupsafe==1.1.0         # via jinja2
-matplotlib==3.0.2
+llvmlite==0.28.0          # via numba
+markupsafe==1.1.1         # via jinja2
+matplotlib==3.0.3
 mistune==0.8.4            # via nbconvert
 mizani==0.5.3             # via plotnine
 mpmath==1.1.0             # via sympy
-nbconvert==5.4.0          # via jupyter, notebook
+nbconvert==5.4.1          # via jupyter, notebook
 nbformat==4.4.0           # via ipywidgets, nbconvert, notebook, plotly
-netcdf4==1.4.2            # via arviz
-notebook==5.7.4           # via ipython, jupyter, jupyterlab, jupyterlab-server, widgetsnbextension
-numba==0.42.0             # via fastparquet
-numpy==1.15.0
+netcdf4==1.4.3.2          # via arviz
+notebook==5.7.6           # via ipython, jupyter, jupyterlab, jupyterlab-server, widgetsnbextension
+numba==0.43.0             # via fastparquet
+numpy==1.16.2
 palettable==3.1.1         # via mizani
-pandas==0.24.1
+pandas==0.24.2
 pandocfilters==1.4.2      # via nbconvert
-parso==0.3.2              # via jedi
+parso==0.3.4              # via jedi
 patsy==0.5.1              # via plotnine, statsmodels
 pexpect==4.6.0            # via ipython
 pickleshare==0.7.5        # via ipython
-pip-tools==3.3.2
-plotly==3.6.0
+pip-tools==3.5.0
+plotly==3.7.1
 plotnine==0.5.1
-prometheus-client==0.5.0  # via notebook
-prompt-toolkit==2.0.8     # via ipython, jupyter-console
+prometheus-client==0.6.0  # via notebook
+prompt-toolkit==2.0.9     # via ipython, jupyter-console
 ptyprocess==0.6.0         # via pexpect, terminado
 pygments==2.3.1           # via ipython, jupyter-console, nbconvert, qtconsole
 pyparsing==2.3.1          # via matplotlib
+pyrsistent==0.14.11       # via jsonschema
 pystan==2.18.1.0
-pytest-runner==4.2        # via fastparquet
-python-dateutil==2.7.5    # via jupyter-client, matplotlib, pandas
+pytest-runner==4.4        # via fastparquet
+python-dateutil==2.8.0    # via jupyter-client, matplotlib, pandas
 pytz==2018.9              # via pandas, plotly
-pyzmq==17.1.2             # via jupyter-client, notebook
+pyzmq==18.0.1             # via jupyter-client, notebook
 qtconsole==4.4.3          # via jupyter
 requests==2.21.0          # via plotly
 retrying==1.3.3           # via plotly
-scipy==1.2.0              # via arviz, plotnine
+scipy==1.2.1              # via arviz, plotnine
 send2trash==1.5.0         # via notebook
-six==1.12.0               # via bleach, cycler, fastparquet, patsy, pip-tools, plotly, prompt-toolkit, python-dateutil, retrying, thrift, traitlets
+six==1.12.0               # via bleach, cycler, fastparquet, jsonschema, patsy, pip-tools, plotly, prompt-toolkit, pyrsistent, python-dateutil, retrying, thrift, traitlets
 skills==0.3.0
 statsmodels==0.9.0        # via plotnine
 sympy==1.3
 terminado==0.8.1          # via notebook
 testpath==0.4.2           # via nbconvert
 thrift==0.11.0            # via fastparquet
-tornado==5.1.1            # via ipykernel, jupyter-client, notebook, terminado
+tornado==6.0.1            # via ipykernel, jupyter-client, notebook, terminado
 traitlets==4.3.2          # via ipykernel, ipython, ipywidgets, jupyter-client, jupyter-core, nbconvert, nbformat, notebook, qtconsole
 urllib3==1.24.1           # via requests
 wcwidth==0.1.7            # via prompt-toolkit
 webencodings==0.5.1       # via bleach
 widgetsnbextension==3.4.2  # via ipywidgets
-xarray==0.11.3            # via arviz
+xarray==0.12.0            # via arviz

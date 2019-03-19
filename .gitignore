@@ -2,3 +2,5 @@ src
 models
 images
 .ipynb_checkpoints
+fits/
+games/

@@ -1,6 +1,6 @@
 import pandas
 import re
-from character import Character, character_category
+from .character import Character, character_category
 import numpy as np
 import os
 from datetime import datetime
@@ -228,7 +228,8 @@ def as_boolean_win_record(historical_record):
 
 
 def games():
-    cached = sorted(os.listdir("games"))
+    game_dir = "games/yomi"
+    cached = sorted(os.listdir(game_dir))
     print("\n".join("{}: {}".format(*choice) for choice in enumerate(cached)))
     pick = input("Load game data:")
     games = None
@@ -236,7 +237,7 @@ def games():
         picked = cached[int(pick)]
         name, _ = os.path.splitext(picked)
         try:
-            games = pandas.read_parquet(f"games/{picked}")
+            games = pandas.read_parquet(f"{game_dir}/{picked}")
             games.character_1 = games.character_1.apply(lambda n: Character(n.lower()))
             games.character_2 = games.character_2.apply(lambda n: Character(n.lower()))
             games = games.astype(
@@ -244,12 +245,6 @@ def games():
             )
         except:
             logging.exception("Can't load %s as parquet", picked)
-
-        if games is None:
-            try:
-                games = pandas.read_pickle(f"games/{picked}")
-            except:
-                logging.exception("Can't load %s as pickle", picked)
 
     if games is None:
         historical_record = fetch_historical_record()
@@ -274,8 +269,8 @@ def games():
         )
         name = str(datetime.now().isoformat())
         games.astype({"character_1": str, "character_2": str}).to_parquet(
-            f"games/{name}.parquet", compression="gzip"
+            f"{game_dir}/{name}.parquet", compression="gzip"
         )
 
     display(games[games.isna().any(axis=1)])
-    return name, games.dropna()
+    return os.path.join("yomi", name), games.dropna()

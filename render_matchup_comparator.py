@@ -1,12 +1,20 @@
 #! /usr/bin/env python
 
-from character import Character, character_category
 import pandas
-from historical_record import games
+import yomi.historical_record
+import bacon
 from render import *
+import click
 
-if __name__ == "__main__":
-    data_name, hist_games = games()
+@click.command()
+@click.option('--game', type=click.Choice(['yomi', 'bacon']), default='yomi')
+def render(game):
+    print('help')
+    if game == 'yomi':
+        data_name, hist_games = yomi.historical_record.games()
+    elif game == 'bacon':
+        data_name, hist_games = bacon.games()
+
     fit_dir = f"fits/{data_name}"
     from model import YomiModel
 
@@ -21,3 +29,6 @@ if __name__ == "__main__":
 
     filename = render.render_matchup_comparator()
     print(filename)
+
+if __name__ == '__main__':
+    render()

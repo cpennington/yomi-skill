@@ -12,8 +12,20 @@ lab: build
 		jupyter
 
 shell: build
-	docker run -it  --mount="type=bind,src=$(PWD),dst=/code" --entrypoint /bin/bash jupyter
+	docker run -it \
+		--mount="type=bind,src=$(PWD),dst=/code" \
+		--entrypoint /bin/bash jupyter
 
 matchups: build
-	docker run -it  --mount="type=bind,src=$(PWD),dst=/code" --entrypoint /code/render_matchup_comparator.py jupyter
+	docker run -it \
+		--mount="type=bind,src=$(PWD),dst=/code" \
+		--entrypoint /code/render_matchup_comparator.py \
+		jupyter
 
+bacon-matchups: build
+	docker run -it  \
+		--mount="type=bind,src=$(PWD),dst=/code" \
+		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
+		--entrypoint /code/render_matchup_comparator.py \
+		jupyter \
+		--game=bacon

@@ -181,7 +181,7 @@ function comparePlayers(player, opponent) {
           groupby: ["c1", "mu", "type"]
         },
         {
-          calculate: "datum.sum_p / 20",
+          calculate: "datum.sum_p / " + characters.length,
           as: "p"
         },
         {
@@ -354,7 +354,7 @@ function comparePlayers(player, opponent) {
           groupby: ["mu", "type"]
         },
         {
-          calculate: "datum.sum_p / 400",
+          calculate: "datum.sum_p / " + characters.length * characters.length,
           as: "p"
         },
         {

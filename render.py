@@ -1,6 +1,5 @@
 from IPython.core.display import display
 from plotnine import *
-from character import *
 from cached_property import cached_property
 import os
 from colorsys import hsv_to_rgb
@@ -8,6 +7,7 @@ import matplotlib.colors
 import math
 import json
 from collections import defaultdict
+import pandas
 
 
 def extract_index(col_name):
@@ -325,10 +325,10 @@ class YomiRender:
             .reset_index()
         )
         matchups["c1"] = matchups.level_0.apply(
-            lambda x: Character(x.split("-")[0])
+            lambda x: x.split("-")[0]
         ).astype(character_category)
         matchups["c2"] = matchups.level_0.apply(
-            lambda x: Character(x.split("-")[1])
+            lambda x: x.split("-")[1]
         ).astype(character_category)
         matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
         del (matchups["level_0"])
@@ -412,7 +412,7 @@ class YomiRender:
             summary[[col for col in summary.columns if col.startswith("mu[")]]
             .rename(
                 columns={
-                    "mu[{}]".format(ix): "{.value}-{.value}".format(c1, c2)
+                    "mu[{}]".format(ix): "{}-{}".format(c1, c2)
                     for ((c1, c2), ix) in mu_index.items()
                 }
             )
@@ -420,10 +420,10 @@ class YomiRender:
             .reset_index()
         )
         matchups["c1"] = matchups["index"].apply(
-            lambda x: Character(x.split("-")[0]).name
+            lambda x: x.split("-")[0]
         )
         matchups["c2"] = matchups["index"].apply(
-            lambda x: Character(x.split("-")[1]).name
+            lambda x: x.split("-")[1]
         )
         del matchups["index"]
 
@@ -452,7 +452,7 @@ class YomiRender:
             .astype(self.player_category)
         )
         player_char_skill["character"] = player_char_skill["index"].apply(
-            lambda x: reverse_character_index[int(x[11:-1].split(",")[0])].name
+            lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
         )
 
         del (player_char_skill["index"])
@@ -483,7 +483,7 @@ class YomiRender:
         with open(outfile_name, "w") as outfile:
             outfile.write(
                 template.replace("$MATCHUP_DATA", matchups.to_json(orient="records"))
-                .replace("$CHARACTERS", json.dumps([c.name for c in Character]))
+                .replace("$CHARACTERS", json.dumps([c for c in self.model.characters]))
                 .replace("$PLAYER_SKILL", json.dumps(player_data))
                 .replace(
                     "$ELO_SCALE",

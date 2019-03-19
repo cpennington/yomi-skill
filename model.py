@@ -3,13 +3,6 @@ import pandas
 import io
 import hashlib
 import pickle
-from historical_record import (
-    as_boolean_win_record,
-    fetch_historical_record,
-    fetch_historical_elo,
-    as_player_elo,
-)
-from character import *
 import logging
 import shutil
 import os
@@ -71,14 +64,18 @@ class YomiModel:
     def mu_index(self):
         return dict(
             zip(
-                ((c1, c2) for c1 in Character for c2 in Character if c1 <= c2),
+                ((c1, c2) for c1 in self.characters for c2 in self.characters if c1 <= c2),
                 range(1, 1000),
             )
         )
 
     @cached_property
+    def characters(self):
+        return self.games.character_1.dtype.categories
+
+    @cached_property
     def character_index(self):
-        return dict(zip(Character, range(1, 100)))
+        return dict(zip(self.characters, range(1, 100)))
 
     @cached_property
     def player_tournament_index(self):
@@ -119,24 +116,24 @@ class YomiModel:
     @cached_property
     def input_data(self):
 
-        for player in self.player_tournament_dates.player.unique():
-            self.player_tournament_dates.loc[
-                self.player_tournament_dates.player == player, "previous"
-            ] = (
-                [-1]
-                + list(
-                    self.player_tournament_dates.loc[
-                        self.player_tournament_dates.player == player
-                    ].index.values
-                )[:-1]
-            )
+        # for player in self.player_tournament_dates.player.unique():
+        #     self.player_tournament_dates.loc[
+        #         self.player_tournament_dates.player == player, "previous"
+        #     ] = (
+        #         [-1]
+        #         + list(
+        #             self.player_tournament_dates.loc[
+        #                 self.player_tournament_dates.player == player
+        #             ].index.values
+        #         )[:-1]
+        #     )
 
-        tournament_player = [
-            self.player_index[player]
-            for ((player, tournament), _) in sorted(
-                self.player_tournament_index.items(), key=lambda x: x[1]
-            )
-        ]
+        # tournament_player = [
+        #     self.player_index[player]
+        #     for ((player, tournament), _) in sorted(
+        #         self.player_tournament_index.items(), key=lambda x: x[1]
+        #     )
+        # ]
 
         elo_diff = self.games.elo_before_1 - self.games.elo_before_2
         elo_pct_p1_win = 1 / (1 + (-elo_diff / 1135.77).rpow(10))
@@ -149,30 +146,30 @@ class YomiModel:
         normalized_weights = scaled_weights / scaled_weights.sum() * len(self.games)
 
         return {
-            "NPT": len(self.player_tournament_index),
+            # "NPT": len(self.player_tournament_index),
             "NG": len(self.games),
             "NM": len(self.mu_index),
             "NP": len(self.player_index),
-            "NC": len(Character),
-            "tp": tournament_player,
-            "win": self.games.win,
-            "pt1": self.games.apply(
-                lambda r: self.player_tournament_index[(r.player_1, r.tournament_name)],
-                axis=1,
-            ),
-            "pt2": self.games.apply(
-                lambda r: self.player_tournament_index[(r.player_2, r.tournament_name)],
-                axis=1,
-            ),
+            "NC": len(self.characters),
+            # "tp": tournament_player,
+            "win": self.games.win.apply(int),
+            # "pt1": self.games.apply(
+            #     lambda r: self.player_tournament_index[(r.player_1, r.tournament_name)],
+            #     axis=1,
+            # ),
+            # "pt2": self.games.apply(
+            #     lambda r: self.player_tournament_index[(r.player_2, r.tournament_name)],
+            #     axis=1,
+            # ),
             "mup": self.games.apply(
                 lambda r: self.mu_index[(r.character_1, r.character_2)], axis=1
             ),
             "non_mirror": self.games.apply(
                 lambda r: float(r.character_1 != r.character_2), axis=1
             ),
-            "prev_tournament": self.player_tournament_dates.previous.astype(int).apply(
-                lambda x: x + 1
-            ),
+            # "prev_tournament": self.player_tournament_dates.previous.astype(int).apply(
+            #     lambda x: x + 1
+            # ),
             "char1": self.games.character_1.apply(self.character_index.get),
             "char2": self.games.character_2.apply(self.character_index.get),
             "player1": self.games.player_1.apply(self.player_index.get),
@@ -351,13 +348,13 @@ class YomiModelChain:
                 observed_data="win",
                 log_likelihood="log_lik",
                 coords={
-                    "player-tournament": [
-                        f"{player}-{tournament}"
-                        for ((player, tournament), _) in sorted(
-                            self.model.player_tournament_index.items(),
-                            key=lambda x: x[1],
-                        )
-                    ],
+                    # "player-tournament": [
+                    #     f"{player}-{tournament}"
+                    #     for ((player, tournament), _) in sorted(
+                    #         self.model.player_tournament_index.items(),
+                    #         key=lambda x: x[1],
+                    #     )
+                    # ],
                     "matchup": [
                         f"{c1}-{c2}"
                         for ((c1, c2), _) in sorted(

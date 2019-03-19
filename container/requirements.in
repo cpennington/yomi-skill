@@ -14,3 +14,4 @@ pystan
 arviz
 cached-property
 fastparquet
+bacon-replay-analyzer
