@@ -6,6 +6,7 @@ lab: build
 	docker run -it \
 		--mount="type=bind,src=$(PWD),dst=/code" \
 		--mount="type=volume,src=pipcache,dst=/root/.cache/pip" \
+		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
 		--publish="127.0.0.1:9999:9999" \
 		--memory=4g \
 		--memory-swap=4g \

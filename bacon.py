@@ -67,13 +67,14 @@ def load_replay_results(replay_dir):
 
 
 INITIAL_ELO = 1500
-LOW_K = 8
-HIGH_K = 16
-K_CUTOFF = 20
+LOW_K = 25
+HIGH_K = 125
+K_CUTOFF = 95
+MIN_GAMES = 0
 DENOM = 1135.77
 
 
-def compute_elo(historical_records):
+def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOFF):
     historical_records = historical_records.sort_values(["match_date"]).reset_index(
         drop=True
     )
@@ -94,8 +95,8 @@ def compute_elo(historical_records):
         wins2 = 1 - row.win
         played1 = play_counts[row.player_1]
         played2 = play_counts[row.player_2]
-        k1 = HIGH_K if played1 < K_CUTOFF else LOW_K
-        k2 = HIGH_K if played2 < K_CUTOFF else LOW_K
+        k1 = high_k if played1 < k_cutoff else low_k
+        k2 = high_k if played2 < k_cutoff else low_k
         newRating1 = rating1 + k1 * (wins1 - expected1 * gamesPlayed)
         newRating2 = rating2 + k2 * (wins2 - expected2 * gamesPlayed)
 
@@ -119,15 +120,21 @@ def compute_elo(historical_records):
 
 def display_elo_checks(games):
     enough_data = games[
-        (games.games_played_1 > K_CUTOFF) & (games.games_played_2 > K_CUTOFF)
+        (games.games_played_1 > MIN_GAMES) & (games.games_played_2 > MIN_GAMES)
     ]
+    enough_data["points_diff"] = enough_data.elo_before_1 - enough_data.elo_before_2
+    enough_data["win_chance"] = 1 / (1 + (-enough_data.points_diff / 1135.77).rpow(10))
+    squared_error = (
+        (enough_data.win_chance - enough_data.win).pow(2)
+        + ((1 - enough_data.win_chance) - (1 - enough_data.win)).pow(2)
+    ).sum()
+
     enough_data["points_diff"] = (
         enough_data.elo_before_1 - enough_data.elo_before_2
     ).abs()
     enough_data["expected_win"] = (
         enough_data.elo_before_1 > enough_data.elo_before_2
     ) == enough_data.win
-
     enough_data["points_bin"] = (enough_data.points_diff / 50).round() * 50
 
     print("Elo Check")
@@ -139,6 +146,8 @@ def display_elo_checks(games):
     binned["expected_win_rate"] = 1 / (1 + (-binned.points_bin / 1135.77).rpow(10))
     binned["actual_win_rate"] = binned["sum"] / binned["count"]
     display(binned)
+
+    print("squared error", squared_error)
 
 
 def games(replay_dir="../bacon-replays"):

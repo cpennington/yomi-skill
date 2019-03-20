@@ -6,14 +6,14 @@ import bacon
 from render import *
 import click
 
+
 @click.command()
-@click.option('--game', type=click.Choice(['yomi', 'bacon']), default='yomi')
-@click.option('--dest')
+@click.option("--game", type=click.Choice(["yomi", "bacon"]), default="yomi")
+@click.option("--dest")
 def render(game, dest):
-    print('help')
-    if game == 'yomi':
+    if game == "yomi":
         data_name, hist_games = yomi.historical_record.games()
-    elif game == 'bacon':
+    elif game == "bacon":
         data_name, hist_games = bacon.games()
 
     fit_dir = f"fits/{data_name}"
@@ -31,5 +31,6 @@ def render(game, dest):
     filename = render.render_matchup_comparator(game, dest)
     print(filename)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     render()
