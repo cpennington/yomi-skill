@@ -13,13 +13,17 @@ def load_replay_results(replay_dir):
         results = pandas.DataFrame(columns=['replay', 'match_date', 'player_1', 'character_1', 'player_2', 'character_2', 'win'])
 
     available_replays = set(fname for fname in os.listdir(replay_dir) if 'inject' not in fname and fname.endswith('.bcr'))
+    print(available_replays)
     cached_replays = set(results.replay)
+    print(cached_replays)
     new_replays = available_replays - cached_replays
+    print(len(new_replays))
 
     records = []
     for replay_file in new_replays:
         try:
             replay = Replay(f'{replay_dir}/{replay_file}')
+
             records.append(
                 {
                     'replay': replay.name,
@@ -53,12 +57,14 @@ def load_replay_results(replay_dir):
 
     character_category = pandas.api.types.CategoricalDtype(sorted(set(results.character_1) | set(results.character_2)), ordered=True)
 
-    return results.astype({'character_1': character_category, 'character_2': character_category})
+    results = results.astype({'character_1': character_category, 'character_2': character_category})
+    results.to_parquet(f"{replay_dir}/results.parquet", compression='gzip')
+    return results[(results.player_1 != 'Bot') & (results.player_2 != 'Bot')]
 
 INITIAL_ELO = 1500
-LOW_K = 40
-HIGH_K = 80
-K_CUTOFF = 15
+LOW_K = 8
+HIGH_K = 16
+K_CUTOFF = 50
 DENOM = 1135.77
 
 def compute_elo(historical_records):
@@ -103,11 +109,16 @@ def compute_elo(historical_records):
 
 def display_elo_checks(games):
     enough_data = games[(games.games_played_1 > K_CUTOFF) & (games.games_played_2 > K_CUTOFF)]
-    enough_data['points_diff'] = enough_data.elo_before_1 - enough_data.elo_before_2
-    enough_data['upset'] = (enough_data.points_diff > 0) != enough_data.win
+    enough_data['points_diff'] = (enough_data.elo_before_1 - enough_data.elo_before_2).abs()
+    enough_data['expected_win'] = (enough_data.elo_before_1 > enough_data.elo_before_2) == enough_data.win
+
+    enough_data['points_bin'] = (enough_data.points_diff / 50).round()*50
 
     print("Elo Check")
-    display(enough_data)
+    binned = enough_data.groupby('points_bin').expected_win.agg(['sum', 'count']).reset_index()
+    binned['expected_win_rate'] = 1/(1 + (-binned.points_bin/1135.77).rpow(10))
+    binned['actual_win_rate'] = binned['sum'] / binned['count']
+    display(binned)
 
 def games(replay_dir="../bacon-replays"):
     game_dir = "games/bacon"
@@ -127,11 +138,11 @@ def games(replay_dir="../bacon-replays"):
     if games is None:
         historical_record = load_replay_results(replay_dir)
         games = compute_elo(historical_record)
-        display_elo_checks(games)
 
         name = str(datetime.now().isoformat())
         display(games)
         games.to_parquet(f"{game_dir}/{name}.parquet", compression="gzip")
 
+    display_elo_checks(games)
     display(games[games.isna().any(axis=1)])
     return os.path.join("bacon", name), games.dropna()

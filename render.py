@@ -470,11 +470,19 @@ class YomiRender:
             .elo_before.last()
         )
 
+        player_game_counts = (
+            self.model.games.player_1.rename('player').append(
+                self.model.games.player_2.rename('player')
+            ).to_frame().groupby('player').size()
+        )
+
         player_data = defaultdict(dict)
         for row in player_char_skill.itertuples():
             player_data[row.player][row.character] = {"mean": row.mean, "std": row.std}
         for player, elo in player_elo.items():
             player_data[player]["elo"] = elo
+        for player, count in player_game_counts.items():
+            player_data[player]["gamesPlayed"] = count
 
         with open("matchup-comparator-template.html") as template_file:
             template = template_file.read()

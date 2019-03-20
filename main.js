@@ -72,6 +72,23 @@ function comparePlayers(player, opponent) {
   loading.style.display = "inline";
   vis.style.display = "none";
 
+  if (player) {
+    document.getElementById("p1-name").textContent = player;
+    document.getElementById("p1-elo").textContent = Math.round(
+      playerSkill[player].elo
+    );
+    document.getElementById("p1-games").textContent =
+      playerSkill[player].gamesPlayed;
+  }
+  if (opponent) {
+    document.getElementById("p2-name").textContent = opponent;
+    document.getElementById("p2-elo").textContent = Math.round(
+      playerSkill[opponent].elo
+    );
+    document.getElementById("p2-games").textContent =
+      playerSkill[opponent].gamesPlayed;
+  }
+
   setTimeout(function() {
     values = matchupData.flatMap(function(v) {
       var pdf = mu_pdf(v);
