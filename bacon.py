@@ -64,7 +64,7 @@ def load_replay_results(replay_dir):
 INITIAL_ELO = 1500
 LOW_K = 8
 HIGH_K = 16
-K_CUTOFF = 50
+K_CUTOFF = 20
 DENOM = 1135.77
 
 def compute_elo(historical_records):

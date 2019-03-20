@@ -284,7 +284,7 @@ function comparePlayers(player, opponent) {
           groupby: ["c2", "mu", "type"]
         },
         {
-          calculate: "datum.sum_p / 20",
+          calculate: "datum.sum_p / " + characters.length,
           as: "p"
         },
         {
