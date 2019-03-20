@@ -8,6 +8,8 @@ import math
 import json
 from collections import defaultdict
 import pandas
+import shutil
+from mako.lookup import TemplateLookup
 
 
 def extract_index(col_name):
@@ -180,7 +182,6 @@ class YomiRender:
         player_skill = self.raw_player_tournament_skill[
             self.raw_player_tournament_skill.player == player
         ]
-        display(self.raw_player_tournament_skill.player.unique())
         player_chart = (
             ggplot(player_skill, aes(x="tournament", y="raw_skill"))
             + geom_violin()
@@ -403,7 +404,7 @@ class YomiRender:
 
         return "\n".join(lines)
 
-    def render_matchup_comparator(self):
+    def render_matchup_comparator(self, game='yomi', dest=None):
         summary = self.model.summary_dataframe(self.warmup, self.min_samples)
 
         mu_index = self.model.mu_index
@@ -468,13 +469,13 @@ class YomiRender:
             .sort_values(["match_date"])
             .groupby("player")
             .elo_before.last()
-        )
+        ).dropna()
 
         player_game_counts = (
             self.model.games.player_1.rename('player').append(
                 self.model.games.player_2.rename('player')
             ).to_frame().groupby('player').size()
-        )
+        ).dropna()
 
         player_data = defaultdict(dict)
         for row in player_char_skill.itertuples():
@@ -484,23 +485,23 @@ class YomiRender:
         for player, count in player_game_counts.items():
             player_data[player]["gamesPlayed"] = count
 
-        with open("matchup-comparator-template.html") as template_file:
-            template = template_file.read()
+        templates = TemplateLookup(directories=['templates'])
 
         outfile_name = f"{self.base_folder}/matchup-comparator.html"
         with open(outfile_name, "w") as outfile:
             outfile.write(
-                template.replace("$MATCHUP_DATA", matchups.to_json(orient="records"))
-                .replace("$CHARACTERS", json.dumps([c for c in self.model.characters]))
-                .replace("$PLAYER_SKILL", json.dumps(player_data))
-                .replace(
-                    "$ELO_SCALE",
-                    json.dumps(
-                        {
-                            "mean": summary.elo_logit_scale["mean"],
-                            "std": summary.elo_logit_scale["std"],
-                        }
-                    ),
+                templates.get_template(f'{game}.html').render_unicode(
+                    matchups=matchups,
+                    characters=self.model.characters,
+                    player_data=player_data,
+                    elo_scale={
+                        "mean": summary.elo_logit_scale["mean"],
+                        "std": summary.elo_logit_scale["std"],
+                    }
                 )
             )
+
+        if dest is not None:
+            shutil.copyfile(outfile_name, dest)
+
         return outfile_name

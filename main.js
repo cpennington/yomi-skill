@@ -14,11 +14,19 @@ const loading = document.getElementById("loading");
 const vis = document.getElementById("vis");
 const increment = 0.05;
 
-Object.keys(playerSkill).forEach(function(p) {
-  var opt = document.createElement("option");
-  opt.value = p;
-  playersList.appendChild(opt);
-});
+Object.entries(playerSkill)
+  .map(function(entry) {
+    return [entry[1].gamesPlayed, entry[0]];
+  })
+  .sort(function(a, b) {
+    return a[0] < b[0];
+  })
+  .forEach(function(entry) {
+    var opt = document.createElement("option");
+    opt.value = entry[1];
+    opt.textContent = entry[1] + " (" + entry[0] + " games recorded)";
+    playersList.appendChild(opt);
+  });
 
 var xs = [];
 for (x = 0; x <= 1; x += increment) {

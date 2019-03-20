@@ -15,3 +15,4 @@ arviz
 cached-property
 fastparquet
 bacon-replay-analyzer
+mako

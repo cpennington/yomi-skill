@@ -1,11 +1,12 @@
 import pandas
 import re
-from .character import Character, character_category
+from .character import character_category
 import numpy as np
 import os
 from datetime import datetime
 import logging
 from IPython.core.display import display
+from games import normalize_types
 
 HISTORICAL_GSHEET = "https://docs.google.com/spreadsheets/u/1/d/1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U/export?format=csv&id=1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U&gid=1371955398"
 ELO_GSHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wMDB9AXwmC8N1UEcbbkNNbCcUdnhOmsFRyrXCU8huErk20zKeULEVdAidCijMUc678oOC1F7tgUI/pub?gid=1688184901&single=true&output=csv"
@@ -41,12 +42,6 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
         & ~historical_record.character_2.isin(["Squall", "Kefka", "Ultimicia"])
     ].dropna(subset=["tournament_name"])
 
-    names = pandas.DataFrame(
-        {"name": historical_record.player_1.append(historical_record.player_2)}
-    )
-    names["lower"] = names.apply(lambda r: r["name"].lower(), axis=1)
-    name_map = names.groupby("lower").first()
-
     historical_record["match_date"] = pandas.to_datetime(
         historical_record.match_date, infer_datetime_format=True
     )
@@ -54,23 +49,42 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
     historical_record.set_win_2 = historical_record.set_win_2.fillna(0)
     historical_record.wins_1 = historical_record.wins_1.fillna(0)
     historical_record.wins_2 = historical_record.wins_2.fillna(0)
-    historical_record.character_1 = historical_record.character_1.apply(
-        lambda n: Character(n.lower())
+
+    all_chars = historical_record.character_1.append(historical_record.character_2).rename('character').to_frame()
+    all_chars['normalized'] = all_chars.character.apply(lambda v: v.lower())
+
+    char_map = all_chars.groupby('normalized').character.agg(lambda x: pandas.Series.mode(x)[0])
+    display(all_chars.groupby('character').count())
+
+    all_chars['standardized'] = all_chars.normalized.apply(lambda c: char_map[c])
+    all_chars = all_chars.drop_duplicates().set_index(['character'])
+
+    historical_record.character_1 = historical_record.character_1.apply(lambda c: all_chars.standardized[c])
+    historical_record.character_2 = historical_record.character_2.apply(lambda c: all_chars.standardized[c])
+
+    character_category = pandas.api.types.CategoricalDtype(
+        sorted(historical_record.character_1.append(historical_record.character_2).unique()),
+        ordered=True
     )
-    historical_record.character_2 = historical_record.character_2.apply(
-        lambda n: Character(n.lower())
-    )
-    historical_record.player_1 = historical_record.player_1.apply(
-        lambda n: name_map.loc[n.lower()]
-    )
-    historical_record.player_2 = historical_record.player_2.apply(
-        lambda n: name_map.loc[n.lower()]
-    )
+
+    all_players = historical_record.player_1.append(historical_record.player_2).rename('player').to_frame()
+    all_players['normalized'] = all_players.player.apply(lambda v: re.sub(r'[^a-z0-9]', '', v.lower()))
+
+    player_map = all_players.groupby('normalized').player.agg(lambda x: pandas.Series.mode(x)[0])
+    display(player_map)
+
+    all_players['standardized'] = all_players.normalized.apply(lambda p: player_map[p])
+    all_players = all_players.drop_duplicates().set_index(['player'])
+    display(all_players)
+
+    historical_record.player_1 = historical_record.player_1.apply(lambda p: all_players.standardized[p])
+    historical_record.player_2 = historical_record.player_2.apply(lambda p: all_players.standardized[p])
 
     player_category = pandas.api.types.CategoricalDtype(
         sorted(historical_record.player_1.append(historical_record.player_2).unique()),
         ordered=True,
     )
+
 
     tournament_category = pandas.api.types.CategoricalDtype(
         sorted(historical_record.tournament_name.unique()), ordered=True
@@ -238,11 +252,6 @@ def games():
         name, _ = os.path.splitext(picked)
         try:
             games = pandas.read_parquet(f"{game_dir}/{picked}")
-            games.character_1 = games.character_1.apply(lambda n: Character(n.lower()))
-            games.character_2 = games.character_2.apply(lambda n: Character(n.lower()))
-            games = games.astype(
-                {"character_1": character_category, "character_2": character_category}
-            )
         except:
             logging.exception("Can't load %s as parquet", picked)
 
@@ -273,4 +282,8 @@ def games():
         )
 
     display(games[games.isna().any(axis=1)])
+
+    games = normalize_types(games)
+
     return os.path.join("yomi", name), games.dropna()
+

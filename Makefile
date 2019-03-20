@@ -20,7 +20,9 @@ matchups: build
 	docker run -it \
 		--mount="type=bind,src=$(PWD),dst=/code" \
 		--entrypoint /code/render_matchup_comparator.py \
-		jupyter
+		jupyter \
+		--game=yomi \
+		--dest=index.html
 
 bacon-matchups: build
 	docker run -it  \
@@ -28,4 +30,5 @@ bacon-matchups: build
 		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
-		--game=bacon
+		--game=bacon \
+		--dest=bacon.html

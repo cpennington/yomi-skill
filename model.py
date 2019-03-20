@@ -12,6 +12,7 @@ import arviz
 import xarray
 from cached_property import cached_property
 import numpy
+from IPython.core.display import display
 
 
 class YomiModel:
@@ -115,7 +116,6 @@ class YomiModel:
 
     @cached_property
     def input_data(self):
-
         # for player in self.player_tournament_dates.player.unique():
         #     self.player_tournament_dates.loc[
         #         self.player_tournament_dates.player == player, "previous"
@@ -152,7 +152,7 @@ class YomiModel:
             "NP": len(self.player_index),
             "NC": len(self.characters),
             # "tp": tournament_player,
-            "win": self.games.win.apply(int),
+            "win": self.games.win.astype(int),
             # "pt1": self.games.apply(
             #     lambda r: self.player_tournament_index[(r.player_1, r.tournament_name)],
             #     axis=1,
@@ -163,17 +163,17 @@ class YomiModel:
             # ),
             "mup": self.games.apply(
                 lambda r: self.mu_index[(r.character_1, r.character_2)], axis=1
-            ),
+            ).astype(int),
             "non_mirror": self.games.apply(
                 lambda r: float(r.character_1 != r.character_2), axis=1
-            ),
+            ).astype(int),
             # "prev_tournament": self.player_tournament_dates.previous.astype(int).apply(
             #     lambda x: x + 1
             # ),
-            "char1": self.games.character_1.apply(self.character_index.get),
-            "char2": self.games.character_2.apply(self.character_index.get),
-            "player1": self.games.player_1.apply(self.player_index.get),
-            "player2": self.games.player_2.apply(self.player_index.get),
+            "char1": self.games.character_1.apply(self.character_index.get).astype(int),
+            "char2": self.games.character_2.apply(self.character_index.get).astype(int),
+            "player1": self.games.player_1.apply(self.player_index.get).astype(int),
+            "player2": self.games.player_2.apply(self.player_index.get).astype(int),
             "elo_logit": elo_logit,
             # Scale so that mininum elo sum gets 0.25 weight, max sum gets 2 weight
             "obs_weights": normalized_weights,

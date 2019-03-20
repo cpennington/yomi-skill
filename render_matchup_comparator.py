@@ -8,7 +8,8 @@ import click
 
 @click.command()
 @click.option('--game', type=click.Choice(['yomi', 'bacon']), default='yomi')
-def render(game):
+@click.option('--dest')
+def render(game, dest):
     print('help')
     if game == 'yomi':
         data_name, hist_games = yomi.historical_record.games()
@@ -27,7 +28,7 @@ def render(game):
 
     render = YomiRender(data_name, model, 1500, 2000)
 
-    filename = render.render_matchup_comparator()
+    filename = render.render_matchup_comparator(game, dest)
     print(filename)
 
 if __name__ == '__main__':

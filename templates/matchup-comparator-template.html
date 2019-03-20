@@ -1,16 +1,18 @@
+<%! import json %>
+
 <html>
   <head>
     <script type="text/json" id="matchup-data">
-      $MATCHUP_DATA
+      ${matchups.to_json(orient="records")}
     </script>
     <script type="text/json" id="characters">
-      $CHARACTERS
+      ${json.dumps(list(characters))}
     </script>
     <script type="text/json" id="player-skill">
-      $PLAYER_SKILL
+      ${json.dumps(player_data)}
     </script>
     <script type="text/json" id="elo-scale">
-      $ELO_SCALE
+      ${json.dumps(elo_scale)}
     </script>
     <script src="https://cdn.jsdelivr.net/npm/vega@5.0.0/build/vega.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc14/build/vega-lite.js"></script>
@@ -20,8 +22,8 @@
   </head>
 
   <body>
-    <a href="yomi.html">Yomi Skill Chart</a>
-    <a href="bacon.html">BattleCON Skill Chart</a>
+    <a href="/yomi-skill">Yomi Skill Chart</a>
+    <a href="/yomi-skill/bacon.html">BattleCON Skill Chart</a>
     <div>
       <div>
         <label for="player">Choose a player:</label>
