@@ -16,12 +16,37 @@ from IPython.core.display import display
 
 
 class YomiModel:
-    def __init__(self, games, data_dir, model_filename, pars):
+    def __init__(self, games, data_dir, model_filename, pars, min_games=0):
         self.games = games
         self.model_filename = model_filename
         self.model_name, _ = os.path.splitext(self.model_filename)
         self.pars = pars
         self.data_dir = data_dir
+        self.min_games = min_games
+        if self.min_games > 0:
+            games_played = (
+                self.games.player_1.append(self.games.player_2)
+                .rename("player")
+                .to_frame()
+                .groupby("player")
+                .size()
+                .rename("count")
+                .reset_index()
+            )
+            not_enough_played = games_played[
+                games_played["count"] < self.min_games
+            ].player
+
+            self.games = self.games.astype({"player_1": str, "player_2": str})
+
+            self.min_games_player = f"< {self.min_games} games"
+
+            self.games.loc[
+                self.games.player_1.isin(not_enough_played), "player_1"
+            ] = self.min_games_player
+            self.games.loc[
+                self.games.player_2.isin(not_enough_played), "player_2"
+            ] = self.min_games_player
 
     @cached_property
     def model_hash(self):
@@ -57,7 +82,7 @@ class YomiModel:
         return dict(
             zip(
                 sorted(self.games.player_1.append(self.games.player_2).unique()),
-                range(1, 1000),
+                range(1, 10000),
             )
         )
 
@@ -65,7 +90,12 @@ class YomiModel:
     def mu_index(self):
         return dict(
             zip(
-                ((c1, c2) for c1 in self.characters for c2 in self.characters if c1 <= c2),
+                (
+                    (c1, c2)
+                    for c1 in self.characters
+                    for c2 in self.characters
+                    if c1 <= c2
+                ),
                 range(1, 1000),
             )
         )
@@ -203,7 +233,15 @@ class YomiModel:
         return dataframe
 
     def summary_dataframe(self, warmup=1000, min_samples=1000):
-        parquet_filename = f"{self.data_dir}/{self.model_name}-{self.model_hash[:6]}/warmup-{warmup}/summary-{min_samples}-samples.parquet"
+        path = [
+            self.data_dir,
+            f"{self.model_name}-{self.model_hash[:6]}",
+            f"warmup-{warmup}",
+        ]
+        if self.min_games > 0:
+            path.append(f"min-games-{self.min_games}")
+        path.append(f"summary-{min_samples}-samples.parquet")
+        parquet_filename = os.path.join(*path)
         try:
             logging.info(f"Loading parquet {parquet_filename}")
             summary_results = pandas.read_parquet(parquet_filename)
@@ -279,7 +317,15 @@ class YomiModelChain:
 
     @cached_property
     def _file_base(self):
-        return f"{self.model.data_dir}/{self.model.model_name}-{self.model.model_hash[:6]}/warmup-{self.warmup}/{self.index}"
+        path = [
+            self.model.data_dir,
+            f"{self.model.model_name}-{self.model.model_hash[:6]}",
+            f"warmup-{self.warmup}",
+        ]
+        if self.model.min_games > 0:
+            path.append(f"min-games-{self.model.min_games}")
+        path.append(str(self.index))
+        return os.path.join(*path)
 
     @cached_property
     def fit_filename(self):
@@ -360,7 +406,7 @@ class YomiModelChain:
                         for ((c1, c2), _) in sorted(
                             self.model.mu_index.items(), key=lambda x: x[1]
                         )
-                    ],
+                    ]
                 },
                 dims={
                     "skill": ["player-tournament"],

@@ -10,7 +10,8 @@ import click
 @click.command()
 @click.option("--game", type=click.Choice(["yomi", "bacon"]), default="yomi")
 @click.option("--dest")
-def render(game, dest):
+@click.option("--min-games", default=50, type=int)
+def render(game, dest, min_games):
     if game == "yomi":
         data_name, hist_games = yomi.historical_record.games()
     elif game == "bacon":
@@ -24,6 +25,7 @@ def render(game, dest):
         fit_dir,
         "char_skill_elo_skill_deficit.stan",
         ["mu", "char_skill", "elo_logit_scale", "log_lik", "win_hat"],
+        min_games,
     )
 
     render = YomiRender(data_name, model, 1500, 2000)

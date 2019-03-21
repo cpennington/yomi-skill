@@ -450,6 +450,11 @@ function comparePlayers(player, opponent) {
       .then(function() {
         loading.style.display = "none";
         vis.style.display = "block";
+        vis.style.width =
+          document.getElementById("c1-c2").offsetWidth +
+          document.getElementById("c1-total").offsetWidth +
+          50 +
+          "px";
       })
       .catch(console.error);
   }, 10);

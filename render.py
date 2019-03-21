@@ -325,12 +325,12 @@ class YomiRender:
             .rename("win_rate")
             .reset_index()
         )
-        matchups["c1"] = matchups.level_0.apply(
-            lambda x: x.split("-")[0]
-        ).astype(character_category)
-        matchups["c2"] = matchups.level_0.apply(
-            lambda x: x.split("-")[1]
-        ).astype(character_category)
+        matchups["c1"] = matchups.level_0.apply(lambda x: x.split("-")[0]).astype(
+            character_category
+        )
+        matchups["c2"] = matchups.level_0.apply(lambda x: x.split("-")[1]).astype(
+            character_category
+        )
         matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
         del (matchups["level_0"])
         matchups = matchups.rename(columns={"level_1": "sample"})
@@ -404,7 +404,7 @@ class YomiRender:
 
         return "\n".join(lines)
 
-    def render_matchup_comparator(self, game='yomi', dest=None):
+    def render_matchup_comparator(self, game="yomi", dest=None):
         summary = self.model.summary_dataframe(self.warmup, self.min_samples)
 
         mu_index = self.model.mu_index
@@ -420,12 +420,8 @@ class YomiRender:
             .transpose()
             .reset_index()
         )
-        matchups["c1"] = matchups["index"].apply(
-            lambda x: x.split("-")[0]
-        )
-        matchups["c2"] = matchups["index"].apply(
-            lambda x: x.split("-")[1]
-        )
+        matchups["c1"] = matchups["index"].apply(lambda x: x.split("-")[0])
+        matchups["c2"] = matchups["index"].apply(lambda x: x.split("-")[1])
         del matchups["index"]
 
         flipped = matchups[matchups.c1 != matchups.c2].rename(
@@ -458,7 +454,7 @@ class YomiRender:
 
         del (player_char_skill["index"])
 
-        player_elo = (
+        elo_by_player = (
             self.model.games[["match_date", "player_1", "elo_before_1"]]
             .rename(columns={"player_1": "player", "elo_before_1": "elo_before"})
             .append(
@@ -466,15 +462,24 @@ class YomiRender:
                     columns={"player_2": "player", "elo_before_2": "elo_before"}
                 )
             )
-            .sort_values(["match_date"])
+        )
+        player_elo = (
+            elo_by_player.sort_values(["match_date"])
             .groupby("player")
             .elo_before.last()
         ).dropna()
 
+        if self.model.min_games > 0:
+            player_elo[self.model.min_games_player] = elo_by_player[
+                elo_by_player.player == self.model.min_games_player
+            ].elo_before.mean()
+
         player_game_counts = (
-            self.model.games.player_1.rename('player').append(
-                self.model.games.player_2.rename('player')
-            ).to_frame().groupby('player').size()
+            self.model.games.player_1.rename("player")
+            .append(self.model.games.player_2.rename("player"))
+            .to_frame()
+            .groupby("player")
+            .size()
         ).dropna()
 
         player_data = defaultdict(dict)
@@ -485,19 +490,19 @@ class YomiRender:
         for player, count in player_game_counts.items():
             player_data[player]["gamesPlayed"] = count
 
-        templates = TemplateLookup(directories=['templates'])
+        templates = TemplateLookup(directories=["templates"])
 
         outfile_name = f"{self.base_folder}/matchup-comparator.html"
         with open(outfile_name, "w") as outfile:
             outfile.write(
-                templates.get_template(f'{game}.html').render_unicode(
+                templates.get_template(f"{game}.html").render_unicode(
                     matchups=matchups,
                     characters=self.model.characters,
                     player_data=player_data,
                     elo_scale={
                         "mean": summary.elo_logit_scale["mean"],
                         "std": summary.elo_logit_scale["std"],
-                    }
+                    },
                 )
             )
 

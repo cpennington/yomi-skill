@@ -1,7 +1,14 @@
 <%! import json %>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
     <script type="text/json" id="matchup-data">
       ${matchups.to_json(orient="records")}
     </script>
@@ -18,23 +25,66 @@
     <script src="https://cdn.jsdelivr.net/npm/vega-lite@3.0.0-rc14/build/vega-lite.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/vega-embed@4.0.0-rc1/build/vega-embed.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gaussian@1.1.0/lib/gaussian.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
+      integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+      crossorigin="anonymous"
+    />
     <link rel="stylesheet" type="text/css" href="theme.css" />
+    <title>
+      <%block name="title"></%block>
+    </title>
   </head>
 
   <body>
-    <a href="/yomi-skill">Yomi Skill Chart</a>
-    <a href="/yomi-skill/bacon.html">BattleCON Skill Chart</a>
-    <div>
-      <div>
-        <label for="player">Choose a player:</label>
-        <input list="players" id="player" name="player" />
-        <label for="opponent">an opponent:</label>
-        <input list="players" id="opponent" name="opponent" />
-        <button id="graph" onclick="return doGraph();">Graph</button>
-        <datalist id="players"></datalist>
-        <span id="loading"><img id="arrows" src="loading.svg"/></span>
+    <nav class="nav nav-tabs">
+      <a
+        class="nav-link ${'active' if self.attr.game == 'yomi' else ''}"
+        href="/yomi-skill"
+        >Yomi Skill Chart</a
+      >
+      <a
+        class="nav-link ${'active' if self.attr.game == 'bacon' else ''}"
+        href="/yomi-skill/bacon.html"
+        >BattleCON Skill Chart</a
+      >
+    </nav>
+    <div class="container">
+      <div class="row col-12">
+        <div class="div-group row col-12">
+          <label for="player" class="col-sm-1 col-form-label">Player:</label>
+          <input
+            list="players"
+            id="player"
+            name="player"
+            class="col-sm-3 form-control"
+          />
+          <label for="opponent" class="col-sm-1 col-form-label"
+            >Opponent:</label
+          >
+          <input
+            list="players"
+            id="opponent"
+            name="opponent"
+            class="col-sm-3 form-control"
+          />
+          <div class="col-sm-4">
+            <button
+              id="graph"
+              onclick="return doGraph();"
+              class="col-sm-9 btn btn-primary justify-content-end"
+            >
+              Graph
+            </button>
+            <datalist id="players"></datalist>
+            <span id="loading" class="col-sm-1 justify-content-end"
+              ><img id="arrows" src="loading.svg"
+            /></span>
+          </div>
+        </div>
       </div>
-      <table id="player-stats">
+      <table id="player-stats" class="table">
         <tr>
           <th>Player</th>
           <th>Elo</th>
@@ -51,18 +101,32 @@
           <td id="p2-games"></td>
         </tr>
       </table>
-
-      <div id="vis">
-        <div>
-          <div id="c1-c2"></div>
-          <div id="c1-total"></div>
-        </div>
-        <div>
-          <div id="c2-total"></div>
-          <div id="total"></div>
-        </div>
+    </div>
+    <div id="vis">
+      <div>
+        <div id="c1-c2"></div>
+        <div id="c1-total"></div>
+      </div>
+      <div>
+        <div id="c2-total"></div>
+        <div id="total"></div>
       </div>
     </div>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+      integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+      integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+      crossorigin="anonymous"
+    ></script>
     <script src="main.js"></script>
   </body>
 </html>

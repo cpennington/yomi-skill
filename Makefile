@@ -23,7 +23,8 @@ matchups: build
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=yomi \
-		--dest=index.html
+		--dest=index.html \
+		--min-games=0
 
 bacon-matchups: build
 	docker run -it  \
@@ -32,4 +33,5 @@ bacon-matchups: build
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=bacon \
-		--dest=bacon.html
+		--dest=bacon.html \
+		--min-games=30
