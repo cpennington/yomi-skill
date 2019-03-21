@@ -52,15 +52,15 @@
     </nav>
     <div class="container">
       <div class="row col-12">
-        <div class="div-group row col-12">
-          <label for="player" class="col-sm-1 col-form-label">Player:</label>
+        <div class="div-group row col-12 mt-2">
+          <label for="player" class="col-sm-auto col-form-label">Player:</label>
           <input
             list="players"
             id="player"
             name="player"
             class="col-sm-3 form-control"
           />
-          <label for="opponent" class="col-sm-1 col-form-label"
+          <label for="opponent" class="col-sm-auto col-form-label"
             >Opponent:</label
           >
           <input
@@ -69,7 +69,7 @@
             name="opponent"
             class="col-sm-3 form-control"
           />
-          <div class="col-sm-4">
+          <div class="col-sm-3 justify-content-between">
             <button
               id="graph"
               onclick="return doGraph();"
@@ -77,29 +77,33 @@
             >
               Graph
             </button>
-            <datalist id="players"></datalist>
-            <span id="loading" class="col-sm-1 justify-content-end"
-              ><img id="arrows" src="loading.svg"
-            /></span>
+            <div id="loading" class="col-sm-1 justify-content-end">
+              <img id="arrows" src="loading.svg" />
+            </div>
           </div>
+          <datalist id="players"></datalist>
         </div>
       </div>
-      <table id="player-stats" class="table">
-        <tr>
-          <th>Player</th>
-          <th>Elo</th>
-          <th>Games recorded</th>
-        </tr>
-        <tr>
-          <td id="p1-name"></td>
-          <td id="p1-elo"></td>
-          <td id="p1-games"></td>
-        </tr>
-        <tr>
-          <td id="p2-name"></td>
-          <td id="p2-elo"></td>
-          <td id="p2-games"></td>
-        </tr>
+      <table id="player-stats" class="table table-hover table-sm mt-2">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Elo</th>
+            <th>Games recorded</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td id="p1-name"></td>
+            <td id="p1-elo"></td>
+            <td id="p1-games"></td>
+          </tr>
+          <tr>
+            <td id="p2-name"></td>
+            <td id="p2-elo"></td>
+            <td id="p2-games"></td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div id="vis">
