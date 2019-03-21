@@ -64,14 +64,20 @@ function mu_pdf(mu, player, opponent) {
     }
     const upper = dist.cdf(log_odds(x + increment / 2));
     const lower = dist.cdf(log_odds(x - increment / 2));
-    return {
+    var datum = {
       c1: mu.c1,
       c2: mu.c2,
       mu: Math.round(x * 100) / 10 + "-" + (10 - Math.round(x * 100) / 10),
       win_chance: x,
       p: player && opponent ? -(upper - lower) : upper - lower,
-      type: player && opponent ? "match" : "global"
+      type: player && opponent ? "match" : "global",
+      count: mu.counts
     };
+    if (player && opponent) {
+      datum.pCount = playerSkill[player][mu.c1].played;
+      datum.oCount = playerSkill[opponent][mu.c2].played;
+    }
+    return datum;
   });
   return pdf;
 }
@@ -105,6 +111,54 @@ function comparePlayers(player, opponent) {
       }
       return pdf;
     });
+
+    const muEstimate = {
+      title: "Matchup Estimate",
+      field: "mu",
+      type: "ordinal",
+      axis: {
+        labels: true,
+        title: null,
+        values: ["5-5"]
+      }
+    };
+    const muLikelihood = {
+      title: "Likelihood of Matchup Estimate",
+      field: "p",
+      type: "quantitative",
+      axis: { labels: false, title: null },
+      format: ".1%"
+    };
+    const overallWinChance = {
+      title: "Overall Win Chance",
+      field: "cum_p",
+      type: "quantitative",
+      scale: {
+        scheme: ["rgb(48, 48, 255)", "rgb(230, 164, 230)", "rgb(255, 61, 61)"],
+        domain: [0.3, 0.7],
+        clamp: true
+      },
+      format: ".1%",
+      legend: null
+    };
+    const statsType = { field: "type", type: "nominal" };
+    const muCount = {
+      field: "count",
+      type: "quantitative",
+      title: "MU Games Recorded"
+    };
+    const pCount = {
+      field: "pCount",
+      type: "quantitative",
+      title: "Player-Character Games Recorded",
+      condition: { test: "datum['pCount'] !== null" }
+    };
+    const oCount = {
+      field: "oCount",
+      type: "quantitative",
+      title: "Opponent-Character Games Recorded",
+      condition: { test: "datum['oCount'] !== null" }
+    };
 
     const vlC1C2 = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
@@ -154,40 +208,19 @@ function comparePlayers(player, opponent) {
           type: "bar"
         },
         encoding: {
-          x: {
-            title: "Matchup Estimate",
-            field: "mu",
-            type: "ordinal",
-            axis: {
-              labels: true,
-              title: null,
-              values: ["5-5"]
-            }
-          },
-          y: {
-            title: "Likelihood of Matchup Estimate",
-            field: "p",
-            type: "quantitative",
-            axis: { labels: false, title: null },
-            format: ".1%"
-          },
-          color: {
-            title: "Overall Win Chance",
-            field: "cum_p",
-            type: "quantitative",
-            scale: {
-              scheme: [
-                "rgb(48, 48, 255)",
-                "rgb(230, 164, 230)",
-                "rgb(255, 61, 61)"
-              ],
-              domain: [0.3, 0.7],
-              clamp: true
-            },
-            format: ".1%",
-            legend: null
-          },
-          detail: { field: "type", type: "nominal" }
+          x: muEstimate,
+          y: muLikelihood,
+          color: overallWinChance,
+          detail: statsType,
+          tooltip: [
+            statsType,
+            overallWinChance,
+            muEstimate,
+            muLikelihood,
+            muCount,
+            pCount,
+            oCount
+          ]
         }
       }
     };

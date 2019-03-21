@@ -423,6 +423,15 @@ class YomiRender:
         matchups["c1"] = matchups["index"].apply(lambda x: x.split("-")[0])
         matchups["c2"] = matchups["index"].apply(lambda x: x.split("-")[1])
         del matchups["index"]
+        matchups["counts"] = matchups.apply(
+            lambda r: len(
+                self.model.games[
+                    (self.model.games.character_1 == r.c1)
+                    & (self.model.games.character_2 == r.c2)
+                ]
+            ),
+            axis=1,
+        )
 
         flipped = matchups[matchups.c1 != matchups.c2].rename(
             columns={"c1": "c2", "c2": "c1"}
@@ -480,11 +489,30 @@ class YomiRender:
             .to_frame()
             .groupby("player")
             .size()
+            .astype(int)
+        ).dropna()
+
+        player_character_counts = (
+            self.model.games[["player_1", "character_1"]]
+            .rename(columns={"player_1": "player", "character_1": "character"})
+            .append(
+                self.model.games[["player_2", "character_2"]].rename(
+                    columns={"player_2": "player", "character_2": "character"}
+                )
+            )
+            .groupby(["player", "character"])
+            .size()
         ).dropna()
 
         player_data = defaultdict(dict)
         for row in player_char_skill.itertuples():
-            player_data[row.player][row.character] = {"mean": row.mean, "std": row.std}
+            player_data[row.player][row.character] = {
+                "mean": row.mean,
+                "std": row.std,
+                "played": int(
+                    player_character_counts[row.player].get(row.character, 0)
+                ),
+            }
         for player, elo in player_elo.items():
             player_data[player]["elo"] = elo
         for player, count in player_game_counts.items():
