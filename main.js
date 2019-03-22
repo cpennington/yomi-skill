@@ -33,20 +33,28 @@ for (x = 0; x <= 1; x += increment) {
   xs.push(x);
 }
 
-function log_odds(win_chance) {
-  return Math.log(win_chance / (1 - win_chance));
+var percPts = [];
+for (pp = 0; pp <= 1; pp += 0.001) {
+  percPts.push(pp);
 }
-function normal_dist(mean, std, x) {
-  variance = std * std;
 
-  return (
-    (1 / Math.sqrt(2 * Math.PI * variance)) *
-    Math.exp(-Math.pow(x - mean, 2) / (2 * variance))
-  );
+function logOdds(winChance) {
+  return Math.log(winChance / (1 - winChance));
 }
-function mu_pdf(mu, player, opponent) {
+
+function invLogOdds(odds) {
+  return Math.exp(odds) / (Math.exp(odds) + 1);
+}
+
+function formatMU(winChance, func) {
+  func = func || Math.round;
+  return func(winChance * 20) / 2 + "-" + (10 - func(winChance * 20) / 2);
+}
+
+function muPDF(mu, player, opponent) {
   var pdf = xs.map(function(x) {
-    var dist = gaussian(mu.mean, mu.std * mu.std);
+    var muDist = gaussian(mu.mean, mu.std * mu.std);
+    var dist = muDist;
     if (player && opponent) {
       const pSkill = playerSkill[player][mu.c1];
       const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
@@ -57,29 +65,84 @@ function mu_pdf(mu, player, opponent) {
       eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
       eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
 
-      dist = dist
+      poDist = muDist
         .add(pSkillDist)
         .sub(oSkillDist)
         .add(eloScaleDist.scale(eloLogit));
+      dist = poDist;
     }
-    const upper = dist.cdf(log_odds(x + increment / 2));
-    const lower = dist.cdf(log_odds(x - increment / 2));
+    const upper = dist.cdf(logOdds(x + increment / 2));
+    const lower = dist.cdf(logOdds(x - increment / 2));
+
+    const muCredInterval =
+      formatMU(invLogOdds(muDist.ppf(0.05)), Math.floor) +
+      " - " +
+      formatMU(invLogOdds(muDist.ppf(0.95)), Math.ceil);
+
+    if (player && opponent) {
+      poCredInterval =
+        formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor) +
+        " - " +
+        formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
+    }
+
     var datum = {
       c1: mu.c1,
       c2: mu.c2,
-      mu: Math.round(x * 100) / 10 + "-" + (10 - Math.round(x * 100) / 10),
-      win_chance: x,
+      mu: formatMU(x),
+      winChance: x,
       p: player && opponent ? -(upper - lower) : upper - lower,
       type: player && opponent ? "match" : "global",
-      count: mu.counts
+      count: mu.counts,
+      credInterval: player && opponent ? poCredInterval : muCredInterval,
+      type: player && opponent ? "match" : "global"
     };
     if (player && opponent) {
       datum.pCount = playerSkill[player][mu.c1].played;
       datum.oCount = playerSkill[opponent][mu.c2].played;
+      datum.poCredMinEst = formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor);
+      datum.poCredMaxEst = formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
     }
     return datum;
   });
   return pdf;
+}
+
+function credibleInterval(mu, player, opponent) {
+  var muDist = gaussian(mu.mean, mu.std * mu.std);
+
+  if (player && opponent) {
+    const pSkill = playerSkill[player][mu.c1];
+    const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
+    const oSkill = playerSkill[opponent][mu.c2];
+    const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
+
+    const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
+    eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
+    eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
+
+    poDist = muDist
+      .add(pSkillDist)
+      .sub(oSkillDist)
+      .add(eloScaleDist.scale(eloLogit));
+  }
+
+  var datum = {
+    c1: mu.c1,
+    c2: mu.c2,
+    muCredInterval:
+      formatMU(invLogOdds(muDist.ppf(0.05)), Math.floor) +
+      " - " +
+      formatMU(invLogOdds(muDist.ppf(0.95)), Math.ceil),
+    type: player && opponent ? "match" : "global"
+  };
+  if (player && opponent) {
+    datum.poCredInterval =
+      formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor) +
+      " - " +
+      formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
+  }
+  return datum;
 }
 
 function comparePlayers(player, opponent) {
@@ -104,13 +167,21 @@ function comparePlayers(player, opponent) {
   }
 
   setTimeout(function() {
-    values = matchupData.flatMap(function(v) {
-      var pdf = mu_pdf(v);
+    muEstimates = matchupData.flatMap(function(v) {
+      var pdf = muPDF(v);
       if (player && opponent) {
-        pdf = pdf.concat(mu_pdf(v, player, opponent));
+        pdf = pdf.concat(muPDF(v, player, opponent));
       }
       return pdf;
     });
+
+    // credInter = matchupData.flatMap(function(v) {
+    //   var intervals = [credibleInterval(v)];
+    //   if (player && opponent) {
+    //     intervals.push(credibleInterval(v, player, opponent));
+    //   }
+    //   return intervals;
+    // });
 
     const muEstimate = {
       title: "Matchup Estimate",
@@ -130,7 +201,7 @@ function comparePlayers(player, opponent) {
       format: ".1%"
     };
     const overallWinChance = {
-      title: "Overall Win Chance",
+      title: "Aggregate Win Estimate",
       field: "cum_p",
       type: "quantitative",
       scale: {
@@ -159,12 +230,32 @@ function comparePlayers(player, opponent) {
       title: "Opponent-Character Games Recorded",
       condition: { test: "datum['oCount'] !== null" }
     };
+    const credInterval = {
+      field: "credInterval",
+      type: "ordinal",
+      title: "90% Chance MU Within"
+    };
 
     const vlC1C2 = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
-        values: values
+        values: muEstimates
       },
+      transform: [
+        {
+          calculate: "datum.p * datum.winChance",
+          as: "w_p"
+        },
+        {
+          joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
+          groupby: ["c1", "c2", "type"]
+        },
+        {
+          calculate: "abs(datum.signed_cum_p)",
+          as: "cum_p"
+        }
+      ],
+
       facet: {
         row: {
           field: "c1",
@@ -187,20 +278,6 @@ function comparePlayers(player, opponent) {
         row: 2,
         column: 2
       },
-      transform: [
-        {
-          calculate: "datum.p * datum.win_chance",
-          as: "w_p"
-        },
-        {
-          joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
-          groupby: ["c1", "c2", "type"]
-        },
-        {
-          calculate: "abs(datum.signed_cum_p)",
-          as: "cum_p"
-        }
-      ],
       spec: {
         width: 50,
         height: 40,
@@ -214,6 +291,7 @@ function comparePlayers(player, opponent) {
           detail: statsType,
           tooltip: [
             statsType,
+            credInterval,
             overallWinChance,
             muEstimate,
             muLikelihood,
@@ -228,13 +306,13 @@ function comparePlayers(player, opponent) {
     const vlC1Totals = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
-        values: values
+        values: muEstimates
       },
       transform: [
         {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
-            { op: "mean", field: "win_chance", as: "mean_win_chance" }
+            { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["c1", "mu", "type"]
         },
@@ -291,7 +369,7 @@ function comparePlayers(player, opponent) {
             format: ".1%"
           },
           color: {
-            title: "Overall Win Chance",
+            title: "Aggregate Win Estimate",
             field: "cum_p",
             type: "quantitative",
             scale: {
@@ -314,13 +392,13 @@ function comparePlayers(player, opponent) {
     const vlC2Totals = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
-        values: values
+        values: muEstimates
       },
       transform: [
         {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
-            { op: "mean", field: "win_chance", as: "mean_win_chance" }
+            { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["c2", "mu", "type"]
         },
@@ -378,7 +456,7 @@ function comparePlayers(player, opponent) {
             format: ".1%"
           },
           color: {
-            title: "Overall Win Chance",
+            title: "Aggregate Win Estimate",
             field: "cum_p",
             type: "quantitative",
             scale: {
@@ -401,13 +479,13 @@ function comparePlayers(player, opponent) {
     const vlTotals = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
-        values: values
+        values: muEstimates
       },
       transform: [
         {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
-            { op: "mean", field: "win_chance", as: "mean_win_chance" }
+            { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["mu", "type"]
         },
@@ -453,7 +531,7 @@ function comparePlayers(player, opponent) {
           format: ".1%"
         },
         color: {
-          title: "Overall Win Chance",
+          title: "Aggregate Win Estimate",
           field: "cum_p",
           type: "quantitative",
           scale: {
@@ -474,9 +552,7 @@ function comparePlayers(player, opponent) {
 
     Promise.all([
       vegaEmbed("#c1-c2", vlC1C2),
-      vegaEmbed("#c1-total", vlC1Totals).then(function(embed) {
-        console.log(embed.view.data("data_0"));
-      }),
+      vegaEmbed("#c1-total", vlC1Totals),
       vegaEmbed("#c2-total", vlC2Totals),
       vegaEmbed("#total", vlTotals)
     ])
