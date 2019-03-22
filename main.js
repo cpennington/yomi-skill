@@ -14,6 +14,49 @@ const loading = document.getElementById("loading");
 const vis = document.getElementById("vis");
 const increment = 0.05;
 
+const quantiles = [0.05, 0.25, 0.5, 0.75, 0.95, 1];
+const medianPlayerSkill = {};
+characters.forEach(function(char) {
+  medianPlayerSkill[char] = {};
+  qValues = math.quantileSeq(
+    Object.entries(playerSkill)
+      .map(function(skillsByChar) {
+        var charStats = skillsByChar[1][char];
+        if (charStats) {
+          return charStats.mean;
+        } else {
+          return null;
+        }
+      })
+      .filter(function(v) {
+        return v != null;
+      }),
+    quantiles
+  );
+
+  std = math.mean(
+    Object.entries(playerSkill)
+      .map(function(skillsByChar) {
+        var charStats = skillsByChar[1][char];
+        if (charStats) {
+          return charStats.std;
+        } else {
+          return null;
+        }
+      })
+      .filter(function(v) {
+        return v != null;
+      })
+  );
+
+  quantiles.forEach(function(q, idx) {
+    medianPlayerSkill[char][q * 100 + "%"] = {
+      mean: qValues[idx],
+      std: std
+    };
+  });
+});
+
 Object.entries(playerSkill)
   .map(function(entry) {
     return [entry[1].gamesPlayed, entry[0]];
@@ -55,20 +98,34 @@ function muPDF(mu, player, opponent) {
   var pdf = xs.map(function(x) {
     var muDist = gaussian(mu.mean, mu.std * mu.std);
     var dist = muDist;
-    if (player && opponent) {
+    if (player) {
       const pSkill = playerSkill[player][mu.c1];
       const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
-      const oSkill = playerSkill[opponent][mu.c2];
-      const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
+      if (opponent) {
+        const oSkill = playerSkill[opponent][mu.c2];
+        const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
 
-      const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
-      eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
-      eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
+        const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
+        eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
+        eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
 
-      poDist = muDist
-        .add(pSkillDist)
-        .sub(oSkillDist)
-        .add(eloScaleDist.scale(eloLogit));
+        poDist = muDist
+          .add(pSkillDist)
+          .sub(oSkillDist)
+          .add(eloScaleDist.scale(eloLogit));
+      } else {
+        const oSkill = medianPlayerSkill[mu.c2]["50%"];
+        const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
+
+        const eloDiff = 0;
+        eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
+        eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
+
+        poDist = muDist.add(pSkillDist).sub(oSkillDist);
+        if (eloDiff != 0) {
+          poDist = poDist.add(eloScaleDist.scale(eloLogit));
+        }
+      }
       dist = poDist;
     }
     const upper = dist.cdf(logOdds(x + increment / 2));
@@ -79,7 +136,7 @@ function muPDF(mu, player, opponent) {
       " - " +
       formatMU(invLogOdds(muDist.ppf(0.95)), Math.ceil);
 
-    if (player && opponent) {
+    if (player) {
       poCredInterval =
         formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor) +
         " - " +
@@ -91,58 +148,22 @@ function muPDF(mu, player, opponent) {
       c2: mu.c2,
       mu: formatMU(x),
       winChance: x,
-      p: player && opponent ? -(upper - lower) : upper - lower,
-      type: player && opponent ? "match" : "global",
+      p: player ? -(upper - lower) : upper - lower,
+      type: player ? "match" : "global",
       count: mu.counts,
-      credInterval: player && opponent ? poCredInterval : muCredInterval,
-      type: player && opponent ? "match" : "global"
+      credInterval: player ? poCredInterval : muCredInterval
     };
-    if (player && opponent) {
+    if (player) {
       datum.pCount = playerSkill[player][mu.c1].played;
-      datum.oCount = playerSkill[opponent][mu.c2].played;
+      if (opponent) {
+        datum.oCount = playerSkill[opponent][mu.c2].played;
+      }
       datum.poCredMinEst = formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor);
       datum.poCredMaxEst = formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
     }
     return datum;
   });
   return pdf;
-}
-
-function credibleInterval(mu, player, opponent) {
-  var muDist = gaussian(mu.mean, mu.std * mu.std);
-
-  if (player && opponent) {
-    const pSkill = playerSkill[player][mu.c1];
-    const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
-    const oSkill = playerSkill[opponent][mu.c2];
-    const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
-
-    const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
-    eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
-    eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
-
-    poDist = muDist
-      .add(pSkillDist)
-      .sub(oSkillDist)
-      .add(eloScaleDist.scale(eloLogit));
-  }
-
-  var datum = {
-    c1: mu.c1,
-    c2: mu.c2,
-    muCredInterval:
-      formatMU(invLogOdds(muDist.ppf(0.05)), Math.floor) +
-      " - " +
-      formatMU(invLogOdds(muDist.ppf(0.95)), Math.ceil),
-    type: player && opponent ? "match" : "global"
-  };
-  if (player && opponent) {
-    datum.poCredInterval =
-      formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor) +
-      " - " +
-      formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
-  }
-  return datum;
 }
 
 function comparePlayers(player, opponent) {
@@ -169,19 +190,12 @@ function comparePlayers(player, opponent) {
   setTimeout(function() {
     muEstimates = matchupData.flatMap(function(v) {
       var pdf = muPDF(v);
-      if (player && opponent) {
+      if (player) {
         pdf = pdf.concat(muPDF(v, player, opponent));
       }
       return pdf;
     });
-
-    // credInter = matchupData.flatMap(function(v) {
-    //   var intervals = [credibleInterval(v)];
-    //   if (player && opponent) {
-    //     intervals.push(credibleInterval(v, player, opponent));
-    //   }
-    //   return intervals;
-    // });
+    console.log(muEstimates);
 
     const muEstimate = {
       title: "Matchup Estimate",
