@@ -12,13 +12,21 @@ const opponentInput = document.getElementById("opponent");
 const playersList = document.getElementById("players");
 const loading = document.getElementById("loading");
 const vis = document.getElementById("vis");
+const againstCfg = document.getElementById("against-cfg");
+const playerStats = document.getElementById("player-stats");
+const p1Stats = document.getElementById("p1-stats");
+const p2Stats = document.getElementById("p2-stats");
 const increment = 0.05;
+
+playerInput.onblur = updatePlayerStats;
+opponentInput.onblur = updatePlayerStats;
 
 const quantiles = [0.05, 0.25, 0.5, 0.75, 0.95, 1];
 const medianPlayerSkill = {};
+const medianPlayerElo = {};
 characters.forEach(function(char) {
   medianPlayerSkill[char] = {};
-  qValues = math.quantileSeq(
+  skillQValues = math.quantileSeq(
     Object.entries(playerSkill)
       .map(function(skillsByChar) {
         var charStats = skillsByChar[1][char];
@@ -49,11 +57,23 @@ characters.forEach(function(char) {
       })
   );
 
+  eloQValues = math.quantileSeq(
+    Object.values(playerSkill)
+      .map(function(skill) {
+        return skill.elo;
+      })
+      .filter(function(v) {
+        return v >= 0;
+      }),
+    quantiles
+  );
+
   quantiles.forEach(function(q, idx) {
     medianPlayerSkill[char][q * 100 + "%"] = {
-      mean: qValues[idx],
+      mean: skillQValues[idx],
       std: std
     };
+    medianPlayerElo[q * 100 + "%"] = eloQValues[idx];
   });
 });
 
@@ -114,10 +134,50 @@ function muPDF(mu, player, opponent) {
           .sub(oSkillDist)
           .add(eloScaleDist.scale(eloLogit));
       } else {
-        const oSkill = medianPlayerSkill[mu.c2]["50%"];
+        const againstSkillPick = Array.from(
+          document.getElementsByName("against-skill")
+        )
+          .map(function(e) {
+            return e.checked ? e.value : null;
+          })
+          .filter(function(v) {
+            return v != null;
+          })[0];
+        var oSkill;
+        if (againstSkillPick === "self") {
+          oSkill = {
+            mean: math.mean(
+              characters.map(function(char) {
+                return playerSkill[player][char].mean;
+              })
+            ),
+            std: math.mean(
+              characters.map(function(char) {
+                return playerSkill[player][char].std;
+              })
+            )
+          };
+        } else {
+          oSkill = medianPlayerSkill[mu.c2][againstSkillPick];
+        }
         const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
 
-        const eloDiff = 0;
+        const againstEloPick = Array.from(
+          document.getElementsByName("against-elo")
+        )
+          .map(function(e) {
+            return e.checked ? e.value : null;
+          })
+          .filter(function(v) {
+            return v != null;
+          })[0];
+        var eloDiff;
+        if (againstEloPick === "self") {
+          eloDiff = 0;
+        } else {
+          eloDiff = playerSkill[player].elo - medianPlayerElo[againstEloPick];
+        }
+
         eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
         eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
 
@@ -166,9 +226,14 @@ function muPDF(mu, player, opponent) {
   return pdf;
 }
 
-function comparePlayers(player, opponent) {
-  loading.style.display = "inline";
-  vis.style.display = "none";
+function updatePlayerStats() {
+  const player = playerSkill[playerInput.value] && playerInput.value;
+  const opponent = playerSkill[opponentInput.value] && opponentInput.value;
+
+  playerStats.style.display = player || opponent ? "table" : "none";
+  againstCfg.style.display = player && !opponent ? "block" : "none";
+  p1Stats.style.display = player ? "table-row" : "none";
+  p2Stats.style.display = opponent ? "table-row" : "none";
 
   if (player) {
     document.getElementById("p1-name").textContent = player;
@@ -179,6 +244,7 @@ function comparePlayers(player, opponent) {
       playerSkill[player].gamesPlayed;
   }
   if (opponent) {
+    againstCfg.display = "none";
     document.getElementById("p2-name").textContent = opponent;
     document.getElementById("p2-elo").textContent = Math.round(
       playerSkill[opponent].elo
@@ -186,6 +252,11 @@ function comparePlayers(player, opponent) {
     document.getElementById("p2-games").textContent =
       playerSkill[opponent].gamesPlayed;
   }
+}
+
+function comparePlayers(player, opponent) {
+  loading.style.display = "inline";
+  vis.style.display = "none";
 
   setTimeout(function() {
     muEstimates = matchupData.flatMap(function(v) {
@@ -195,7 +266,6 @@ function comparePlayers(player, opponent) {
       }
       return pdf;
     });
-    console.log(muEstimates);
 
     const muEstimate = {
       title: "Matchup Estimate",
@@ -587,4 +657,5 @@ function doGraph(event) {
   comparePlayers(playerInput.value, opponentInput.value);
 }
 
+updatePlayerStats();
 doGraph();

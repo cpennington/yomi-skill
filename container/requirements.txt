@@ -8,7 +8,7 @@
 arviz==0.3.3
 attrs==19.1.0             # via bacon-replay-analyzer, jsonschema
 backcall==0.1.0           # via ipython
-bacon-replay-analyzer==0.0.6
+bacon-replay-analyzer==0.0.7
 bleach==3.1.0             # via nbconvert
 cached-property==1.5.1
 certifi==2019.3.9         # via requests
@@ -25,7 +25,7 @@ fastparquet==0.2.1
 idna==2.8                 # via requests
 ipykernel==5.1.0          # via ipywidgets, jupyter, jupyter-console, notebook, qtconsole
 ipython-genutils==0.2.0   # via nbformat, notebook, qtconsole, traitlets
-ipython[notebook]==7.3.0
+ipython[notebook]==7.4.0
 ipywidgets==7.4.2         # via ipython, jupyter
 jedi==0.13.3              # via ipython
 jinja2==2.10              # via nbconvert, notebook
@@ -38,7 +38,7 @@ jupyterlab-server==0.2.0  # via jupyterlab
 jupyterlab==0.35.4
 kiwisolver==1.0.1         # via matplotlib
 llvmlite==0.28.0          # via numba
-mako==1.0.7
+mako==1.0.8
 markupsafe==1.1.1         # via jinja2, mako
 matplotlib==3.0.3
 mistune==0.8.4            # via nbconvert
