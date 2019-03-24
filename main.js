@@ -288,22 +288,33 @@ function comparePlayers(player, opponent) {
       format: ".1%",
       stack: null
     };
-    const overallWinChance = {
-      title: "Aggregate Win Estimate",
-      field: "cum_p",
-      type: "quantitative",
-      scale: {
-        scheme: ["rgb(48, 48, 255)", "rgb(230, 164, 230)", "rgb(255, 61, 61)"],
-        domain: [0.3, 0.7],
-        clamp: true
+    const overallWinChance = Object.assign(
+      {},
+      {
+        title: "Aggregate Win Estimate",
+        field: "cum_p",
+        type: "quantitative",
+        scale: {
+          scheme: [
+            "rgb(48, 48, 255)",
+            "rgb(230, 164, 230)",
+            "rgb(255, 61, 61)"
+          ],
+          domain: [0.3, 0.7],
+          clamp: true
+        },
+        format: ".1%",
+        legend: null
       },
-      format: ".1%",
-      legend: null,
-      condition: {
-        test: "datum['type'] == 'global'",
-        value: "transparent"
-      }
-    };
+      player
+        ? {
+            condition: {
+              test: "datum['type'] == 'global'",
+              value: "transparent"
+            }
+          }
+        : {}
+    );
     const statsType = { field: "type", type: "nominal" };
     const muCount = {
       field: "count",
