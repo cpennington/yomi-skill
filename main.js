@@ -298,45 +298,35 @@ function comparePlayers(player, opponent) {
         clamp: true
       },
       format: ".1%",
-      legend: null
+      legend: null,
+      condition: {
+        test: "datum['type'] == 'global'",
+        value: "transparent"
+      }
     };
     const statsType = { field: "type", type: "nominal" };
     const muCount = {
       field: "count",
       type: "quantitative",
       title: "MU Games Recorded"
-      // aggregate: "sum"
     };
     const pCount = {
       field: "pCount",
       type: "quantitative",
       title: "Player-Character Games Recorded",
       condition: { test: "datum['pCount'] !== null" }
-      // aggregate: "sum"
     };
     const oCount = {
       field: "oCount",
       type: "quantitative",
       title: "Opponent-Character Games Recorded",
       condition: { test: "datum['oCount'] !== null" }
-      //aggregate: "sum"
     };
     const credInterval = {
       field: "credInterval",
       type: "ordinal",
       title: "90% Chance MU Within"
     };
-    const fillOpacity = player
-      ? {
-          condition: {
-            test: "datum['type'] == 'global'",
-            value: 0
-          },
-          value: 1
-        }
-      : {
-          value: 1
-        };
 
     const stroke = player
       ? {
@@ -379,7 +369,6 @@ function comparePlayers(player, opponent) {
       fill: overallWinChance,
       stroke: stroke,
       detail: statsType,
-      fillOpacity: fillOpacity,
       tooltip: [statsType, overallWinChance, muEstimate, muLikelihood, muCount]
     };
 
