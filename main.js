@@ -305,20 +305,21 @@ function comparePlayers(player, opponent) {
       field: "count",
       type: "quantitative",
       title: "MU Games Recorded"
+      // aggregate: "sum"
     };
     const pCount = {
       field: "pCount",
       type: "quantitative",
       title: "Player-Character Games Recorded",
-      condition: { test: "datum['pCount'] !== null" },
-      aggregate: "sum"
+      condition: { test: "datum['pCount'] !== null" }
+      // aggregate: "sum"
     };
     const oCount = {
       field: "oCount",
       type: "quantitative",
       title: "Opponent-Character Games Recorded",
-      condition: { test: "datum['oCount'] !== null" },
-      aggregate: "sum"
+      condition: { test: "datum['oCount'] !== null" }
+      //aggregate: "sum"
     };
     const credInterval = {
       field: "credInterval",
@@ -353,7 +354,33 @@ function comparePlayers(player, opponent) {
       field: "pdf",
       type: "quantitative",
       stack: null,
-      axis: { labels: false, title: null }
+      axis: { labels: false, title: null, tickCount: 2, gridOpacity: 0.5 },
+      scale: {
+        domain: [
+          0,
+          math.max(
+            muEstimates.map(function(datum) {
+              return datum.pdf;
+            })
+          )
+        ]
+      }
+    };
+
+    const mark = {
+      type: "area",
+      stroke: "#000",
+      interpolate: "monotone"
+    };
+
+    const baseEncoding = {
+      x: muEstimate,
+      y: pdf,
+      fill: overallWinChance,
+      stroke: stroke,
+      detail: statsType,
+      fillOpacity: fillOpacity,
+      tooltip: [statsType, overallWinChance, muEstimate, muLikelihood, muCount]
     };
 
     const vlC1C2 = {
@@ -401,14 +428,8 @@ function comparePlayers(player, opponent) {
       spec: {
         width: 50,
         height: 40,
-        mark: {
-          type: "bar"
-        },
-        encoding: {
-          x: muEstimate,
-          y: muLikelihood,
-          color: overallWinChance,
-          detail: statsType,
+        mark: mark,
+        encoding: Object.assign({}, baseEncoding, {
           tooltip: [
             statsType,
             credInterval,
@@ -419,11 +440,11 @@ function comparePlayers(player, opponent) {
             pCount,
             oCount
           ]
-        }
+        })
       }
     };
 
-    const vlC1Totals = {
+    const vlC1Totals = Object.assign({}, vlC1C2, {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
         values: muEstimates
@@ -433,6 +454,7 @@ function comparePlayers(player, opponent) {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
             { op: "sum", field: "pdf", as: "sum_pdf" },
+            { op: "sum", field: "count", as: "count" },
             { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["c1", "mu", "type"]
@@ -472,49 +494,16 @@ function comparePlayers(player, opponent) {
       spec: {
         width: 50,
         height: 40,
-        mark: {
-          type: "bar"
-        },
-        encoding: {
-          x: {
-            title: "Matchup Estimate",
-            field: "mu",
-            type: "ordinal",
-            axis: {
-              labels: true,
-              title: null,
-              values: ["5-5"]
-            }
-          },
-          y: {
-            title: "Likelihood of Matchup Estimate",
-            field: "p",
-            type: "quantitative",
-            axis: { labels: false, title: null },
-            format: ".1%"
-          },
-          color: {
-            title: "Aggregate Win Estimate",
-            field: "cum_p",
-            type: "quantitative",
-            scale: {
-              scheme: [
-                "rgb(48, 48, 255)",
-                "rgb(230, 164, 230)",
-                "rgb(255, 61, 61)"
-              ],
-              domain: [0.3, 0.7],
-              clamp: true
-            },
-            format: ".1%",
-            legend: { format: ".1%" }
-          },
-          detail: { field: "type", type: "nominal" }
-        }
+        mark: mark,
+        encoding: Object.assign({}, baseEncoding, {
+          fill: Object.assign({}, baseEncoding.fill, {
+            legend: true
+          })
+        })
       }
-    };
+    });
 
-    const vlC2Totals = {
+    const vlC2Totals = Object.assign({}, vlC1C2, {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
         values: muEstimates
@@ -523,6 +512,8 @@ function comparePlayers(player, opponent) {
         {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
+            { op: "sum", field: "pdf", as: "sum_pdf" },
+            { op: "sum", field: "count", as: "count" },
             { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["c2", "mu", "type"]
@@ -530,6 +521,10 @@ function comparePlayers(player, opponent) {
         {
           calculate: "datum.sum_p / " + characters.length,
           as: "p"
+        },
+        {
+          calculate: "datum.sum_pdf / " + characters.length,
+          as: "pdf"
         },
         {
           calculate: "datum.p * datum.mean_win_chance",
@@ -559,47 +554,10 @@ function comparePlayers(player, opponent) {
       spec: {
         width: 50,
         height: 40,
-        mark: {
-          type: "bar"
-        },
-        encoding: {
-          x: {
-            title: "Matchup Estimate",
-            field: "mu",
-            type: "ordinal",
-            axis: {
-              labels: true,
-              title: null,
-              values: ["5-5"]
-            }
-          },
-          y: {
-            title: "Likelihood of Matchup Estimate",
-            field: "p",
-            type: "quantitative",
-            axis: { labels: false, title: null },
-            format: ".1%"
-          },
-          color: {
-            title: "Aggregate Win Estimate",
-            field: "cum_p",
-            type: "quantitative",
-            scale: {
-              scheme: [
-                "rgb(48, 48, 255)",
-                "rgb(230, 164, 230)",
-                "rgb(255, 61, 61)"
-              ],
-              domain: [0.3, 0.7],
-              clamp: true
-            },
-            format: ".1%",
-            legend: null
-          },
-          detail: { field: "type", type: "nominal" }
-        }
+        mark: mark,
+        encoding: baseEncoding
       }
-    };
+    });
 
     const vlTotals = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
@@ -610,6 +568,7 @@ function comparePlayers(player, opponent) {
         {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
+            { op: "sum", field: "pdf", as: "sum_pdf" },
             { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["mu", "type"]
@@ -617,6 +576,10 @@ function comparePlayers(player, opponent) {
         {
           calculate: "datum.sum_p / " + characters.length * characters.length,
           as: "p"
+        },
+        {
+          calculate: "datum.sum_pdf / " + characters.length * characters.length,
+          as: "pdf"
         },
         {
           calculate: "datum.p * datum.mean_win_chance",
@@ -631,48 +594,10 @@ function comparePlayers(player, opponent) {
           as: "cum_p"
         }
       ],
-
       width: 50,
       height: 40,
-      mark: {
-        type: "bar"
-      },
-      encoding: {
-        x: {
-          title: "Matchup Estimate",
-          field: "mu",
-          type: "ordinal",
-          axis: {
-            labels: true,
-            title: null,
-            values: ["5-5"]
-          }
-        },
-        y: {
-          title: "Likelihood of Matchup Estimate",
-          field: "p",
-          type: "quantitative",
-          axis: { labels: false, title: null },
-          format: ".1%"
-        },
-        color: {
-          title: "Aggregate Win Estimate",
-          field: "cum_p",
-          type: "quantitative",
-          scale: {
-            scheme: [
-              "rgb(48, 48, 255)",
-              "rgb(230, 164, 230)",
-              "rgb(255, 61, 61)"
-            ],
-            domain: [0.3, 0.7],
-            clamp: true
-          },
-          format: ".1%",
-          legend: null
-        },
-        detail: { field: "type", type: "nominal" }
-      }
+      mark: mark,
+      encoding: baseEncoding
     };
 
     Promise.all([
