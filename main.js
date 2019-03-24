@@ -208,7 +208,8 @@ function muPDF(mu, player, opponent) {
       c2: mu.c2,
       mu: formatMU(x),
       winChance: x,
-      p: player ? -(upper - lower) : upper - lower,
+      pdf: dist.pdf(logOdds(x)),
+      p: upper - lower,
       type: player ? "match" : "global",
       count: mu.counts,
       credInterval: player ? poCredInterval : muCredInterval
@@ -274,7 +275,9 @@ function comparePlayers(player, opponent) {
       axis: {
         labels: true,
         title: null,
-        values: ["5-5"]
+        values: ["2-8", "5-5", "8-2"],
+        grid: true,
+        gridOpacity: 0.5
       }
     };
     const muLikelihood = {
@@ -282,7 +285,8 @@ function comparePlayers(player, opponent) {
       field: "p",
       type: "quantitative",
       axis: { labels: false, title: null },
-      format: ".1%"
+      format: ".1%",
+      stack: null
     };
     const overallWinChance = {
       title: "Aggregate Win Estimate",
@@ -306,18 +310,50 @@ function comparePlayers(player, opponent) {
       field: "pCount",
       type: "quantitative",
       title: "Player-Character Games Recorded",
-      condition: { test: "datum['pCount'] !== null" }
+      condition: { test: "datum['pCount'] !== null" },
+      aggregate: "sum"
     };
     const oCount = {
       field: "oCount",
       type: "quantitative",
       title: "Opponent-Character Games Recorded",
-      condition: { test: "datum['oCount'] !== null" }
+      condition: { test: "datum['oCount'] !== null" },
+      aggregate: "sum"
     };
     const credInterval = {
       field: "credInterval",
       type: "ordinal",
       title: "90% Chance MU Within"
+    };
+    const fillOpacity = player
+      ? {
+          condition: {
+            test: "datum['type'] == 'global'",
+            value: 0
+          },
+          value: 1
+        }
+      : {
+          value: 1
+        };
+
+    const stroke = player
+      ? {
+          condition: {
+            test: "datum['type'] == 'global'",
+            value: "#000"
+          },
+          value: "transparent"
+        }
+      : {
+          value: "transparent"
+        };
+
+    const pdf = {
+      field: "pdf",
+      type: "quantitative",
+      stack: null,
+      axis: { labels: false, title: null }
     };
 
     const vlC1C2 = {
@@ -396,6 +432,7 @@ function comparePlayers(player, opponent) {
         {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
+            { op: "sum", field: "pdf", as: "sum_pdf" },
             { op: "mean", field: "winChance", as: "mean_win_chance" }
           ],
           groupby: ["c1", "mu", "type"]
@@ -403,6 +440,10 @@ function comparePlayers(player, opponent) {
         {
           calculate: "datum.sum_p / " + characters.length,
           as: "p"
+        },
+        {
+          calculate: "datum.sum_pdf / " + characters.length,
+          as: "pdf"
         },
         {
           calculate: "datum.p * datum.mean_win_chance",
