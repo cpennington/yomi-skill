@@ -191,36 +191,27 @@ function muPDF(mu, player, opponent) {
     const upper = dist.cdf(logOdds(x + increment / 2));
     const lower = dist.cdf(logOdds(x - increment / 2));
 
-    const muCredInterval =
-      formatMU(invLogOdds(muDist.ppf(0.05)), Math.floor) +
-      " - " +
-      formatMU(invLogOdds(muDist.ppf(0.95)), Math.ceil);
-
-    if (player) {
-      poCredInterval =
-        formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor) +
-        " - " +
-        formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
-    }
-
     var datum = {
       c1: mu.c1,
       c2: mu.c2,
       mu: formatMU(x),
       winChance: x,
+      credLower: invLogOdds(dist.ppf(0.05)),
+      credUpper: invLogOdds(dist.ppf(0.95)),
       pdf: dist.pdf(logOdds(x)),
       p: upper - lower,
       type: player ? "match" : "global",
-      count: mu.counts,
-      credInterval: player ? poCredInterval : muCredInterval
+      count: mu.counts
     };
     if (player) {
       datum.pCount = playerSkill[player][mu.c1].played;
       if (opponent) {
         datum.oCount = playerSkill[opponent][mu.c2].played;
       }
-      datum.poCredMinEst = formatMU(invLogOdds(poDist.ppf(0.05)), Math.floor);
-      datum.poCredMaxEst = formatMU(invLogOdds(poDist.ppf(0.95)), Math.ceil);
+      datum.player = player;
+    }
+    if (opponent) {
+      datum.opponent = opponent;
     }
     return datum;
   });
@@ -261,7 +252,10 @@ function comparePlayers(player, opponent) {
 
   setTimeout(function() {
     muEstimates = matchupData.flatMap(function(v) {
-      var pdf = muPDF(v);
+      var pdf = [];
+      if (v.c1 != v.c2) {
+        pdf = pdf.concat(muPDF(v));
+      }
       if (player) {
         pdf = pdf.concat(muPDF(v, player, opponent));
       }
@@ -380,7 +374,37 @@ function comparePlayers(player, opponent) {
       fill: overallWinChance,
       stroke: stroke,
       detail: statsType,
-      tooltip: [statsType, overallWinChance, muEstimate, muLikelihood, muCount]
+      tooltip: [
+        statsType,
+        credInterval,
+        overallWinChance,
+        { field: "muLikelihood", type: "nominal", title: "Estimate" },
+        muCount
+      ]
+    };
+
+    const credIntervalTransform = {
+      calculate:
+        "join([" +
+        "floor(datum.credLower * 20) / 2," +
+        "'-'," +
+        "(10 - floor(datum.credLower * 20) / 2)," +
+        "' - '," +
+        "ceil(datum.credUpper * 20) / 2," +
+        "'-'," +
+        "(10 - ceil(datum.credUpper * 20) / 2)" +
+        "], '')",
+      as: "credInterval"
+    };
+
+    const muLikelihoodTransform = {
+      calculate:
+        "join([" +
+        "format(datum.p, '.1%')," +
+        "'chance the MU is'," +
+        "datum.mu" +
+        "], ' ')",
+      as: "muLikelihood"
     };
 
     const vlC1C2 = {
@@ -400,7 +424,10 @@ function comparePlayers(player, opponent) {
         {
           calculate: "abs(datum.signed_cum_p)",
           as: "cum_p"
-        }
+        },
+        { calculate: "join([datum.c1, '/', datum.c2], '')", as: "mu_name" },
+        credIntervalTransform,
+        muLikelihoodTransform
       ],
 
       facet: {
@@ -431,11 +458,11 @@ function comparePlayers(player, opponent) {
         mark: mark,
         encoding: Object.assign({}, baseEncoding, {
           tooltip: [
+            { field: "mu_name", type: "nominal", title: "Matchup" },
             statsType,
             credInterval,
             overallWinChance,
-            muEstimate,
-            muLikelihood,
+            { field: "muLikelihood", type: "nominal", title: "Estimate" },
             muCount,
             pCount,
             oCount
@@ -455,7 +482,10 @@ function comparePlayers(player, opponent) {
             { op: "sum", field: "p", as: "sum_p" },
             { op: "sum", field: "pdf", as: "sum_pdf" },
             { op: "sum", field: "count", as: "count" },
-            { op: "mean", field: "winChance", as: "mean_win_chance" }
+            { op: "mean", field: "winChance", as: "mean_win_chance" },
+            { op: "mean", field: "credLower", as: "credLower" },
+            { op: "mean", field: "credUpper", as: "credUpper" },
+            { op: "mean", field: "pCount", as: "pCount" }
           ],
           groupby: ["c1", "mu", "type"]
         },
@@ -478,7 +508,9 @@ function comparePlayers(player, opponent) {
         {
           calculate: "abs(datum.signed_cum_p)",
           as: "cum_p"
-        }
+        },
+        credIntervalTransform,
+        muLikelihoodTransform
       ],
       facet: {
         row: {
@@ -498,7 +530,15 @@ function comparePlayers(player, opponent) {
         encoding: Object.assign({}, baseEncoding, {
           fill: Object.assign({}, baseEncoding.fill, {
             legend: true
-          })
+          }),
+          tooltip: [
+            statsType,
+            credInterval,
+            overallWinChance,
+            { field: "muLikelihood", type: "nominal", title: "Estimate" },
+            muCount,
+            pCount
+          ]
         })
       }
     });
@@ -514,7 +554,10 @@ function comparePlayers(player, opponent) {
             { op: "sum", field: "p", as: "sum_p" },
             { op: "sum", field: "pdf", as: "sum_pdf" },
             { op: "sum", field: "count", as: "count" },
-            { op: "mean", field: "winChance", as: "mean_win_chance" }
+            { op: "mean", field: "winChance", as: "mean_win_chance" },
+            { op: "mean", field: "credLower", as: "credLower" },
+            { op: "mean", field: "credUpper", as: "credUpper" },
+            { op: "mean", field: "oCount", as: "oCount" }
           ],
           groupby: ["c2", "mu", "type"]
         },
@@ -537,7 +580,9 @@ function comparePlayers(player, opponent) {
         {
           calculate: "abs(datum.signed_cum_p)",
           as: "cum_p"
-        }
+        },
+        credIntervalTransform,
+        muLikelihoodTransform
       ],
 
       facet: {
@@ -555,7 +600,16 @@ function comparePlayers(player, opponent) {
         width: 50,
         height: 40,
         mark: mark,
-        encoding: baseEncoding
+        encoding: Object.assign({}, baseEncoding, {
+          tooltip: [
+            statsType,
+            credInterval,
+            overallWinChance,
+            { field: "muLikelihood", type: "nominal", title: "Estimate" },
+            muCount,
+            oCount
+          ]
+        })
       }
     });
 
@@ -569,7 +623,9 @@ function comparePlayers(player, opponent) {
           aggregate: [
             { op: "sum", field: "p", as: "sum_p" },
             { op: "sum", field: "pdf", as: "sum_pdf" },
-            { op: "mean", field: "winChance", as: "mean_win_chance" }
+            { op: "mean", field: "winChance", as: "mean_win_chance" },
+            { op: "mean", field: "credLower", as: "credLower" },
+            { op: "mean", field: "credUpper", as: "credUpper" }
           ],
           groupby: ["mu", "type"]
         },
@@ -592,7 +648,9 @@ function comparePlayers(player, opponent) {
         {
           calculate: "abs(datum.signed_cum_p)",
           as: "cum_p"
-        }
+        },
+        credIntervalTransform,
+        muLikelihoodTransform
       ],
       width: 50,
       height: 40,
