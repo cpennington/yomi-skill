@@ -279,7 +279,7 @@ function comparePlayers(player, opponent) {
       field: "p",
       type: "quantitative",
       axis: { labels: false, title: null },
-      format: ".1%",
+      format: ".0%",
       stack: null
     };
     const overallWinChance = Object.assign(
@@ -297,8 +297,10 @@ function comparePlayers(player, opponent) {
           domain: [0.3, 0.7],
           clamp: true
         },
-        format: ".1%",
-        legend: null
+        format: ".0%",
+        legend: {
+          format: ".0%"
+        }
       },
       player
         ? {
@@ -400,7 +402,7 @@ function comparePlayers(player, opponent) {
     const muLikelihoodTransform = {
       calculate:
         "join([" +
-        "format(datum.p, '.1%')," +
+        "format(datum.p, '.0%')," +
         "'chance the MU is'," +
         "datum.mu" +
         "], ' ')",
@@ -411,6 +413,14 @@ function comparePlayers(player, opponent) {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
         values: muEstimates
+      },
+      config: {
+        facet: {
+          spacing: {
+            row: 0,
+            column: 0
+          }
+        }
       },
       vconcat: [
         {
@@ -455,10 +465,6 @@ function comparePlayers(player, opponent) {
                     labelLimit: 40
                   }
                 }
-              },
-              spacing: {
-                row: 2,
-                column: 2
               },
               spec: {
                 width: 50,
@@ -528,18 +534,11 @@ function comparePlayers(player, opponent) {
                   header: { title: null, labelLimit: 40 }
                 }
               },
-              spacing: {
-                row: 2,
-                column: 2
-              },
               spec: {
                 width: 50,
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
-                  fill: Object.assign({}, baseEncoding.fill, {
-                    legend: true
-                  }),
                   tooltip: [
                     statsType,
                     credInterval,
@@ -605,10 +604,6 @@ function comparePlayers(player, opponent) {
                   type: "ordinal",
                   header: { title: null, labelLimit: 40 }
                 }
-              },
-              spacing: {
-                row: 2,
-                column: 2
               },
               spec: {
                 width: 50,
@@ -679,7 +674,7 @@ function comparePlayers(player, opponent) {
       ]
     };
 
-    vegaEmbed("#c1-c2", vlC1C2)
+    vegaEmbed("#vis", vlC1C2)
       .then(function() {
         loading.style.display = "none";
         vis.style.display = "block";
