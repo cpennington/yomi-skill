@@ -269,7 +269,7 @@ function comparePlayers(player, opponent) {
       axis: {
         labels: true,
         title: null,
-        values: ["2-8", "5-5", "8-2"],
+        values: ["3-7", "5-5", "7-3"],
         grid: true,
         gridOpacity: 0.5
       }
@@ -421,6 +421,11 @@ function comparePlayers(player, opponent) {
           }
         }
       },
+      transform: [
+        {
+          filter: "datum.p > .01"
+        }
+      ],
       vconcat: [
         {
           hconcat: [
