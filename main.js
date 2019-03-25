@@ -458,7 +458,7 @@ function comparePlayers(player, opponent) {
                   type: "ordinal",
                   header: {
                     title: player ? player + " playing " : "Playing",
-                    labelLimit: 40
+                    labelAngle: 0
                   }
                 },
                 column: {
@@ -466,7 +466,7 @@ function comparePlayers(player, opponent) {
                   type: "ordinal",
                   header: {
                     title: opponent ? "Against " + opponent + " as" : "Against",
-                    labelLimit: 40
+                    labelAngle: -45
                   }
                 }
               },
@@ -535,7 +535,7 @@ function comparePlayers(player, opponent) {
                 row: {
                   field: "c1",
                   type: "ordinal",
-                  header: { title: null, labelLimit: 40 }
+                  header: { title: null, labelAngle: 0 }
                 }
               },
               spec: {
@@ -606,7 +606,7 @@ function comparePlayers(player, opponent) {
                 column: {
                   field: "c2",
                   type: "ordinal",
-                  header: { title: null, labelLimit: 40 }
+                  header: { title: null, labelAngle: -45 }
                 }
               },
               spec: {
