@@ -677,7 +677,7 @@ function comparePlayers(player, opponent) {
     vegaEmbed("#vis", vlC1C2)
       .then(function() {
         loading.style.display = "none";
-        delete vis.style.display;
+        vis.style.display = "";
       })
       .catch(console.error);
   }, 10);
