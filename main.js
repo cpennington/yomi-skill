@@ -412,266 +412,277 @@ function comparePlayers(player, opponent) {
       data: {
         values: muEstimates
       },
-      transform: [
+      vconcat: [
         {
-          calculate: "datum.p * datum.winChance",
-          as: "w_p"
-        },
-        {
-          joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
-          groupby: ["c1", "c2", "type"]
-        },
-        {
-          calculate: "abs(datum.signed_cum_p)",
-          as: "cum_p"
-        },
-        { calculate: "join([datum.c1, '/', datum.c2], '')", as: "mu_name" },
-        credIntervalTransform,
-        muLikelihoodTransform
-      ],
-
-      facet: {
-        row: {
-          field: "c1",
-          type: "ordinal",
-          header: {
-            title: player ? player + " playing " : "Playing",
-            labelLimit: 40
-          }
-        },
-        column: {
-          field: "c2",
-          type: "ordinal",
-          header: {
-            title: opponent ? "Against " + opponent + " as" : "Against",
-            labelLimit: 40
-          }
-        }
-      },
-      spacing: {
-        row: 2,
-        column: 2
-      },
-      spec: {
-        width: 50,
-        height: 40,
-        mark: mark,
-        encoding: Object.assign({}, baseEncoding, {
-          tooltip: [
-            { field: "mu_name", type: "nominal", title: "Matchup" },
-            statsType,
-            credInterval,
-            overallWinChance,
-            { field: "muLikelihood", type: "nominal", title: "Estimate" },
-            muCount,
-            pCount,
-            oCount
+          hconcat: [
+            {
+              transform: [
+                {
+                  calculate: "datum.p * datum.winChance",
+                  as: "w_p"
+                },
+                {
+                  joinaggregate: [
+                    { op: "sum", field: "w_p", as: "signed_cum_p" }
+                  ],
+                  groupby: ["c1", "c2", "type"]
+                },
+                {
+                  calculate: "abs(datum.signed_cum_p)",
+                  as: "cum_p"
+                },
+                {
+                  calculate: "join([datum.c1, '/', datum.c2], '')",
+                  as: "mu_name"
+                },
+                credIntervalTransform,
+                muLikelihoodTransform
+              ],
+              facet: {
+                row: {
+                  field: "c1",
+                  type: "ordinal",
+                  header: {
+                    title: player ? player + " playing " : "Playing",
+                    labelLimit: 40
+                  }
+                },
+                column: {
+                  field: "c2",
+                  type: "ordinal",
+                  header: {
+                    title: opponent ? "Against " + opponent + " as" : "Against",
+                    labelLimit: 40
+                  }
+                }
+              },
+              spacing: {
+                row: 2,
+                column: 2
+              },
+              spec: {
+                width: 50,
+                height: 40,
+                mark: mark,
+                encoding: Object.assign({}, baseEncoding, {
+                  tooltip: [
+                    { field: "mu_name", type: "nominal", title: "Matchup" },
+                    statsType,
+                    credInterval,
+                    overallWinChance,
+                    {
+                      field: "muLikelihood",
+                      type: "nominal",
+                      title: "Estimate"
+                    },
+                    muCount,
+                    pCount,
+                    oCount
+                  ]
+                })
+              }
+            },
+            {
+              transform: [
+                {
+                  aggregate: [
+                    { op: "sum", field: "p", as: "sum_p" },
+                    { op: "sum", field: "pdf", as: "sum_pdf" },
+                    { op: "sum", field: "count", as: "count" },
+                    { op: "mean", field: "winChance", as: "mean_win_chance" },
+                    { op: "mean", field: "credLower", as: "credLower" },
+                    { op: "mean", field: "credUpper", as: "credUpper" },
+                    { op: "mean", field: "pCount", as: "pCount" }
+                  ],
+                  groupby: ["c1", "mu", "type"]
+                },
+                {
+                  calculate: "datum.sum_p / " + characters.length,
+                  as: "p"
+                },
+                {
+                  calculate: "datum.sum_pdf / " + characters.length,
+                  as: "pdf"
+                },
+                {
+                  calculate: "datum.p * datum.mean_win_chance",
+                  as: "w_p"
+                },
+                {
+                  joinaggregate: [
+                    { op: "sum", field: "w_p", as: "signed_cum_p" }
+                  ],
+                  groupby: ["c1", "type"]
+                },
+                {
+                  calculate: "abs(datum.signed_cum_p)",
+                  as: "cum_p"
+                },
+                credIntervalTransform,
+                muLikelihoodTransform
+              ],
+              facet: {
+                row: {
+                  field: "c1",
+                  type: "ordinal",
+                  header: { title: null, labelLimit: 40 }
+                }
+              },
+              spacing: {
+                row: 2,
+                column: 2
+              },
+              spec: {
+                width: 50,
+                height: 40,
+                mark: mark,
+                encoding: Object.assign({}, baseEncoding, {
+                  fill: Object.assign({}, baseEncoding.fill, {
+                    legend: true
+                  }),
+                  tooltip: [
+                    statsType,
+                    credInterval,
+                    overallWinChance,
+                    {
+                      field: "muLikelihood",
+                      type: "nominal",
+                      title: "Estimate"
+                    },
+                    muCount,
+                    pCount
+                  ]
+                })
+              }
+            }
           ]
-        })
-      }
+        },
+        {
+          hconcat: [
+            {
+              transform: [
+                {
+                  aggregate: [
+                    { op: "sum", field: "p", as: "sum_p" },
+                    { op: "sum", field: "pdf", as: "sum_pdf" },
+                    { op: "sum", field: "count", as: "count" },
+                    { op: "mean", field: "winChance", as: "mean_win_chance" },
+                    { op: "mean", field: "credLower", as: "credLower" },
+                    { op: "mean", field: "credUpper", as: "credUpper" },
+                    { op: "mean", field: "oCount", as: "oCount" }
+                  ],
+                  groupby: ["c2", "mu", "type"]
+                },
+                {
+                  calculate: "datum.sum_p / " + characters.length,
+                  as: "p"
+                },
+                {
+                  calculate: "datum.sum_pdf / " + characters.length,
+                  as: "pdf"
+                },
+                {
+                  calculate: "datum.p * datum.mean_win_chance",
+                  as: "w_p"
+                },
+                {
+                  joinaggregate: [
+                    { op: "sum", field: "w_p", as: "signed_cum_p" }
+                  ],
+                  groupby: ["c2", "type"]
+                },
+                {
+                  calculate: "abs(datum.signed_cum_p)",
+                  as: "cum_p"
+                },
+                credIntervalTransform,
+                muLikelihoodTransform
+              ],
+
+              facet: {
+                column: {
+                  field: "c2",
+                  type: "ordinal",
+                  header: { title: null, labelLimit: 40 }
+                }
+              },
+              spacing: {
+                row: 2,
+                column: 2
+              },
+              spec: {
+                width: 50,
+                height: 40,
+                mark: mark,
+                encoding: Object.assign({}, baseEncoding, {
+                  tooltip: [
+                    statsType,
+                    credInterval,
+                    overallWinChance,
+                    {
+                      field: "muLikelihood",
+                      type: "nominal",
+                      title: "Estimate"
+                    },
+                    muCount,
+                    oCount
+                  ]
+                })
+              }
+            },
+            {
+              transform: [
+                {
+                  aggregate: [
+                    { op: "sum", field: "p", as: "sum_p" },
+                    { op: "sum", field: "pdf", as: "sum_pdf" },
+                    { op: "mean", field: "winChance", as: "mean_win_chance" },
+                    { op: "mean", field: "credLower", as: "credLower" },
+                    { op: "mean", field: "credUpper", as: "credUpper" }
+                  ],
+                  groupby: ["mu", "type"]
+                },
+                {
+                  calculate:
+                    "datum.sum_p / " + characters.length * characters.length,
+                  as: "p"
+                },
+                {
+                  calculate:
+                    "datum.sum_pdf / " + characters.length * characters.length,
+                  as: "pdf"
+                },
+                {
+                  calculate: "datum.p * datum.mean_win_chance",
+                  as: "w_p"
+                },
+                {
+                  joinaggregate: [
+                    { op: "sum", field: "w_p", as: "signed_cum_p" }
+                  ],
+                  groupby: ["type"]
+                },
+                {
+                  calculate: "abs(datum.signed_cum_p)",
+                  as: "cum_p"
+                },
+                credIntervalTransform,
+                muLikelihoodTransform
+              ],
+              width: 50,
+              height: 40,
+              mark: mark,
+              encoding: baseEncoding
+            }
+          ]
+        }
+      ]
     };
 
-    const vlC1Totals = Object.assign({}, vlC1C2, {
-      $schema: "https://vega.github.io/schema/vega-lite/v3.json",
-      data: {
-        values: muEstimates
-      },
-      transform: [
-        {
-          aggregate: [
-            { op: "sum", field: "p", as: "sum_p" },
-            { op: "sum", field: "pdf", as: "sum_pdf" },
-            { op: "sum", field: "count", as: "count" },
-            { op: "mean", field: "winChance", as: "mean_win_chance" },
-            { op: "mean", field: "credLower", as: "credLower" },
-            { op: "mean", field: "credUpper", as: "credUpper" },
-            { op: "mean", field: "pCount", as: "pCount" }
-          ],
-          groupby: ["c1", "mu", "type"]
-        },
-        {
-          calculate: "datum.sum_p / " + characters.length,
-          as: "p"
-        },
-        {
-          calculate: "datum.sum_pdf / " + characters.length,
-          as: "pdf"
-        },
-        {
-          calculate: "datum.p * datum.mean_win_chance",
-          as: "w_p"
-        },
-        {
-          joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
-          groupby: ["c1", "type"]
-        },
-        {
-          calculate: "abs(datum.signed_cum_p)",
-          as: "cum_p"
-        },
-        credIntervalTransform,
-        muLikelihoodTransform
-      ],
-      facet: {
-        row: {
-          field: "c1",
-          type: "ordinal",
-          header: { title: null, labelLimit: 40 }
-        }
-      },
-      spacing: {
-        row: 2,
-        column: 2
-      },
-      spec: {
-        width: 50,
-        height: 40,
-        mark: mark,
-        encoding: Object.assign({}, baseEncoding, {
-          fill: Object.assign({}, baseEncoding.fill, {
-            legend: true
-          }),
-          tooltip: [
-            statsType,
-            credInterval,
-            overallWinChance,
-            { field: "muLikelihood", type: "nominal", title: "Estimate" },
-            muCount,
-            pCount
-          ]
-        })
-      }
-    });
-
-    const vlC2Totals = Object.assign({}, vlC1C2, {
-      $schema: "https://vega.github.io/schema/vega-lite/v3.json",
-      data: {
-        values: muEstimates
-      },
-      transform: [
-        {
-          aggregate: [
-            { op: "sum", field: "p", as: "sum_p" },
-            { op: "sum", field: "pdf", as: "sum_pdf" },
-            { op: "sum", field: "count", as: "count" },
-            { op: "mean", field: "winChance", as: "mean_win_chance" },
-            { op: "mean", field: "credLower", as: "credLower" },
-            { op: "mean", field: "credUpper", as: "credUpper" },
-            { op: "mean", field: "oCount", as: "oCount" }
-          ],
-          groupby: ["c2", "mu", "type"]
-        },
-        {
-          calculate: "datum.sum_p / " + characters.length,
-          as: "p"
-        },
-        {
-          calculate: "datum.sum_pdf / " + characters.length,
-          as: "pdf"
-        },
-        {
-          calculate: "datum.p * datum.mean_win_chance",
-          as: "w_p"
-        },
-        {
-          joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
-          groupby: ["c2", "type"]
-        },
-        {
-          calculate: "abs(datum.signed_cum_p)",
-          as: "cum_p"
-        },
-        credIntervalTransform,
-        muLikelihoodTransform
-      ],
-
-      facet: {
-        column: {
-          field: "c2",
-          type: "ordinal",
-          header: { title: null, labelLimit: 40 }
-        }
-      },
-      spacing: {
-        row: 2,
-        column: 2
-      },
-      spec: {
-        width: 50,
-        height: 40,
-        mark: mark,
-        encoding: Object.assign({}, baseEncoding, {
-          tooltip: [
-            statsType,
-            credInterval,
-            overallWinChance,
-            { field: "muLikelihood", type: "nominal", title: "Estimate" },
-            muCount,
-            oCount
-          ]
-        })
-      }
-    });
-
-    const vlTotals = {
-      $schema: "https://vega.github.io/schema/vega-lite/v3.json",
-      data: {
-        values: muEstimates
-      },
-      transform: [
-        {
-          aggregate: [
-            { op: "sum", field: "p", as: "sum_p" },
-            { op: "sum", field: "pdf", as: "sum_pdf" },
-            { op: "mean", field: "winChance", as: "mean_win_chance" },
-            { op: "mean", field: "credLower", as: "credLower" },
-            { op: "mean", field: "credUpper", as: "credUpper" }
-          ],
-          groupby: ["mu", "type"]
-        },
-        {
-          calculate: "datum.sum_p / " + characters.length * characters.length,
-          as: "p"
-        },
-        {
-          calculate: "datum.sum_pdf / " + characters.length * characters.length,
-          as: "pdf"
-        },
-        {
-          calculate: "datum.p * datum.mean_win_chance",
-          as: "w_p"
-        },
-        {
-          joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
-          groupby: ["type"]
-        },
-        {
-          calculate: "abs(datum.signed_cum_p)",
-          as: "cum_p"
-        },
-        credIntervalTransform,
-        muLikelihoodTransform
-      ],
-      width: 50,
-      height: 40,
-      mark: mark,
-      encoding: baseEncoding
-    };
-
-    Promise.all([
-      vegaEmbed("#c1-c2", vlC1C2),
-      vegaEmbed("#c1-total", vlC1Totals),
-      vegaEmbed("#c2-total", vlC2Totals),
-      vegaEmbed("#total", vlTotals)
-    ])
+    vegaEmbed("#c1-c2", vlC1C2)
       .then(function() {
         loading.style.display = "none";
         vis.style.display = "block";
-        vis.style.width =
-          document.getElementById("c1-c2").offsetWidth +
-          document.getElementById("c1-total").offsetWidth +
-          50 +
-          "px";
       })
       .catch(console.error);
   }, 10);
