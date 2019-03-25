@@ -289,11 +289,10 @@ function comparePlayers(player, opponent) {
         field: "cum_p",
         type: "quantitative",
         scale: {
-          scheme: [
-            "rgb(48, 48, 255)",
-            "rgb(230, 164, 230)",
-            "rgb(255, 61, 61)"
-          ],
+          scheme: {
+            name: ["#22F", "#DAD", "#F22"],
+            count: 9
+          },
           domain: [0.3, 0.7],
           clamp: true
         },
