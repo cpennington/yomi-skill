@@ -23,8 +23,18 @@ def render(game, dest, min_games):
     model = YomiModel(
         hist_games,
         fit_dir,
-        "char_skill_elo_skill_deficit.stan",
-        ["mu", "char_skill", "elo_logit_scale", "log_lik", "win_hat"],
+        "char_skill_elo_skill_deficit_versioned_hier.stan",
+        # "char_skill_elo_skill_deficit_versioned.stan",
+        [
+            "mu_mean",
+            "mu_std",
+            # "mu",
+            "vmu",
+            "char_skill",
+            "elo_logit_scale",
+            "log_lik",
+            "win_hat",
+        ],
         min_games,
     )
 

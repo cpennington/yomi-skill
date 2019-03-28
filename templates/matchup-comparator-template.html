@@ -10,7 +10,7 @@
     />
 
     <script type="text/json" id="matchup-data">
-      ${matchups.to_json(orient="records")}
+      ${json.dumps(matchups)}
     </script>
     <script type="text/json" id="characters">
       ${json.dumps(list(characters))}

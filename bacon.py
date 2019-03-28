@@ -6,6 +6,7 @@ from collections import defaultdict
 from datetime import datetime
 from IPython.core.display import display
 from games import normalize_types
+from datetime import datetime
 
 
 def load_replay_results(replay_dir):
@@ -46,6 +47,12 @@ def load_replay_results(replay_dir):
                     "player_2": replay.player_1,
                     "character_2": replay.fighter_1.name,
                     "win": replay.winner == replay.player_0,
+                    "player_1_wins": replay.record_0[0],
+                    "player_1_losses": replay.record_0[1],
+                    "player_1_ties": replay.record_0[2],
+                    "player_2_wins": replay.record_1[0],
+                    "player_2_losses": replay.record_1[1],
+                    "player_2_ties": replay.record_1[2],
                 }
                 if replay.fighter_0.name <= replay.fighter_1.name
                 else {
@@ -56,6 +63,12 @@ def load_replay_results(replay_dir):
                     "player_2": replay.player_0,
                     "character_2": replay.fighter_0.name,
                     "win": replay.winner == replay.player_1,
+                    "player_1_wins": replay.record_1[0],
+                    "player_1_losses": replay.record_1[1],
+                    "player_1_ties": replay.record_1[2],
+                    "player_2_wins": replay.record_0[0],
+                    "player_2_losses": replay.record_0[1],
+                    "player_2_ties": replay.record_0[2],
                 }
             )
         except:
@@ -64,6 +77,38 @@ def load_replay_results(replay_dir):
 
     results.to_parquet(f"{replay_dir}/results.parquet", compression="gzip")
     return results[(results.player_1 != "Bot") & (results.player_2 != "Bot")]
+
+
+BASE_VERSION = "0.15"
+VERSION_HISTORY = [
+    (datetime(2018, 9, 19, 15), "0.16", ["Luc", "Kallistar"]),
+    (datetime(2018, 10, 3), "0.17", ["Burman", "Hikaru", "Rukyuk", "Sarafina"]),
+    (datetime(2018, 11, 15, 13), "0.18", ["Evil Hikaru"]),
+    (
+        datetime(2018, 12, 19, 17),
+        "0.19",
+        ["Iri", "Burman", "Magdelina", "Kimbhe", "Sarafina", "Seven"],
+    ),
+    (datetime(2019, 1, 30), "0.20", ["Rexan"]),
+    (datetime(2019, 3, 6, 19), "0.21", ["Kehrolyn", "Seven"]),
+    (datetime(2019, 3, 7, 19), "0.21a", ["Seven"]),
+]
+
+
+def apply_versions(games):
+    games["version_1"] = BASE_VERSION
+    games["version_2"] = BASE_VERSION
+    for (version_date, version_name, chars) in VERSION_HISTORY:
+        games.loc[
+            games.character_1.isin(chars) & (games.match_date >= version_date),
+            "version_1",
+        ] = version_name
+        games.loc[
+            games.character_2.isin(chars) & (games.match_date >= version_date),
+            "version_2",
+        ] = version_name
+
+    return games
 
 
 INITIAL_ELO = 1500
@@ -167,7 +212,9 @@ def games(replay_dir="../bacon-replays"):
 
     if games is None:
         historical_record = load_replay_results(replay_dir)
-        games = compute_elo(historical_record)
+        with_versions = apply_versions(historical_record)
+        display(with_versions)
+        games = compute_elo(with_versions)
 
         name = str(datetime.now().isoformat())
         games.to_parquet(f"{game_dir}/{name}.parquet", compression="gzip")

@@ -114,108 +114,172 @@ function formatMU(winChance, func) {
   return func(winChance * 20) / 2 + "-" + (10 - func(winChance * 20) / 2);
 }
 
-function muPDF(mu, player, opponent) {
-  var pdf = xs.map(function(x) {
-    var muDist = gaussian(mu.mean, mu.std * mu.std);
-    var dist = muDist;
-    if (player) {
-      const pSkill = playerSkill[player][mu.c1];
-      const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
-      if (opponent) {
-        const oSkill = playerSkill[opponent][mu.c2];
-        const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
-
-        const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
-        eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
-        eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
-
-        poDist = muDist
-          .add(pSkillDist)
-          .sub(oSkillDist)
-          .add(eloScaleDist.scale(eloLogit));
-      } else {
-        const againstSkillPick = Array.from(
-          document.getElementsByName("against-skill")
-        )
-          .map(function(e) {
-            return e.checked ? e.value : null;
-          })
-          .filter(function(v) {
-            return v != null;
-          })[0];
-        var oSkill;
-        if (againstSkillPick === "self") {
-          oSkill = {
-            mean: math.mean(
-              characters.map(function(char) {
-                return playerSkill[player][char].mean;
-              })
-            ),
-            std: math.mean(
-              characters.map(function(char) {
-                return playerSkill[player][char].std;
-              })
-            )
-          };
-        } else {
-          oSkill = medianPlayerSkill[mu.c2][againstSkillPick];
-        }
-        const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
-
-        const againstEloPick = Array.from(
-          document.getElementsByName("against-elo")
-        )
-          .map(function(e) {
-            return e.checked ? e.value : null;
-          })
-          .filter(function(v) {
-            return v != null;
-          })[0];
-        var eloDiff;
-        if (againstEloPick === "self") {
-          eloDiff = 0;
-        } else {
-          eloDiff = playerSkill[player].elo - medianPlayerElo[againstEloPick];
-        }
-
-        eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
-        eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
-
-        poDist = muDist.add(pSkillDist).sub(oSkillDist);
-        if (eloDiff != 0) {
-          poDist = poDist.add(eloScaleDist.scale(eloLogit));
-        }
-      }
-      dist = poDist;
-    }
-    const upper = dist.cdf(logOdds(x + increment / 2));
-    const lower = dist.cdf(logOdds(x - increment / 2));
-
-    var datum = {
-      c1: mu.c1,
-      c2: mu.c2,
-      mu: formatMU(x),
-      winChance: x,
-      credLower: invLogOdds(dist.ppf(0.05)),
-      credUpper: invLogOdds(dist.ppf(0.95)),
-      pdf: dist.pdf(logOdds(x)),
-      p: upper - lower,
-      type: player ? "match" : "global",
-      count: mu.counts
+function getOSkillDist(player, againstChar) {
+  const againstSkillPick = Array.from(
+    document.getElementsByName("against-skill")
+  )
+    .map(function(e) {
+      return e.checked ? e.value : null;
+    })
+    .filter(function(v) {
+      return v != null;
+    })[0];
+  var oSkill;
+  if (againstSkillPick === "self") {
+    oSkill = {
+      mean: math.mean(
+        characters.map(function(char) {
+          return playerSkill[player][char].mean;
+        })
+      ),
+      std: math.mean(
+        characters.map(function(char) {
+          return playerSkill[player][char].std;
+        })
+      )
     };
+  } else {
+    oSkill = medianPlayerSkill[againstChar][againstSkillPick];
+  }
+  return gaussian(oSkill.mean, oSkill.std * oSkill.std);
+}
+
+function getAgainstEloDiff(player) {
+  const againstEloPick = Array.from(document.getElementsByName("against-elo"))
+    .map(function(e) {
+      return e.checked ? e.value : null;
+    })
+    .filter(function(v) {
+      return v != null;
+    })[0];
+  if (againstEloPick === "self") {
+    return 0;
+  } else {
+    return playerSkill[player].elo - medianPlayerElo[againstEloPick];
+  }
+}
+
+function getPlayerSkillDist(player, opponent, c1, c2) {
+  const pSkill = playerSkill[player][c1];
+  const pSkillDist = gaussian(pSkill.mean, pSkill.std * pSkill.std);
+  if (opponent) {
+    const oSkill = playerSkill[opponent][c2];
+    const oSkillDist = gaussian(oSkill.mean, oSkill.std * oSkill.std);
+
+    const eloDiff = playerSkill[player].elo - playerSkill[opponent].elo;
+    eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
+    eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
+
+    return pSkillDist.sub(oSkillDist).add(eloScaleDist.scale(eloLogit));
+  } else {
+    const oSkillDist = getOSkillDist(player, c2);
+    const eloDiff = getAgainstEloDiff(player);
+
+    eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
+    eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
+
+    var dist = muDist.add(pSkillDist).sub(oSkillDist);
+    if (eloDiff != 0) {
+      dist = dist.add(eloScaleDist.scale(eloLogit));
+    }
+    return dist;
+  }
+}
+
+function muPDF(c1, c2, player, opponent) {
+  const mu = matchupData[c1][c2] || {};
+  const std = mu.std;
+  const mean = mu.mean;
+  const versions = mu.versions || {};
+
+  var baselineMUDist = null;
+  if (std && mean) {
+    baselineMUDist = gaussian(mean, std * std);
+  }
+
+  var data = xs.flatMap(function(x) {
     if (player) {
-      datum.pCount = playerSkill[player][mu.c1].played;
-      if (opponent) {
-        datum.oCount = playerSkill[opponent][mu.c2].played;
-      }
-      datum.player = player;
+      const playerDist = getPlayerSkillDist(player, opponent, c1, c2);
     }
-    if (opponent) {
-      datum.opponent = opponent;
+    var data2 = Object.entries(versions).flatMap(function(versions) {
+      const v1 = versions[0];
+      return Object.entries(versions[1]).flatMap(function(version) {
+        const v2 = version[0];
+        const versionDist = gaussian(
+          version[1].mean,
+          version[1].std * version[1].std
+        );
+
+        var dist;
+        if (player) {
+          dist = playerDist.add(versionDist);
+        } else {
+          dist = versionDist;
+        }
+        if (baselineMUDist) {
+          dist = dist.add(baselineMUDist);
+        }
+
+        const upper = dist.cdf(logOdds(x + increment / 2));
+        const lower = dist.cdf(logOdds(x - increment / 2));
+
+        var datum = {
+          c1: c1,
+          c2: c2,
+          v1: v1,
+          v2: v2,
+          v1v2: v1 + "/" + v2,
+          newestVersion: v1 > v2 ? v1 : v2,
+          mu: formatMU(x),
+          winChance: x,
+          credLower: invLogOdds(dist.ppf(0.05)),
+          credUpper: invLogOdds(dist.ppf(0.95)),
+          pdf: dist.pdf(logOdds(x)),
+          p: upper - lower,
+          type: player ? "match" : "global",
+          count: version[1].counts
+        };
+        if (player) {
+          datum.pCount = playerSkill[player][c1].played;
+          if (opponent) {
+            datum.oCount = playerSkill[opponent][c2].played;
+          }
+          datum.player = player;
+        }
+        if (opponent) {
+          datum.opponent = opponent;
+        }
+        return datum;
+      });
+    });
+
+    if (data2.length == 0) {
+      return [
+        {
+          c1: c1,
+          c2: c2,
+          v1: "N/A",
+          v2: "N/A",
+          v1v2: "N/A",
+          newestVersion: "N/A",
+          mu: formatMU(x),
+          winChance: x,
+          credLower: 0,
+          credUpper: 1,
+          pdf: 0,
+          p: 0,
+          type: player ? "match" : "global",
+          count: 0
+        }
+      ];
+    } else {
+      return data2;
     }
-    return datum;
   });
-  return pdf;
+  if (c1 == "Rukyuk" && c2 == "Kehrolyn") {
+    console.log("Rook/Kah", data);
+  }
+  return data;
 }
 
 function updatePlayerStats() {
@@ -251,15 +315,18 @@ function comparePlayers(player, opponent) {
   vis.style.display = "none";
 
   setTimeout(function() {
-    muEstimates = matchupData.flatMap(function(v) {
-      var pdf = [];
-      if (v.c1 != v.c2) {
-        pdf = pdf.concat(muPDF(v));
-      }
-      if (player) {
-        pdf = pdf.concat(muPDF(v, player, opponent));
-      }
-      return pdf;
+    muEstimates = characters.flatMap(function(c1) {
+      return characters.flatMap(function(c2) {
+        var pdf = [];
+        pdf = pdf.concat(muPDF(c1, c2));
+        if (player) {
+          pdf = pdf.concat(muPDF(c1, c2, player, opponent));
+        }
+        if (c1 == "Rukyuk" && c2 == "Kehrolyn") {
+          console.log(pdf);
+        }
+        return pdf;
+      });
     });
 
     const muEstimate = {
@@ -364,7 +431,7 @@ function comparePlayers(player, opponent) {
     };
 
     const mark = {
-      type: "area",
+      type: "line",
       stroke: "#000",
       interpolate: "monotone"
     };
@@ -372,8 +439,8 @@ function comparePlayers(player, opponent) {
     const baseEncoding = {
       x: muEstimate,
       y: pdf,
-      fill: overallWinChance,
-      stroke: stroke,
+      // fill: overallWinChance,
+      // stroke: stroke,
       detail: statsType,
       tooltip: [
         statsType,
@@ -423,7 +490,7 @@ function comparePlayers(player, opponent) {
       },
       transform: [
         {
-          filter: "datum.p > .01"
+          // filter: "datum.count > 0 && datum.p >= 0.001"
         }
       ],
       vconcat: [
@@ -439,7 +506,7 @@ function comparePlayers(player, opponent) {
                   joinaggregate: [
                     { op: "sum", field: "w_p", as: "signed_cum_p" }
                   ],
-                  groupby: ["c1", "c2", "type"]
+                  groupby: ["c1", "c2", "type", "v1v2"]
                 },
                 {
                   calculate: "abs(datum.signed_cum_p)",
@@ -455,19 +522,21 @@ function comparePlayers(player, opponent) {
               facet: {
                 row: {
                   field: "c1",
-                  type: "ordinal",
+                  type: "nominal",
                   header: {
                     title: player ? player + " playing " : "Playing",
                     labelAngle: 0
-                  }
+                  },
+                  sort: characters
                 },
                 column: {
                   field: "c2",
-                  type: "ordinal",
+                  type: "nominal",
                   header: {
                     title: opponent ? "Against " + opponent + " as" : "Against",
                     labelAngle: -45
-                  }
+                  },
+                  sort: characters
                 }
               },
               spec: {
@@ -475,8 +544,10 @@ function comparePlayers(player, opponent) {
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
+                  color: { field: "newestVersion", type: "ordinal" },
                   tooltip: [
                     { field: "mu_name", type: "nominal", title: "Matchup" },
+                    { field: "v1v2", type: "ordinal" },
                     statsType,
                     credInterval,
                     overallWinChance,
@@ -504,7 +575,7 @@ function comparePlayers(player, opponent) {
                     { op: "mean", field: "credUpper", as: "credUpper" },
                     { op: "mean", field: "pCount", as: "pCount" }
                   ],
-                  groupby: ["c1", "mu", "type"]
+                  groupby: ["c1", "mu", "type", "v1"]
                 },
                 {
                   calculate: "datum.sum_p / " + characters.length,
@@ -535,7 +606,8 @@ function comparePlayers(player, opponent) {
                 row: {
                   field: "c1",
                   type: "ordinal",
-                  header: { title: null, labelAngle: 0 }
+                  header: { title: null, labelAngle: 0 },
+                  sort: characters
                 }
               },
               spec: {
@@ -543,6 +615,7 @@ function comparePlayers(player, opponent) {
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
+                  color: { field: "v1", type: "ordinal" },
                   tooltip: [
                     statsType,
                     credInterval,
@@ -574,7 +647,7 @@ function comparePlayers(player, opponent) {
                     { op: "mean", field: "credUpper", as: "credUpper" },
                     { op: "mean", field: "oCount", as: "oCount" }
                   ],
-                  groupby: ["c2", "mu", "type"]
+                  groupby: ["c2", "mu", "type", "v2"]
                 },
                 {
                   calculate: "datum.sum_p / " + characters.length,
@@ -606,7 +679,8 @@ function comparePlayers(player, opponent) {
                 column: {
                   field: "c2",
                   type: "ordinal",
-                  header: { title: null, labelAngle: -45 }
+                  header: { title: null, labelAngle: -45 },
+                  sort: characters
                 }
               },
               spec: {
@@ -614,6 +688,7 @@ function comparePlayers(player, opponent) {
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
+                  color: { field: "v2", type: "ordinal" },
                   tooltip: [
                     statsType,
                     credInterval,

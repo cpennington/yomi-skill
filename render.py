@@ -423,15 +423,6 @@ class YomiRender:
         matchups["c1"] = matchups["index"].apply(lambda x: x.split("-")[0])
         matchups["c2"] = matchups["index"].apply(lambda x: x.split("-")[1])
         del matchups["index"]
-        matchups["counts"] = matchups.apply(
-            lambda r: len(
-                self.model.games[
-                    (self.model.games.character_1 == r.c1)
-                    & (self.model.games.character_2 == r.c2)
-                ]
-            ),
-            axis=1,
-        )
 
         flipped = matchups[matchups.c1 != matchups.c2].rename(
             columns={"c1": "c2", "c2": "c1"}
@@ -439,6 +430,58 @@ class YomiRender:
         flipped["mean"] = -flipped["mean"]
 
         matchups = matchups.append(flipped).sort_values(["c1", "c2"])
+
+        version_mu_index = self.model.version_mu_index
+
+        display(set(col.partition("[")[0] for col in summary.columns))
+        versioned_matchups = (
+            summary[[col for col in summary.columns if col.startswith("vmu[")]]
+            .rename(
+                columns={
+                    f"vmu[{ix}]": "-".join(cs) for (cs, ix) in version_mu_index.items()
+                }
+            )
+            .transpose()
+            .reset_index()
+        )
+        display(self.model.input_data["NMV"])
+        display(len(version_mu_index))
+        display(versioned_matchups)
+        versioned_matchups["c1"] = versioned_matchups["index"].apply(
+            lambda x: x.split("-")[0]
+        )
+        versioned_matchups["v1"] = versioned_matchups["index"].apply(
+            lambda x: x.split("-")[1]
+        )
+        versioned_matchups["c2"] = versioned_matchups["index"].apply(
+            lambda x: x.split("-")[2]
+        )
+        versioned_matchups["v2"] = versioned_matchups["index"].apply(
+            lambda x: x.split("-")[3]
+        )
+        del versioned_matchups["index"]
+        display(versioned_matchups)
+        versioned_matchups["counts"] = versioned_matchups.apply(
+            lambda r: len(
+                self.model.games[
+                    (self.model.games.character_1 == r.c1)
+                    & (self.model.games.version_1 == r.v1)
+                    @ (self.model.games.character_2 == r.c2)
+                    & (self.model.games.version_2 == r.v2)
+                ]
+            ),
+            axis=1,
+        )
+
+        vflipped = versioned_matchups[
+            versioned_matchups.c1 != versioned_matchups.c2
+        ].rename(columns={"c1": "c2", "v1": "v2", "c2": "c1", "v2": "v1"})
+        vflipped["mean"] = -vflipped["mean"]
+
+        versioned_matchups = versioned_matchups.append(vflipped).sort_values(
+            ["c1", "v1", "c2", "v2"]
+        )
+        display(versioned_matchups)
 
         reverse_player_index = {
             ix: player for (player, ix) in self.model.player_index.items()
@@ -521,11 +564,56 @@ class YomiRender:
         templates = TemplateLookup(directories=["templates"])
 
         outfile_name = f"{self.base_folder}/matchup-comparator.html"
+
+        if game == "yomi":
+            characters = [
+                "Grave",
+                "Midori",
+                "Rook",
+                "Valerie",
+                "Lum",
+                "Jaina",
+                "Setsuki",
+                "DeGrey",
+                "Geiger",
+                "Argagarg",
+                "Quince",
+                "BBB",
+                "Menelker",
+                "Gloria",
+                "Vendetta",
+                "Onimaru",
+                "Troq",
+                "Persephone",
+                "Gwen",
+                "Zane",
+            ]
+        else:
+            characters = self.model.characters
+
+        matchup_dict = defaultdict(dict)
+        for row in matchups.itertuples():
+            matchup_dict[row.c1][row.c2] = {
+                "mean": row.mean,
+                "std": row.std,
+                "versions": defaultdict(dict),
+            }
+
+        for row in versioned_matchups.itertuples():
+            matchup_dict.setdefault(row.c1, {}).setdefault(row.c2, {}).setdefault(
+                "versions", {}
+            ).setdefault(row.v1, {})[row.v2] = {
+                "mean": row.mean,
+                "std": row.std,
+                "counts": row.counts,
+            }
+
         with open(outfile_name, "w") as outfile:
             outfile.write(
                 templates.get_template(f"{game}.html").render_unicode(
-                    matchups=matchups,
-                    characters=self.model.characters,
+                    matchups=matchup_dict,
+                    versioned_matchups=versioned_matchups,
+                    characters=characters,
                     player_data=player_data,
                     elo_scale={
                         "mean": summary.elo_logit_scale["mean"],

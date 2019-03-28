@@ -101,12 +101,50 @@ class YomiModel:
         )
 
     @cached_property
+    def version_mu_index(self):
+        return dict(
+            zip(
+                (
+                    (row.character_1, row.version_1, row.character_2, row.version_2)
+                    for row in self.games[
+                        ["character_1", "version_1", "character_2", "version_2"]
+                    ]
+                    .drop_duplicates()
+                    .itertuples()
+                ),
+                range(1, 1000),
+            )
+        )
+
+    @cached_property
     def characters(self):
-        return self.games.character_1.dtype.categories
+        return sorted(self.games.character_1.append(self.games.character_2).unique())
+
+    @cached_property
+    def versions(self):
+        return sorted(self.games.version_1.append(self.games.version_2).unique())
+
+    @cached_property
+    def character_versions(self):
+        return sorted(
+            self.games[["character_1", "version_1"]]
+            .rename(columns={"character_1": "character", "version_1": "version"})
+            .append(
+                self.games[["character_2", "version_2"]].rename(
+                    columns={"character_2": "character", "version_2": "version"}
+                )
+            )
+            .drop_duplicates()
+            .itertuples(index=False)
+        )
 
     @cached_property
     def character_index(self):
         return dict(zip(self.characters, range(1, 100)))
+
+    @cached_property
+    def version_index(self):
+        return dict(zip(self.versions, range(1, 1000)))
 
     @cached_property
     def player_tournament_index(self):
@@ -181,6 +219,7 @@ class YomiModel:
             "NM": len(self.mu_index),
             "NP": len(self.player_index),
             "NC": len(self.characters),
+            "NMV": len(self.version_mu_index),
             # "tp": tournament_player,
             "win": self.games.win.astype(int),
             # "pt1": self.games.apply(
@@ -194,6 +233,18 @@ class YomiModel:
             "mup": self.games.apply(
                 lambda r: self.mu_index[(r.character_1, r.character_2)], axis=1
             ).astype(int),
+            "vmup": self.games.apply(
+                lambda r: self.version_mu_index[
+                    (r.character_1, r.version_1, r.character_2, r.version_2)
+                ],
+                axis=1,
+            ).astype(int),
+            "mu_for_v": [
+                self.mu_index[(c1, c2)]
+                for ((c1, v1, c2, v2), vix) in sorted(
+                    self.version_mu_index.items(), key=lambda i: i[1]
+                )
+            ],
             "non_mirror": self.games.apply(
                 lambda r: float(r.character_1 != r.character_2), axis=1
             ).astype(int),
@@ -202,6 +253,8 @@ class YomiModel:
             # ),
             "char1": self.games.character_1.apply(self.character_index.get).astype(int),
             "char2": self.games.character_2.apply(self.character_index.get).astype(int),
+            "version1": self.games.version_1.apply(self.version_index.get).astype(int),
+            "version2": self.games.version_2.apply(self.version_index.get).astype(int),
             "player1": self.games.player_1.apply(self.player_index.get).astype(int),
             "player2": self.games.player_2.apply(self.player_index.get).astype(int),
             "elo_logit": elo_logit,
