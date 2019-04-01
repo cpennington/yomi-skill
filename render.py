@@ -409,7 +409,16 @@ class YomiRender:
 
         mu_index = self.model.mu_index
 
-        if any(col.startswith('mu[') for col in summary.columns):
+        os.makedirs(f"site/{game}/playerData", exist_ok=True)
+        for player in self.model.player_index:
+            self.model.games[
+                (self.model.games.player_1 == player)
+                | (self.model.games.player_2 == player)
+            ].sort_values("match_date").to_json(
+                f"site/{game}/playerData/{player}.json", orient="records"
+            )
+
+        if any(col.startswith("mu[") for col in summary.columns):
             matchups = (
                 summary[[col for col in summary.columns if col.startswith("mu[")]]
                 .rename(
@@ -445,7 +454,7 @@ class YomiRender:
         else:
             matchups = None
 
-        if any(col.startswith('vmu[') for col in summary.columns):
+        if any(col.startswith("vmu[") for col in summary.columns):
             version_mu_index = self.model.version_mu_index
 
             display(set(col.partition("[")[0] for col in summary.columns))
@@ -453,7 +462,8 @@ class YomiRender:
                 summary[[col for col in summary.columns if col.startswith("vmu[")]]
                 .rename(
                     columns={
-                        f"vmu[{ix}]": "-".join(cs) for (cs, ix) in version_mu_index.items()
+                        f"vmu[{ix}]": "-".join(cs)
+                        for (cs, ix) in version_mu_index.items()
                     }
                 )
                 .transpose()

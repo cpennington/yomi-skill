@@ -99,7 +99,7 @@ def load_tankbard(record_file):
     )
     records["timestamp"] = records.timestamp.astype(int)
     records["match_date"] = records.timestamp.apply(datetime.fromtimestamp)
-    records["win"] = records.win.map({"<": True, ">": False})
+    records["win"] = records.win.map({">": True, "<": False})
     records["submitter"] = "tankbard"
     records["replay"] = record_file
 
@@ -189,20 +189,24 @@ def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOF
         newRating1 = rating1 + k1 * (wins1 - expected1 * gamesPlayed)
         newRating2 = rating2 + k2 * (wins2 - expected2 * gamesPlayed)
 
-        elo_records.append(
-            {
-                "elo_before_1": rating1,
-                "elo_before_2": rating2,
-                "games_played_1": play_counts[row.player_1],
-                "games_played_2": play_counts[row.player_2],
-            }
-        )
+        record = {
+            "elo_before_1": rating1,
+            "elo_before_2": rating2,
+            "games_played_1": play_counts[row.player_1],
+            "games_played_2": play_counts[row.player_2],
+        }
 
         play_counts[row.player_1] += 1
         play_counts[row.player_2] += 1
 
         current_elo[row.player_1] = newRating1
         current_elo[row.player_2] = newRating2
+
+        record["elo_after_1"] = newRating1
+        record["elo_after_2"] = newRating2
+        record["elo_delta_1"] = newRating1 - rating1
+        record["elo_delta_2"] = newRating2 - rating2
+        elo_records.append(record)
 
     return historical_records.join(pandas.DataFrame.from_records(elo_records))
 
@@ -237,7 +241,7 @@ def display_elo_checks(games):
     print("squared error", squared_error)
 
 
-def load_historical_record(replay_dir='../bacon-replays'):
+def load_historical_record(replay_dir="../bacon-replays"):
     historical_record = pandas.DataFrame()
     with os.scandir(replay_dir) as it:
         historical_record = pandas.concat(
@@ -259,28 +263,35 @@ def load_historical_record(replay_dir='../bacon-replays'):
         + historical_record.player_2_ties
     )
 
-    historical_record['match_day'] = historical_record.match_date.apply(lambda d: d.isocalendar())
+    historical_record["match_day"] = historical_record.match_date.apply(
+        lambda d: d.isocalendar()
+    )
 
-    #historical_record = historical_record[(historical_record.player_1_games_played != 0) | (historical_record.player_2_games_played != 0)]
+    # historical_record = historical_record[(historical_record.player_1_games_played != 0) | (historical_record.player_2_games_played != 0)]
 
-    historical_record = historical_record.drop_duplicates(
-        subset=[
-            "match_day",
-            "player_1",
-            "player_2",
-            "character_1",
-            "character_2",
-            "player_1_wins",
-            "player_1_losses",
-            "player_1_ties",
-            "player_2_wins",
-            "player_2_losses",
-            "player_2_ties",
-        ]
-    ).sort_values(['match_date']).reset_index(drop=True)
-    historical_record = historical_record.drop(columns=['match_day'])
+    historical_record = (
+        historical_record.drop_duplicates(
+            subset=[
+                "match_day",
+                "player_1",
+                "player_2",
+                "character_1",
+                "character_2",
+                "player_1_wins",
+                "player_1_losses",
+                "player_1_ties",
+                "player_2_wins",
+                "player_2_losses",
+                "player_2_ties",
+            ]
+        )
+        .sort_values(["match_date"])
+        .reset_index(drop=True)
+    )
+    historical_record = historical_record.drop(columns=["match_day"])
 
     return historical_record
+
 
 def games(replay_dir="../bacon-replays", autodata=None):
     game_dir = "games/bacon"
