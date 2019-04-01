@@ -47,9 +47,14 @@
         >Yomi Skill Chart</a
       >
       <a
-        class="nav-link ${'active' if self.attr.game == 'bacon' else ''}"
+        class="nav-link ${'active' if self.attr.game == 'bacon and not has_versions' else ''}"
         href="/yomi-skill/bacon.html"
         >BattleCON Skill Chart</a
+      >
+      <a
+        class="nav-link ${'active' if self.attr.game == 'bacon' and has_versions else ''}"
+        href="/yomi-skill/bacon-versions.html"
+        >BattleCON Skill Chart (by version)${has_versions}</a
       >
     </nav>
     <div class="container">

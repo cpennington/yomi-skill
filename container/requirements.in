@@ -16,3 +16,4 @@ cached-property
 fastparquet
 bacon-replay-analyzer
 mako
+toposort

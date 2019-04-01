@@ -24,7 +24,8 @@ matchups: build
 		jupyter \
 		--game=yomi \
 		--dest=index.html \
-		--min-games=0
+		--min-games=0 \
+		--same-data
 
 bacon-matchups: build
 	docker run -it  \
@@ -34,4 +35,17 @@ bacon-matchups: build
 		jupyter \
 		--game=bacon \
 		--dest=bacon.html \
-		--min-games=30
+		--min-games=30 \
+		--same-data
+
+bacon-vmatchups: build
+	docker run -it  \
+		--mount="type=bind,src=$(PWD),dst=/code" \
+		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
+		--entrypoint /code/render_matchup_comparator.py \
+		jupyter \
+		--game=bacon \
+		--dest=bacon-versions.html \
+		--min-games=30 \
+		--same-data \
+		--with-versions

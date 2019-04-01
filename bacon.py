@@ -75,8 +75,55 @@ def load_replay_results(replay_dir):
             logging.exception(f"Unable to understand {replay_dir}/{replay_file}")
     results = results.append(pandas.DataFrame.from_records(records))
 
+    results["submitter"] = (
+        results.player_1.append(results.player_2).value_counts().index[0]
+    )
+
     results.to_parquet(f"{replay_dir}/results.parquet", compression="gzip")
     return results[(results.player_1 != "Bot") & (results.player_2 != "Bot")]
+
+
+def load_tankbard(record_file):
+    records = pandas.read_csv(
+        record_file,
+        names=[
+            "timestamp",
+            "player_1",
+            "character_1",
+            "record_1",
+            "win",
+            "player_2",
+            "character_2",
+            "record_2",
+        ],
+    )
+    records["timestamp"] = records.timestamp.astype(int)
+    records["match_date"] = records.timestamp.apply(datetime.fromtimestamp)
+    records["win"] = records.win.map({"<": True, ">": False})
+    records["submitter"] = "tankbard"
+    records["replay"] = record_file
+
+    backwards_mus = records.character_1 > records.character_2
+    records[backwards_mus] = records[backwards_mus].rename(
+        columns={
+            "player_1": "player_2",
+            "player_2": "player_1",
+            "character_1": "character_2",
+            "character_2": "character_1",
+            "record_1": "record_2",
+            "record_2": "record_1",
+        }
+    )
+    records.loc[backwards_mus, ["win"]] = ~records[backwards_mus].win
+
+    records["player_1_wins"] = records.record_1.apply(lambda r: int(r.split("-")[0]))
+    records["player_1_losses"] = records.record_1.apply(lambda r: int(r.split("-")[1]))
+    records["player_1_ties"] = records.record_1.apply(lambda r: int(r.split("-")[2]))
+    records["player_2_wins"] = records.record_2.apply(lambda r: int(r.split("-")[0]))
+    records["player_2_losses"] = records.record_2.apply(lambda r: int(r.split("-")[1]))
+    records["player_2_ties"] = records.record_2.apply(lambda r: int(r.split("-")[2]))
+
+    return records[(records.player_1 != "Aliphant") & (records.player_2 != "Aliphant")]
 
 
 BASE_VERSION = "0.15"
@@ -112,17 +159,14 @@ def apply_versions(games):
 
 
 INITIAL_ELO = 1500
-LOW_K = 25
-HIGH_K = 125
-K_CUTOFF = 95
+LOW_K = 51
+HIGH_K = 79
+K_CUTOFF = 186
 MIN_GAMES = 0
 DENOM = 1135.77
 
 
 def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOFF):
-    historical_records = historical_records.sort_values(["match_date"]).reset_index(
-        drop=True
-    )
     current_elo = defaultdict(lambda: INITIAL_ELO)
     play_counts = defaultdict(int)
 
@@ -164,9 +208,7 @@ def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOF
 
 
 def display_elo_checks(games):
-    enough_data = games[
-        (games.games_played_1 > MIN_GAMES) & (games.games_played_2 > MIN_GAMES)
-    ]
+    enough_data = games
     enough_data["points_diff"] = enough_data.elo_before_1 - enough_data.elo_before_2
     enough_data["win_chance"] = 1 / (1 + (-enough_data.points_diff / 1135.77).rpow(10))
     squared_error = (
@@ -195,12 +237,64 @@ def display_elo_checks(games):
     print("squared error", squared_error)
 
 
-def games(replay_dir="../bacon-replays"):
+def load_historical_record(replay_dir='../bacon-replays'):
+    historical_record = pandas.DataFrame()
+    with os.scandir(replay_dir) as it:
+        historical_record = pandas.concat(
+            load_replay_results(entry.path) for entry in it if entry.is_dir()
+        )
+
+    historical_record = historical_record.append(
+        load_tankbard(replay_dir + "/bc_records")
+    )
+
+    historical_record["player_1_games_played"] = (
+        historical_record.player_1_wins
+        + historical_record.player_1_losses
+        + historical_record.player_1_ties
+    )
+    historical_record["player_2_games_played"] = (
+        historical_record.player_2_wins
+        + historical_record.player_2_losses
+        + historical_record.player_2_ties
+    )
+
+    historical_record['match_day'] = historical_record.match_date.apply(lambda d: d.isocalendar())
+
+    #historical_record = historical_record[(historical_record.player_1_games_played != 0) | (historical_record.player_2_games_played != 0)]
+
+    historical_record = historical_record.drop_duplicates(
+        subset=[
+            "match_day",
+            "player_1",
+            "player_2",
+            "character_1",
+            "character_2",
+            "player_1_wins",
+            "player_1_losses",
+            "player_1_ties",
+            "player_2_wins",
+            "player_2_losses",
+            "player_2_ties",
+        ]
+    ).sort_values(['match_date']).reset_index(drop=True)
+    historical_record = historical_record.drop(columns=['match_day'])
+
+    return historical_record
+
+def games(replay_dir="../bacon-replays", autodata=None):
     game_dir = "games/bacon"
     os.makedirs(game_dir, exist_ok=True)
     cached = sorted(os.listdir(game_dir))
-    print("\n".join("{}: {}".format(*choice) for choice in enumerate(cached)))
-    pick = input("Load game data:")
+    if autodata == "same":
+        pick = len(cached) - 1
+    elif autodata == "new":
+        pick = None
+    else:
+        print("\n".join("{}: {}".format(*choice) for choice in enumerate(cached)))
+        pick = input("Load game data:")
+
+    print("Pick", pick)
     games = None
     if pick:
         picked = cached[int(pick)]
@@ -211,8 +305,10 @@ def games(replay_dir="../bacon-replays"):
             logging.exception("Can't load %s as parquet", picked)
 
     if games is None:
-        historical_record = load_replay_results(replay_dir)
+        historical_record = load_historical_record(replay_dir)
+
         with_versions = apply_versions(historical_record)
+
         display(with_versions)
         games = compute_elo(with_versions)
 
@@ -221,5 +317,5 @@ def games(replay_dir="../bacon-replays"):
 
     games = normalize_types(games)
     display_elo_checks(games)
-    display(games[games.isna().any(axis=1)])
-    return os.path.join("bacon", name), games.dropna()
+    # display(games[games.isna().any(axis=1)])
+    return os.path.join("bacon", name), games

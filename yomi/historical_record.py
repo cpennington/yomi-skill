@@ -314,11 +314,17 @@ def as_boolean_win_record(historical_record):
     return games.sort_values(["match_date", "tournament_name"])
 
 
-def games():
+def games(autodata=None):
     game_dir = "games/yomi"
     cached = sorted(os.listdir(game_dir))
-    print("\n".join("{}: {}".format(*choice) for choice in enumerate(cached)))
-    pick = input("Load game data:")
+    if autodata == "same":
+        pick = len(cached) - 1
+    elif autodata == "new":
+        pick = None
+    else:
+        print("\n".join("{}: {}".format(*choice) for choice in enumerate(cached)))
+        pick = input("Load game data:")
+
     games = None
     if pick:
         picked = cached[int(pick)]
