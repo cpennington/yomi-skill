@@ -1,3 +1,6 @@
+language: minimal
+script: true
+
 deploy:
   provider: pages
   skip_cleanup: true
