@@ -14,7 +14,8 @@ import click
 @click.option("--with-versions/--no-versions", "versions", default=False)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
-def render(game, dest, min_games, versions, autodata):
+@click.option("--static-root", default='.')
+def render(game, dest, min_games, versions, autodata, static_root):
     if game == "yomi":
         data_name, hist_games = yomi.historical_record.games(autodata=autodata)
     elif game == "bacon":
@@ -58,7 +59,7 @@ def render(game, dest, min_games, versions, autodata):
 
     render = YomiRender(data_name, model, 1500, 2000)
 
-    filename = render.render_matchup_comparator(game, dest)
+    filename = render.render_matchup_comparator(game, dest, static_root=static_root)
     print(filename)
 
 

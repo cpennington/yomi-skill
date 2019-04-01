@@ -23,9 +23,10 @@ matchups: build
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=yomi \
-		--dest=index.html \
+		--dest=site/index.html \
 		--min-games=0 \
-		--same-data
+		--same-data \
+		--static-root=.
 
 bacon-matchups: build
 	docker run -it  \
@@ -34,9 +35,10 @@ bacon-matchups: build
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=bacon \
-		--dest=bacon.html \
+		--dest=site/bacon/index.html \
 		--min-games=30 \
-		--same-data
+		--same-data \
+		--static-root=..
 
 bacon-vmatchups: build
 	docker run -it  \
@@ -45,7 +47,8 @@ bacon-vmatchups: build
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=bacon \
-		--dest=bacon-versions.html \
+		--dest=site/bacon/versions/index.html \
 		--min-games=30 \
 		--same-data \
-		--with-versions
+		--with-versions \
+		--static-root=../..

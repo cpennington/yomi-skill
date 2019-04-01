@@ -404,7 +404,7 @@ class YomiRender:
 
         return "\n".join(lines)
 
-    def render_matchup_comparator(self, game="yomi", dest=None):
+    def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
         summary = self.model.summary_dataframe(self.warmup, self.min_samples)
 
         mu_index = self.model.mu_index
@@ -640,6 +640,7 @@ class YomiRender:
                         "std": summary.elo_logit_scale["std"],
                     },
                     has_versions=versioned_matchups is not None,
+                    static_root=static_root,
                 )
             )
 
