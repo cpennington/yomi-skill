@@ -65,7 +65,7 @@ class YomiRender:
             lambda x: reverse_player_tournament_index[int(x[6:-1])][1]
         ).astype(tournament_category)
 
-        del (player_tournament_skill["level_0"])
+        del player_tournament_skill["level_0"]
         player_tournament_skill = player_tournament_skill.rename(
             columns={"level_1": "sample"}
         )
@@ -106,7 +106,7 @@ class YomiRender:
             lambda x: reverse_player_tournament_index[extract_index(x)[1][0]][1]
         ).astype(tournament_category)
 
-        del (player_tournament_skill["level_0"])
+        del player_tournament_skill["level_0"]
         player_tournament_skill = player_tournament_skill.rename(
             columns={"level_1": "sample"}
         )
@@ -145,7 +145,7 @@ class YomiRender:
             lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
         ).astype(character_category)
 
-        del (player_char_skill["level_0"])
+        del player_char_skill["level_0"]
         player_char_skill = player_char_skill.rename(columns={"level_1": "sample"})
 
         sample_max_skill = player_char_skill.groupby("sample").char_skill.max()
@@ -332,7 +332,7 @@ class YomiRender:
             character_category
         )
         matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
-        del (matchups["level_0"])
+        del matchups["level_0"]
         matchups = matchups.rename(columns={"level_1": "sample"})
 
         flipped = matchups[matchups.c1 != matchups.c2].rename(
@@ -411,10 +411,31 @@ class YomiRender:
 
         os.makedirs(f"site/{game}/playerData", exist_ok=True)
         for player in self.model.player_index:
-            self.model.games[
-                (self.model.games.player_1 == player)
-                | (self.model.games.player_2 == player)
-            ].sort_values("match_date").to_json(
+            p1_games = self.model.games[(self.model.games.player_1 == player)].rename(
+                columns={
+                    col: (
+                        col.replace("player_2", "opponent")
+                        .replace("player_1", "player")
+                        .replace("_1", "_p")
+                        .replace("_2", "_o")
+                    )
+                    for col in self.model.games.columns
+                }
+            )
+            p2_games = self.model.games[(self.model.games.player_2 == player)].rename(
+                columns={
+                    col: (
+                        col.replace("player_1", "opponent")
+                        .replace("player_2", "player")
+                        .replace("_2", "_p")
+                        .replace("_1", "_o")
+                    )
+                    for col in self.model.games.columns
+                }
+            )
+            p2_games.win = ~p2_games.win
+
+            p1_games.append(p2_games).sort_values("match_date").to_json(
                 f"site/{game}/playerData/{player}.json", orient="records"
             )
 
@@ -531,7 +552,7 @@ class YomiRender:
             lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
         )
 
-        del (player_char_skill["index"])
+        del player_char_skill["index"]
 
         elo_by_player = (
             self.model.games[["match_date", "player_1", "elo_before_1"]]

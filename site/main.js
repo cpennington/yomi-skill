@@ -6,6 +6,8 @@ const playerSkill = JSON.parse(
   document.getElementById("player-skill").innerText
 );
 const eloScale = JSON.parse(document.getElementById("elo-scale").innerText);
+const game = document.getElementById("game-id").innerText;
+const staticRoot = document.getElementById("static-root").innerText;
 const eloScaleDist = gaussian(eloScale.mean, eloScale.std * eloScale.std);
 const playerInput = document.getElementById("player");
 const opponentInput = document.getElementById("opponent");
@@ -18,7 +20,7 @@ const p1Stats = document.getElementById("p1-stats");
 const p2Stats = document.getElementById("p2-stats");
 const increment = 0.05;
 
-const hasVersions = !!(matchupData[characters[0]][characters[0]].versions);
+const hasVersions = !!matchupData[characters[0]][characters[0]].versions;
 
 playerInput.onblur = updatePlayerStats;
 opponentInput.onblur = updatePlayerStats;
@@ -316,7 +318,6 @@ function updatePlayerStats() {
 
 function comparePlayers(player, opponent) {
   loading.style.display = "inline";
-  vis.style.display = "none";
 
   setTimeout(function() {
     muEstimates = characters.flatMap(function(c1) {
@@ -418,7 +419,7 @@ function comparePlayers(player, opponent) {
       field: "pdf",
       type: "quantitative",
       stack: null,
-      axis: { labels: false, title: null, tickCount: 2, gridOpacity: 0.5 },
+      axis: { labels: false, title: null, tickCount: 2, gridOpacity: 0.5 }
       // scale: {
       //   domain: [
       //     0,
@@ -450,8 +451,8 @@ function comparePlayers(player, opponent) {
       ]
     };
     if (!hasVersions) {
-      baseEncoding['fill'] = overallWinChance;
-      baseEncoding['stroke'] = stroke;
+      baseEncoding["fill"] = overallWinChance;
+      baseEncoding["stroke"] = stroke;
     }
 
     const credIntervalTransform = {
@@ -478,7 +479,7 @@ function comparePlayers(player, opponent) {
       as: "muLikelihood"
     };
 
-    const vlC1C2 = {
+    const vlMUs = {
       $schema: "https://vega.github.io/schema/vega-lite/v3.json",
       data: {
         values: muEstimates
@@ -547,44 +548,48 @@ function comparePlayers(player, opponent) {
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
-                  color: Object.assign({}, { field: "newestVersion", type: "ordinal" },
-                  player
-                    ? {
-                        condition: {
-                          test: "datum['type'] == 'global'",
-                          value: "#bbb"
+                  color: Object.assign(
+                    {},
+                    { field: "newestVersion", type: "ordinal" },
+                    player
+                      ? {
+                          condition: {
+                            test: "datum['type'] == 'global'",
+                            value: "#bbb"
+                          }
                         }
-                      }
-                    : {}
+                      : {}
                   ),
-                  tooltip: hasVersions ? [
-                    { field: "mu_name", type: "nominal", title: "Matchup" },
-                    { field: "v1v2", type: "ordinal" },
-                    statsType,
-                    credInterval,
-                    overallWinChance,
-                    {
-                      field: "muLikelihood",
-                      type: "nominal",
-                      title: "Estimate"
-                    },
-                    muCount,
-                    pCount,
-                    oCount
-                  ] : [
-                    { field: "mu_name", type: "nominal", title: "Matchup" },
-                    statsType,
-                    credInterval,
-                    overallWinChance,
-                    {
-                      field: "muLikelihood",
-                      type: "nominal",
-                      title: "Estimate"
-                    },
-                    muCount,
-                    pCount,
-                    oCount
-                  ]
+                  tooltip: hasVersions
+                    ? [
+                        { field: "mu_name", type: "nominal", title: "Matchup" },
+                        { field: "v1v2", type: "ordinal" },
+                        statsType,
+                        credInterval,
+                        overallWinChance,
+                        {
+                          field: "muLikelihood",
+                          type: "nominal",
+                          title: "Estimate"
+                        },
+                        muCount,
+                        pCount,
+                        oCount
+                      ]
+                    : [
+                        { field: "mu_name", type: "nominal", title: "Matchup" },
+                        statsType,
+                        credInterval,
+                        overallWinChance,
+                        {
+                          field: "muLikelihood",
+                          type: "nominal",
+                          title: "Estimate"
+                        },
+                        muCount,
+                        pCount,
+                        oCount
+                      ]
                 })
               }
             },
@@ -778,13 +783,82 @@ function comparePlayers(player, opponent) {
       ]
     };
 
-    vegaEmbed("#vis", vlC1C2)
+    vegaEmbed("#vis", vlMUs)
       .then(function() {
         loading.style.display = "none";
-        vis.style.display = "";
       })
       .catch(console.error);
   }, 10);
+
+  if (player) {
+    console.log(player);
+    fetch(
+      encodeURI(staticRoot + "/" + game + "/playerData/" + player + ".json")
+    ).then(function(response) {
+      console.log(response);
+      response.json().then(function(playerMatches) {
+        console.log(playerMatches);
+        Array.from(playerMatches).forEach(function(match, idx) {
+          match["index"] = idx;
+          if (playerMatches[idx + 1]) {
+            match["eloDelta"] =
+              playerMatches[idx + 1].elo_before_p - match.elo_before_p;
+          }
+        });
+
+        const vlMatches = {
+          $schema: "https://vega.github.io/schema/vega-lite/v3.json",
+          data: {
+            values: playerMatches,
+            format: {
+              parse: { match_date: "date" }
+            }
+          },
+          vconcat: [
+            {
+              width: 1500,
+              height: 100,
+              transform: [{ filter: "datum.eloDelta != 0" }],
+              mark: {
+                type: "bar"
+              },
+              encoding: {
+                x: { field: "index", type: "ordinal" },
+                y: { field: "eloDelta", type: "quantitative" },
+                color: {
+                  condition: { test: "datum.eloDelta > 0", value: "#0b0" },
+                  value: "#b00"
+                }
+              }
+            },
+            {
+              width: 1500,
+              height: 200,
+              mark: {
+                type: "line",
+                interpolate: "monotone"
+              },
+              encoding: {
+                x: {
+                  field: "match_date",
+                  type: "temporal",
+                  timeUnit: "yearmonthdate"
+                },
+                y: {
+                  field: "elo_before_p",
+                  type: "quantitative",
+                  aggregate: "mean",
+                  scale: { zero: false }
+                }
+              }
+            }
+          ]
+        };
+
+        vegaEmbed("#player-vis", vlMatches);
+      });
+    });
+  }
 }
 
 function doGraph(event) {

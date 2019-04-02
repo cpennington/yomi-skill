@@ -365,4 +365,3 @@ def games(autodata=None):
     games = normalize_types(games)
 
     return os.path.join("yomi", name), games.dropna()
-

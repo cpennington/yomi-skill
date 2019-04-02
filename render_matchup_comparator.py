@@ -14,7 +14,7 @@ import click
 @click.option("--with-versions/--no-versions", "versions", default=False)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
-@click.option("--static-root", default='.')
+@click.option("--static-root", default=".")
 def render(game, dest, min_games, versions, autodata, static_root):
     if game == "yomi":
         data_name, hist_games = yomi.historical_record.games(autodata=autodata)
@@ -47,13 +47,7 @@ def render(game, dest, min_games, versions, autodata, static_root):
             hist_games,
             fit_dir,
             "char_skill_elo_skill_deficit.stan",
-            [
-                "mu",
-                "char_skill",
-                "elo_logit_scale",
-                "log_lik",
-                "win_hat",
-            ],
+            ["mu", "char_skill", "elo_logit_scale", "log_lik", "win_hat"],
             min_games,
         )
 
