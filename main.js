@@ -873,7 +873,7 @@ function comparePlayers(player, opponent) {
               height: 200,
               mark: {
                 type: "line",
-                interpolate: "monotone"
+                interpolate: "step-after"
               },
               encoding: {
                 x: {
