@@ -194,23 +194,25 @@ function computeDatum(c1, c2, muData, x, player, opponent, playerDist) {
   const muDist = gaussian(muData.mean, muData.std * muData.std);
 
   var dist;
-  if (player) {
+  if (player && c1 != c2) {
     dist = playerDist.add(muDist);
-  } else {
+  } else if (c1 != c2) {
     dist = muDist;
+  } else if (player) {
+    dist = playerDist;
   }
 
-  const upper = dist.cdf(logOdds(x + increment / 2));
-  const lower = dist.cdf(logOdds(x - increment / 2));
+  const upper = dist ? dist.cdf(logOdds(x + increment / 2)) : 0;
+  const lower = dist ? dist.cdf(logOdds(x - increment / 2)) : 0;
 
   var datum = {
     c1: c1,
     c2: c2,
     mu: formatMU(x),
     winChance: x,
-    credLower: invLogOdds(dist.ppf(0.05)),
-    credUpper: invLogOdds(dist.ppf(0.95)),
-    pdf: dist.pdf(logOdds(x)),
+    credLower: dist ? invLogOdds(dist.ppf(0.05)) : 0,
+    credUpper: dist ? invLogOdds(dist.ppf(0.95)) : 1,
+    pdf: dist ? dist.pdf(logOdds(x)) : 0,
     p: upper - lower,
     type: player ? "match" : "global",
     count: muData.counts
@@ -256,9 +258,6 @@ function muPDF(c1, c2, player, opponent) {
           );
         });
       });
-      if (c1 == "Rukyuk" && c2 == "Cadenza") {
-        console.log(data2);
-      }
       if (data2.length == 0) {
         data2 = [
           {
@@ -331,6 +330,40 @@ function comparePlayers(player, opponent) {
       });
     });
 
+    const minCredLower = math.min(
+      muEstimates
+        .filter(function(mu) {
+          return mu.p > 0;
+        })
+        .map(function(mu) {
+          return mu.credLower;
+        })
+    );
+    const maxCredUpper = math.max(
+      muEstimates
+        .filter(function(mu) {
+          return mu.p > 0;
+        })
+        .map(function(mu) {
+          return mu.credUpper;
+        })
+    );
+
+    const eps = 0.00001;
+    const credIntervalExtreme = math.max(
+      math.abs(0.5 - minCredLower),
+      math.abs(0.5 - maxCredUpper)
+    );
+    const credIntervalDomain = xs
+      .filter(function(x) {
+        return (
+          x + eps >= math.floor((0.5 - credIntervalExtreme) * 20 - 1) / 20 &&
+          x - eps <= math.ceil((0.5 + credIntervalExtreme) * 20 + 1) / 20
+        );
+      })
+      .map(function(x) {
+        return formatMU(x);
+      });
     const muEstimate = {
       title: "Matchup Estimate",
       field: "mu",
@@ -341,6 +374,9 @@ function comparePlayers(player, opponent) {
         values: ["3-7", "5-5", "7-3"],
         grid: true,
         gridOpacity: 0.5
+      },
+      scale: {
+        domain: credIntervalDomain
       }
     };
     const muLikelihood = {
@@ -351,6 +387,7 @@ function comparePlayers(player, opponent) {
       format: ".0%",
       stack: null
     };
+
     const overallWinChance = Object.assign(
       {},
       {
