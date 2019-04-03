@@ -179,6 +179,8 @@ function getPlayerSkillDist(player, opponent, c1, c2) {
     const oSkillDist = getOSkillDist(player, c2);
     const eloDiff = getAgainstEloDiff(player);
 
+    // 1135.77 means that 200 points rating difference gets a 60% win rate
+    // see http://www.mtgeloproject.net/faq.php
     eloPctPlayerWin = 1 / (1 + Math.pow(10, -eloDiff / 1135.77));
     eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
 
@@ -966,7 +968,8 @@ function comparePlayers(player, opponent) {
               height: 200,
               mark: {
                 type: "line",
-                interpolate: "step-after"
+                interpolate: "step-after",
+                point: "transparent"
               },
               encoding: {
                 x: {
