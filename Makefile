@@ -53,6 +53,8 @@ bacon-vmatchups: build
 		--with-versions \
 		--static-root=../..
 
+all-matchups: matchups bacon-matchups bacon-vmatchups
+
 new-matchups: build
 	docker run -it \
 		--mount="type=bind,src=$(PWD),dst=/code" \
@@ -88,3 +90,5 @@ new-bacon-vmatchups: build
 		--new-data \
 		--with-versions \
 		--static-root=../..
+
+all-new-matchups: new-matchups new-bacon-matchups new-bacon-vmatchups

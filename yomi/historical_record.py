@@ -139,11 +139,13 @@ def fetch_historical_elo(url=ELO_GSHEET):
             "event",
             "match_date",
             "elo_1_before",
+            "elo_1_after",
             "set_win_1",
             "player_1",
             "player_2",
             "set_win_2",
             "elo_2_before",
+            "elo_2_after",
         ]
     ]
     historical_elo = historical_elo.dropna(
@@ -177,14 +179,14 @@ def fetch_historical_elo(url=ELO_GSHEET):
             "set_number": int,
             "event": tournament_category,
             "elo_1_before": float,
-            # 'elo_1_after': float,
+            "elo_1_after": float,
             # 'sets_played_1': int,
             "set_win_1": "int8",
             "player_1": player_category,
             "player_2": player_category,
             "set_win_2": "int8",
             "elo_2_before": float,
-            # 'elo_2_after': float,
+            "elo_2_after": float,
             # 'sets_played_2': int,
             # '5_elo': float,
             # '25_elo': float,
@@ -251,11 +253,23 @@ def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOF
 
 def as_player_elo(historical_elo):
     p1_elo = historical_elo[
-        ["set_number", "event", "match_date", "elo_1_before", "player_1"]
-    ].rename(columns={"player_1": "player", "elo_1_before": "elo_before"})
+        ["set_number", "event", "match_date", "elo_1_before", "elo_1_after", "player_1"]
+    ].rename(
+        columns={
+            "player_1": "player",
+            "elo_1_before": "elo_before",
+            "elo_1_after": "elo_after",
+        }
+    )
     p2_elo = historical_elo[
-        ["set_number", "event", "match_date", "elo_2_before", "player_2"]
-    ].rename(columns={"player_2": "player", "elo_2_before": "elo_before"})
+        ["set_number", "event", "match_date", "elo_2_before", "elo_2_after", "player_2"]
+    ].rename(
+        columns={
+            "player_2": "player",
+            "elo_2_before": "elo_before",
+            "elo_2_after": "elo_after",
+        }
+    )
 
     all_player_elo = p1_elo.append(p2_elo)
     return all_player_elo.set_index(["set_number", "player"])
@@ -344,14 +358,19 @@ def games(autodata=None):
         player_elo = as_player_elo(historical_elo)
         assert len(historical_elo) * 2 == len(player_elo)
 
-        mean_elo_by_date = player_elo.groupby(
-            ["match_date", "player"]
-        ).elo_before.mean()
+        mean_elo_by_date = player_elo.groupby(["match_date", "player"])[
+            "elo_before", "elo_after"
+        ].mean()
 
         games = win_record.join(
-            mean_elo_by_date.rename("elo_before_1"), on=["match_date", "player_1"]
+            mean_elo_by_date.rename(
+                columns={"elo_before": "elo_before_1", "elo_after": "elo_after_1"}
+            ),
+            on=["match_date", "player_1"],
         ).join(
-            mean_elo_by_date.rename("elo_before_2"),
+            mean_elo_by_date.rename(
+                columns={"elo_before": "elo_before_2", "elo_after": "elo_after_2"}
+            ),
             on=["match_date", "player_2"],
             rsuffix="_2",
         )
@@ -359,6 +378,9 @@ def games(autodata=None):
         games.astype({"character_1": str, "character_2": str}).to_parquet(
             f"{game_dir}/{name}.parquet", compression="gzip"
         )
+
+    games["version_1"] = "2"
+    games["version_2"] = "2"
 
     display(games[games.isna().any(axis=1)])
 

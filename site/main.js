@@ -828,18 +828,67 @@ function comparePlayers(player, opponent) {
   }, 10);
 
   if (player) {
-    console.log(player);
     fetch(
       encodeURI(staticRoot + "/" + game + "/playerData/" + player + ".json")
     ).then(function(response) {
       console.log(response);
       response.json().then(function(playerMatches) {
+        const matchDateField = { field: "match_date", type: "temporal" };
+        const charPlayerField = {
+          field: "character_p",
+          type: "nominal",
+          title: "Playing as"
+        };
+        const oppField = {
+          field: "opponent",
+          type: "nominal",
+          title: "Opponent"
+        };
+        const charOpponentField = {
+          field: "character_o",
+          type: "nominal",
+          title: "Opponent as"
+        };
+        const eloPlayerField = {
+          field: "elo_before_p",
+          type: "quantitative",
+          title: "Player Elo"
+        };
+        const eloOpponentField = {
+          field: "elo_before_o",
+          type: "quantitative",
+          title: "Opponent Elo"
+        };
+        const eventField = {
+          field: "tournament_name",
+          type: "nominal",
+          title: "Tournament"
+        };
+
+        const baconEloTooltips = [
+          matchDateField,
+          charPlayerField,
+          oppField,
+          charOpponentField,
+          eloPlayerField,
+          eloOpponentField
+        ];
+
+        const yomiEloTooltips = [
+          matchDateField,
+          eventField,
+          oppField,
+          eloPlayerField,
+          eloOpponentField
+        ];
+
         console.log(playerMatches);
         Array.from(playerMatches).forEach(function(match, idx) {
           match["index"] = idx;
-          if (playerMatches[idx + 1]) {
+          if (match.elo_after_p || playerMatches[idx + 1]) {
             match["eloDelta"] =
-              playerMatches[idx + 1].elo_before_p - match.elo_before_p;
+              (match.elo_after_p || playerMatches[idx + 1].elo_before_p) -
+              match.elo_before_p;
           }
         });
 
@@ -859,13 +908,57 @@ function comparePlayers(player, opponent) {
               mark: {
                 type: "bar"
               },
+              transform:
+                game == "yomi"
+                  ? [
+                      {
+                        aggregate: [
+                          { op: "min", field: "index", as: "index" },
+                          { op: "mean", field: "eloDelta", as: "eloDelta" },
+                          {
+                            op: "mean",
+                            field: "elo_before_p",
+                            as: "elo_before_p"
+                          },
+                          {
+                            op: "mean",
+                            field: "elo_before_o",
+                            as: "elo_before_o"
+                          }
+                        ],
+                        groupby: [
+                          "player",
+                          "opponent",
+                          "match_date",
+                          "tournament_name"
+                        ]
+                      }
+                    ]
+                  : [],
               encoding: {
                 x: { field: "index", type: "ordinal" },
                 y: { field: "eloDelta", type: "quantitative" },
                 color: {
-                  condition: { test: "datum.eloDelta > 0", value: "#0b0" },
-                  value: "#b00"
-                }
+                  condition: [
+                    {
+                      test:
+                        "datum.eloDelta > 0 && datum.elo_before_p > datum.elo_before_o",
+                      value: "#050"
+                    },
+                    {
+                      test:
+                        "datum.eloDelta > 0 && datum.elo_before_p < datum.elo_before_o",
+                      value: "#0d0"
+                    },
+                    {
+                      test:
+                        "datum.eloDelta < 0 && datum.elo_before_p < datum.elo_before_o",
+                      value: "#500"
+                    }
+                  ],
+                  value: "#d00"
+                },
+                tooltip: game == "bacon" ? baconEloTooltips : yomiEloTooltips
               }
             },
             {
@@ -886,7 +979,8 @@ function comparePlayers(player, opponent) {
                   type: "quantitative",
                   aggregate: "mean",
                   scale: { zero: false }
-                }
+                },
+                tooltip: game == "bacon" ? baconEloTooltips : yomiEloTooltips
               }
             }
           ]

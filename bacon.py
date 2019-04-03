@@ -75,6 +75,11 @@ def load_replay_results(replay_dir):
             logging.exception(f"Unable to understand {replay_dir}/{replay_file}")
     results = results.append(pandas.DataFrame.from_records(records))
 
+    if len(results) == 0:
+        print(f"No replays found in {replay_dir}")
+        return results
+
+    display(results)
     results["submitter"] = (
         results.player_1.append(results.player_2).value_counts().index[0]
     )
