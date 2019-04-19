@@ -647,11 +647,11 @@ function comparePlayers(player, opponent) {
                   groupby: ["c1", "mu", "type", "v1"]
                 },
                 {
-                  calculate: "datum.sum_p / " + characters.length,
+                  calculate: "datum.sum_p / " + (characters.length - 1),
                   as: "p"
                 },
                 {
-                  calculate: "datum.sum_pdf / " + characters.length,
+                  calculate: "datum.sum_pdf / " + (characters.length - 1),
                   as: "pdf"
                 },
                 {
@@ -719,11 +719,11 @@ function comparePlayers(player, opponent) {
                   groupby: ["c2", "mu", "type", "v2"]
                 },
                 {
-                  calculate: "datum.sum_p / " + characters.length,
+                  calculate: "datum.sum_p / " + (characters.length - 1),
                   as: "p"
                 },
                 {
-                  calculate: "datum.sum_pdf / " + characters.length,
+                  calculate: "datum.sum_pdf / " + (characters.length - 1),
                   as: "pdf"
                 },
                 {
@@ -787,12 +787,14 @@ function comparePlayers(player, opponent) {
                 },
                 {
                   calculate:
-                    "datum.sum_p / " + characters.length * characters.length,
+                    "datum.sum_p / " +
+                    (characters.length - 1) * characters.length,
                   as: "p"
                 },
                 {
                   calculate:
-                    "datum.sum_pdf / " + characters.length * characters.length,
+                    "datum.sum_pdf / " +
+                    (characters.length - 1) * characters.length,
                   as: "pdf"
                 },
                 {
