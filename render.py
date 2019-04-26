@@ -317,7 +317,7 @@ class YomiRender:
             fit_results[[col for col in fit_results.columns if col.startswith("mu[")]]
             .rename(
                 columns={
-                    "mu[{}]".format(ix): "{.value}-{.value}".format(c1, c2)
+                    "mu[{}]".format(ix): "{}-{}".format(c1, c2)
                     for ((c1, c2), ix) in mu_index.items()
                 }
             )
@@ -325,12 +325,8 @@ class YomiRender:
             .rename("win_rate")
             .reset_index()
         )
-        matchups["c1"] = matchups.level_0.apply(lambda x: x.split("-")[0]).astype(
-            character_category
-        )
-        matchups["c2"] = matchups.level_0.apply(lambda x: x.split("-")[1]).astype(
-            character_category
-        )
+        matchups["c1"] = matchups.level_0.apply(lambda x: x.split("-")[0])
+        matchups["c2"] = matchups.level_0.apply(lambda x: x.split("-")[1])
         matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
         del matchups["level_0"]
         matchups = matchups.rename(columns={"level_1": "sample"})
@@ -380,13 +376,13 @@ class YomiRender:
         matchup_chart.save(filename, verbose=False)
 
     def balanced_matchups(self):
-        median_win_rate = self.matchups.groupby(["c1", "c2"]).win_rate.median()
+        median_win_rate = self.matchups[self.matchups.c1 != self.matchups.c2].groupby(["c1", "c2"]).win_rate.median()
         abs_unbalance = (median_win_rate - 5).abs().rename("abs_unbalance")
         most_balanced = (
             abs_unbalance.reset_index()
             .sort_values(["c1", "abs_unbalance"])
             .groupby("c1")
-            .head(6)
+            .head(5)
         )
 
         display(most_balanced.set_index(["c1", "c2"]).join(median_win_rate))
@@ -394,7 +390,7 @@ class YomiRender:
         lines = []
         lines.append("| Character | Counterpick |")
         lines.append("|---|---|")
-        for character in Character:
+        for character in self.model.characters:
             counterpicks = " ".join(
                 most_balanced[most_balanced.c1 == character].c2.apply(
                     lambda c: f":{c}:"
