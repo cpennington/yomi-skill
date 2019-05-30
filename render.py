@@ -376,7 +376,11 @@ class YomiRender:
         matchup_chart.save(filename, verbose=False)
 
     def balanced_matchups(self):
-        median_win_rate = self.matchups[self.matchups.c1 != self.matchups.c2].groupby(["c1", "c2"]).win_rate.median()
+        median_win_rate = (
+            self.matchups[self.matchups.c1 != self.matchups.c2]
+            .groupby(["c1", "c2"])
+            .win_rate.median()
+        )
         abs_unbalance = (median_win_rate - 5).abs().rename("abs_unbalance")
         most_balanced = (
             abs_unbalance.reset_index()

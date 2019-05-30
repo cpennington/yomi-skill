@@ -20,6 +20,8 @@ shell: build
 matchups: build
 	docker run -it \
 		--mount="type=bind,src=$(PWD),dst=/code" \
+		--memory=4g \
+		--memory-swap=4g \
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=yomi \
@@ -32,6 +34,8 @@ bacon-matchups: build
 	docker run -it  \
 		--mount="type=bind,src=$(PWD),dst=/code" \
 		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
+		--memory=4g \
+		--memory-swap=4g \
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=bacon \
@@ -45,6 +49,8 @@ bacon-vmatchups: build
 		--mount="type=bind,src=$(PWD),dst=/code" \
 		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
 		--entrypoint /code/render_matchup_comparator.py \
+		--memory=4g \
+		--memory-swap=4g \
 		jupyter \
 		--game=bacon \
 		--dest=site/bacon/versions/index.html \
@@ -58,6 +64,8 @@ all-matchups: matchups bacon-matchups bacon-vmatchups
 new-matchups: build
 	docker run -it \
 		--mount="type=bind,src=$(PWD),dst=/code" \
+		--memory=4g \
+		--memory-swap=4g \
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=yomi \
@@ -70,6 +78,8 @@ new-bacon-matchups: build
 	docker run -it  \
 		--mount="type=bind,src=$(PWD),dst=/code" \
 		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
+		--memory=4g \
+		--memory-swap=4g \
 		--entrypoint /code/render_matchup_comparator.py \
 		jupyter \
 		--game=bacon \
@@ -83,6 +93,8 @@ new-bacon-vmatchups: build
 		--mount="type=bind,src=$(PWD),dst=/code" \
 		--mount="type=bind,src=$(PWD)/../bacon-replays,dst=/bacon-replays" \
 		--entrypoint /code/render_matchup_comparator.py \
+		--memory=4g \
+		--memory-swap=4g \
 		jupyter \
 		--game=bacon \
 		--dest=site/bacon/versions/index.html \
