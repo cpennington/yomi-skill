@@ -317,7 +317,7 @@ function updatePlayerStats() {
   }
 }
 
-function comparePlayers(player, opponent) {
+function comparePlayers(player, opponent, textOnly) {
   loading.style.display = "inline";
 
   setTimeout(function() {
@@ -418,6 +418,10 @@ function comparePlayers(player, opponent) {
           }
         : {}
     );
+    const muNumber = {
+      title: "Matchup Value",
+      field: "muNumber"
+    };
     const statsType = { field: "type", type: "nominal" };
     const muCount = {
       field: "count",
@@ -471,24 +475,30 @@ function comparePlayers(player, opponent) {
       // }
     };
 
-    const mark = {
-      type: hasVersions ? "line" : "area",
-      stroke: "#000",
-      interpolate: "monotone"
-    };
+    const mark = textOnly
+      ? { type: "text" }
+      : {
+          type: hasVersions ? "line" : "area",
+          stroke: "#000",
+          interpolate: "monotone"
+        };
 
-    const baseEncoding = {
-      x: muEstimate,
-      y: pdf,
-      detail: statsType,
-      tooltip: [
-        statsType,
-        credInterval,
-        overallWinChance,
-        { field: "muLikelihood", type: "nominal", title: "Estimate" },
-        muCount
-      ]
-    };
+    const baseEncoding = textOnly
+      ? {
+          text: muNumber
+        }
+      : {
+          x: muEstimate,
+          y: pdf,
+          detail: statsType,
+          tooltip: [
+            statsType,
+            credInterval,
+            overallWinChance,
+            { field: "muLikelihood", type: "nominal", title: "Estimate" },
+            muCount
+          ]
+        };
     if (!hasVersions) {
       baseEncoding["fill"] = overallWinChance;
       baseEncoding["stroke"] = stroke;
@@ -518,8 +528,483 @@ function comparePlayers(player, opponent) {
       as: "muLikelihood"
     };
 
+    const muNumberVal = {
+      calculate: "format(datum.cum_p * 10, '.2')",
+      // "join([" +
+      // "format(datum.cum_p * 10, '.2')," +
+      // "' ['," +
+      // "format(floor(datum.credLower * 100)/10, '.2')," +
+      // "' - '," +
+      // "format(ceil(datum.credUpper * 100)/10, '.2')," +
+      // "']'," +
+      // "], '')",
+      as: "muNumber"
+    };
+
+    const c1c2Transforms = [
+      {
+        calculate: "datum.p * datum.winChance",
+        as: "w_p"
+      },
+      {
+        joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
+        groupby: ["c1", "c2", "type", "v1v2"]
+      },
+      {
+        calculate: "abs(datum.signed_cum_p)",
+        as: "cum_p"
+      },
+      {
+        calculate: "join([datum.c1, '/', datum.c2], '')",
+        as: "mu_name"
+      },
+      credIntervalTransform,
+      muLikelihoodTransform,
+      muNumberVal
+    ];
+
+    const c1Transforms = [
+      {
+        aggregate: [
+          { op: "sum", field: "p", as: "sum_p" },
+          { op: "sum", field: "pdf", as: "sum_pdf" },
+          { op: "sum", field: "count", as: "count" },
+          { op: "mean", field: "winChance", as: "mean_win_chance" },
+          { op: "mean", field: "credLower", as: "credLower" },
+          { op: "mean", field: "credUpper", as: "credUpper" },
+          { op: "mean", field: "pCount", as: "pCount" }
+        ],
+        groupby: ["c1", "mu", "type", "v1"]
+      },
+      {
+        calculate: "datum.sum_p / " + (characters.length - 1),
+        as: "p"
+      },
+      {
+        calculate: "datum.sum_pdf / " + (characters.length - 1),
+        as: "pdf"
+      },
+      {
+        calculate: "datum.p * datum.mean_win_chance",
+        as: "w_p"
+      },
+      {
+        joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
+        groupby: ["c1", "type"]
+      },
+      {
+        calculate: "abs(datum.signed_cum_p)",
+        as: "cum_p"
+      },
+      credIntervalTransform,
+      muLikelihoodTransform,
+      muNumberVal
+    ];
+
+    const c2Transforms = [
+      {
+        aggregate: [
+          { op: "sum", field: "p", as: "sum_p" },
+          { op: "sum", field: "pdf", as: "sum_pdf" },
+          { op: "sum", field: "count", as: "count" },
+          { op: "mean", field: "winChance", as: "mean_win_chance" },
+          { op: "mean", field: "credLower", as: "credLower" },
+          { op: "mean", field: "credUpper", as: "credUpper" },
+          { op: "mean", field: "oCount", as: "oCount" }
+        ],
+        groupby: ["c2", "mu", "type", "v2"]
+      },
+      {
+        calculate: "datum.sum_p / " + (characters.length - 1),
+        as: "p"
+      },
+      {
+        calculate: "datum.sum_pdf / " + (characters.length - 1),
+        as: "pdf"
+      },
+      {
+        calculate: "datum.p * datum.mean_win_chance",
+        as: "w_p"
+      },
+      {
+        joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
+        groupby: ["c2", "type"]
+      },
+      {
+        calculate: "abs(datum.signed_cum_p)",
+        as: "cum_p"
+      },
+      credIntervalTransform,
+      muLikelihoodTransform,
+      muNumberVal
+    ];
+
+    const allTransforms = [
+      {
+        aggregate: [
+          { op: "sum", field: "p", as: "sum_p" },
+          { op: "sum", field: "pdf", as: "sum_pdf" },
+          { op: "mean", field: "winChance", as: "mean_win_chance" },
+          { op: "mean", field: "credLower", as: "credLower" },
+          { op: "mean", field: "credUpper", as: "credUpper" }
+        ],
+        groupby: ["mu", "type"]
+      },
+      {
+        calculate:
+          "datum.sum_p / " + (characters.length - 1) * characters.length,
+        as: "p"
+      },
+      {
+        calculate:
+          "datum.sum_pdf / " + (characters.length - 1) * characters.length,
+        as: "pdf"
+      },
+      {
+        calculate: "datum.p * datum.mean_win_chance",
+        as: "w_p"
+      },
+      {
+        joinaggregate: [{ op: "sum", field: "w_p", as: "signed_cum_p" }],
+        groupby: ["type"]
+      },
+      {
+        calculate: "abs(datum.signed_cum_p)",
+        as: "cum_p"
+      },
+      credIntervalTransform,
+      muLikelihoodTransform,
+      muNumberVal
+    ];
+
+    const c1c2Graphs = {
+      transform: c1c2Transforms,
+      facet: {
+        row: {
+          field: "c1",
+          type: "nominal",
+          header: {
+            title: player ? player + " playing " : "Playing",
+            labelAngle: 0
+          },
+          sort: characters
+        },
+        column: {
+          field: "c2",
+          type: "nominal",
+          header: {
+            title: opponent ? "Against " + opponent + " as" : "Against",
+            labelAngle: -45
+          },
+          sort: characters
+        }
+      },
+      spec: {
+        width: 50,
+        height: 40,
+        mark: mark,
+        encoding: Object.assign({}, baseEncoding, {
+          color: Object.assign(
+            {},
+            { field: "newestVersion", type: "ordinal" },
+            player
+              ? {
+                  condition: {
+                    test: "datum['type'] == 'global'",
+                    value: "#bbb"
+                  }
+                }
+              : {}
+          ),
+          tooltip: hasVersions
+            ? [
+                { field: "mu_name", type: "nominal", title: "Matchup" },
+                { field: "v1v2", type: "ordinal" },
+                statsType,
+                credInterval,
+                overallWinChance,
+                {
+                  field: "muLikelihood",
+                  type: "nominal",
+                  title: "Estimate"
+                },
+                muCount,
+                pCount,
+                oCount
+              ]
+            : [
+                { field: "mu_name", type: "nominal", title: "Matchup" },
+                statsType,
+                credInterval,
+                overallWinChance,
+                {
+                  field: "muLikelihood",
+                  type: "nominal",
+                  title: "Estimate"
+                },
+                muCount,
+                pCount,
+                oCount
+              ]
+        })
+      }
+    };
+    const c1c2Text = {
+      transform: c1c2Transforms,
+      width: 700,
+      height: 700,
+      encoding: {
+        y: {
+          field: "c1",
+          type: "nominal",
+          header: {
+            title: player ? player + " playing " : "Playing",
+            labelAngle: 0
+          },
+          sort: characters
+        },
+        x: {
+          field: "c2",
+          type: "nominal",
+          header: {
+            title: opponent ? "Against " + opponent + " as" : "Against",
+            labelAngle: -45
+          },
+          sort: characters
+        }
+      },
+      layer: [
+        { mark: "rect", encoding: baseEncoding },
+        {
+          mark: "text",
+          encoding: {
+            text: muNumber,
+            tooltip: hasVersions
+              ? [
+                  { field: "mu_name", type: "nominal", title: "Matchup" },
+                  { field: "v1v2", type: "ordinal" },
+                  statsType,
+                  credInterval,
+                  overallWinChance,
+                  {
+                    field: "muLikelihood",
+                    type: "nominal",
+                    title: "Estimate"
+                  },
+                  muCount,
+                  pCount,
+                  oCount
+                ]
+              : [
+                  { field: "mu_name", type: "nominal", title: "Matchup" },
+                  statsType,
+                  credInterval,
+                  overallWinChance,
+                  {
+                    field: "muLikelihood",
+                    type: "nominal",
+                    title: "Estimate"
+                  },
+                  muCount,
+                  pCount,
+                  oCount
+                ]
+          }
+        }
+      ]
+    };
+
+    const c1Graphs = {
+      transform: c1Transforms,
+      facet: {
+        row: {
+          field: "c1",
+          type: "ordinal",
+          header: { title: null, labelAngle: 0 },
+          sort: characters
+        }
+      },
+      spec: {
+        width: 50,
+        height: 40,
+        mark: mark,
+        encoding: Object.assign({}, baseEncoding, {
+          color: { field: "v1", type: "ordinal" },
+          tooltip: [
+            statsType,
+            credInterval,
+            overallWinChance,
+            {
+              field: "muLikelihood",
+              type: "nominal",
+              title: "Estimate"
+            },
+            muCount,
+            pCount
+          ]
+        })
+      }
+    };
+
+    const c1Text = {
+      transform: c1Transforms,
+      width: 35,
+      height: 700,
+      encoding: {
+        y: {
+          field: "c1",
+          type: "nominal",
+          header: {
+            title: player ? player + " playing " : "Playing",
+            labelAngle: 0
+          },
+          sort: characters
+        }
+      },
+      layer: [
+        { mark: "rect", encoding: baseEncoding },
+        {
+          mark: "text",
+          encoding: {
+            text: muNumber,
+            tooltip: [
+              statsType,
+              credInterval,
+              overallWinChance,
+              {
+                field: "muLikelihood",
+                type: "nominal",
+                title: "Estimate"
+              },
+              muCount,
+              pCount
+            ]
+          }
+        }
+      ]
+    };
+
+    const c2Graphs = {
+      transform: c2Transforms,
+      facet: {
+        column: {
+          field: "c2",
+          type: "ordinal",
+          header: { title: null, labelAngle: -45 },
+          sort: characters
+        }
+      },
+      spec: {
+        width: 50,
+        height: 40,
+        mark: mark,
+        encoding: Object.assign({}, baseEncoding, {
+          color: { field: "v2", type: "ordinal" },
+          tooltip: [
+            statsType,
+            credInterval,
+            overallWinChance,
+            {
+              field: "muLikelihood",
+              type: "nominal",
+              title: "Estimate"
+            },
+            muCount,
+            oCount
+          ]
+        })
+      }
+    };
+
+    const c2Text = {
+      transform: c2Transforms,
+      width: 700,
+      height: 35,
+      encoding: {
+        x: {
+          field: "c2",
+          type: "nominal",
+          header: {
+            title: player ? player + " playing " : "Playing",
+            labelAngle: 0
+          },
+          sort: characters
+        }
+      },
+      layer: [
+        { mark: "rect", encoding: baseEncoding },
+        {
+          mark: "text",
+          encoding: {
+            text: muNumber,
+            tooltip: [
+              statsType,
+              credInterval,
+              overallWinChance,
+              {
+                field: "muLikelihood",
+                type: "nominal",
+                title: "Estimate"
+              },
+              muCount,
+              pCount
+            ]
+          }
+        }
+      ]
+    };
+
+    const allGraphs = {
+      transform: allTransforms,
+      width: 35,
+      height: 40,
+      mark: mark,
+      encoding: {
+        text: muNumber,
+        tooltip: [
+          statsType,
+          credInterval,
+          overallWinChance,
+          {
+            field: "muLikelihood",
+            type: "nominal",
+            title: "Estimate"
+          },
+          muCount,
+          pCount
+        ]
+      }
+    };
+
+    const allText = {
+      transform: allTransforms,
+      width: 35,
+      height: 35,
+      layer: [
+        { mark: "rect", encoding: baseEncoding },
+        {
+          mark: "text",
+          encoding: {
+            text: muNumber,
+            tooltip: [
+              statsType,
+              credInterval,
+              overallWinChance,
+              {
+                field: "muLikelihood",
+                type: "nominal",
+                title: "Estimate"
+              },
+              muCount,
+              pCount
+            ]
+          }
+        }
+      ]
+    };
+
     const vlMUs = {
-      $schema: "https://vega.github.io/schema/vega-lite/v3.json",
+      $schema: "https://vega.github.io/schema/vega-lite/v4.json",
       data: {
         values: muEstimates
       },
@@ -539,286 +1024,14 @@ function comparePlayers(player, opponent) {
       vconcat: [
         {
           hconcat: [
-            {
-              transform: [
-                {
-                  calculate: "datum.p * datum.winChance",
-                  as: "w_p"
-                },
-                {
-                  joinaggregate: [
-                    { op: "sum", field: "w_p", as: "signed_cum_p" }
-                  ],
-                  groupby: ["c1", "c2", "type", "v1v2"]
-                },
-                {
-                  calculate: "abs(datum.signed_cum_p)",
-                  as: "cum_p"
-                },
-                {
-                  calculate: "join([datum.c1, '/', datum.c2], '')",
-                  as: "mu_name"
-                },
-                credIntervalTransform,
-                muLikelihoodTransform
-              ],
-              facet: {
-                row: {
-                  field: "c1",
-                  type: "nominal",
-                  header: {
-                    title: player ? player + " playing " : "Playing",
-                    labelAngle: 0
-                  },
-                  sort: characters
-                },
-                column: {
-                  field: "c2",
-                  type: "nominal",
-                  header: {
-                    title: opponent ? "Against " + opponent + " as" : "Against",
-                    labelAngle: -45
-                  },
-                  sort: characters
-                }
-              },
-              spec: {
-                width: 50,
-                height: 40,
-                mark: mark,
-                encoding: Object.assign({}, baseEncoding, {
-                  color: Object.assign(
-                    {},
-                    { field: "newestVersion", type: "ordinal" },
-                    player
-                      ? {
-                          condition: {
-                            test: "datum['type'] == 'global'",
-                            value: "#bbb"
-                          }
-                        }
-                      : {}
-                  ),
-                  tooltip: hasVersions
-                    ? [
-                        { field: "mu_name", type: "nominal", title: "Matchup" },
-                        { field: "v1v2", type: "ordinal" },
-                        statsType,
-                        credInterval,
-                        overallWinChance,
-                        {
-                          field: "muLikelihood",
-                          type: "nominal",
-                          title: "Estimate"
-                        },
-                        muCount,
-                        pCount,
-                        oCount
-                      ]
-                    : [
-                        { field: "mu_name", type: "nominal", title: "Matchup" },
-                        statsType,
-                        credInterval,
-                        overallWinChance,
-                        {
-                          field: "muLikelihood",
-                          type: "nominal",
-                          title: "Estimate"
-                        },
-                        muCount,
-                        pCount,
-                        oCount
-                      ]
-                })
-              }
-            },
-            {
-              transform: [
-                {
-                  aggregate: [
-                    { op: "sum", field: "p", as: "sum_p" },
-                    { op: "sum", field: "pdf", as: "sum_pdf" },
-                    { op: "sum", field: "count", as: "count" },
-                    { op: "mean", field: "winChance", as: "mean_win_chance" },
-                    { op: "mean", field: "credLower", as: "credLower" },
-                    { op: "mean", field: "credUpper", as: "credUpper" },
-                    { op: "mean", field: "pCount", as: "pCount" }
-                  ],
-                  groupby: ["c1", "mu", "type", "v1"]
-                },
-                {
-                  calculate: "datum.sum_p / " + (characters.length - 1),
-                  as: "p"
-                },
-                {
-                  calculate: "datum.sum_pdf / " + (characters.length - 1),
-                  as: "pdf"
-                },
-                {
-                  calculate: "datum.p * datum.mean_win_chance",
-                  as: "w_p"
-                },
-                {
-                  joinaggregate: [
-                    { op: "sum", field: "w_p", as: "signed_cum_p" }
-                  ],
-                  groupby: ["c1", "type"]
-                },
-                {
-                  calculate: "abs(datum.signed_cum_p)",
-                  as: "cum_p"
-                },
-                credIntervalTransform,
-                muLikelihoodTransform
-              ],
-              facet: {
-                row: {
-                  field: "c1",
-                  type: "ordinal",
-                  header: { title: null, labelAngle: 0 },
-                  sort: characters
-                }
-              },
-              spec: {
-                width: 50,
-                height: 40,
-                mark: mark,
-                encoding: Object.assign({}, baseEncoding, {
-                  color: { field: "v1", type: "ordinal" },
-                  tooltip: [
-                    statsType,
-                    credInterval,
-                    overallWinChance,
-                    {
-                      field: "muLikelihood",
-                      type: "nominal",
-                      title: "Estimate"
-                    },
-                    muCount,
-                    pCount
-                  ]
-                })
-              }
-            }
+            textOnly ? c1c2Text : c1c2Graphs,
+            textOnly ? c1Text : c1Graphs
           ]
         },
         {
           hconcat: [
-            {
-              transform: [
-                {
-                  aggregate: [
-                    { op: "sum", field: "p", as: "sum_p" },
-                    { op: "sum", field: "pdf", as: "sum_pdf" },
-                    { op: "sum", field: "count", as: "count" },
-                    { op: "mean", field: "winChance", as: "mean_win_chance" },
-                    { op: "mean", field: "credLower", as: "credLower" },
-                    { op: "mean", field: "credUpper", as: "credUpper" },
-                    { op: "mean", field: "oCount", as: "oCount" }
-                  ],
-                  groupby: ["c2", "mu", "type", "v2"]
-                },
-                {
-                  calculate: "datum.sum_p / " + (characters.length - 1),
-                  as: "p"
-                },
-                {
-                  calculate: "datum.sum_pdf / " + (characters.length - 1),
-                  as: "pdf"
-                },
-                {
-                  calculate: "datum.p * datum.mean_win_chance",
-                  as: "w_p"
-                },
-                {
-                  joinaggregate: [
-                    { op: "sum", field: "w_p", as: "signed_cum_p" }
-                  ],
-                  groupby: ["c2", "type"]
-                },
-                {
-                  calculate: "abs(datum.signed_cum_p)",
-                  as: "cum_p"
-                },
-                credIntervalTransform,
-                muLikelihoodTransform
-              ],
-
-              facet: {
-                column: {
-                  field: "c2",
-                  type: "ordinal",
-                  header: { title: null, labelAngle: -45 },
-                  sort: characters
-                }
-              },
-              spec: {
-                width: 50,
-                height: 40,
-                mark: mark,
-                encoding: Object.assign({}, baseEncoding, {
-                  color: { field: "v2", type: "ordinal" },
-                  tooltip: [
-                    statsType,
-                    credInterval,
-                    overallWinChance,
-                    {
-                      field: "muLikelihood",
-                      type: "nominal",
-                      title: "Estimate"
-                    },
-                    muCount,
-                    oCount
-                  ]
-                })
-              }
-            },
-            {
-              transform: [
-                {
-                  aggregate: [
-                    { op: "sum", field: "p", as: "sum_p" },
-                    { op: "sum", field: "pdf", as: "sum_pdf" },
-                    { op: "mean", field: "winChance", as: "mean_win_chance" },
-                    { op: "mean", field: "credLower", as: "credLower" },
-                    { op: "mean", field: "credUpper", as: "credUpper" }
-                  ],
-                  groupby: ["mu", "type"]
-                },
-                {
-                  calculate:
-                    "datum.sum_p / " +
-                    (characters.length - 1) * characters.length,
-                  as: "p"
-                },
-                {
-                  calculate:
-                    "datum.sum_pdf / " +
-                    (characters.length - 1) * characters.length,
-                  as: "pdf"
-                },
-                {
-                  calculate: "datum.p * datum.mean_win_chance",
-                  as: "w_p"
-                },
-                {
-                  joinaggregate: [
-                    { op: "sum", field: "w_p", as: "signed_cum_p" }
-                  ],
-                  groupby: ["type"]
-                },
-                {
-                  calculate: "abs(datum.signed_cum_p)",
-                  as: "cum_p"
-                },
-                credIntervalTransform,
-                muLikelihoodTransform
-              ],
-              width: 50,
-              height: 40,
-              mark: mark,
-              encoding: baseEncoding
-            }
+            textOnly ? c2Text : c2Graphs,
+            textOnly ? allText : allGraphs
           ]
         }
       ]
@@ -927,7 +1140,7 @@ function comparePlayers(player, opponent) {
       const allMatches = playerMatches.concat(opponentMatches);
 
       const vlMatches = {
-        $schema: "https://vega.github.io/schema/vega-lite/v3.json",
+        $schema: "https://vega.github.io/schema/vega-lite/v4.json",
         data: {
           values: allMatches,
           format: {
@@ -1036,7 +1249,11 @@ function comparePlayers(player, opponent) {
 }
 
 function doGraph(event) {
-  comparePlayers(playerInput.value, opponentInput.value);
+  comparePlayers(playerInput.value, opponentInput.value, false);
+}
+
+function doText(event) {
+  comparePlayers(playerInput.value, opponentInput.value, true);
 }
 
 updatePlayerStats();

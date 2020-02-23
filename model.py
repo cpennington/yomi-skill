@@ -12,7 +12,6 @@ import arviz
 import xarray
 from cached_property import cached_property
 import numpy
-from IPython.core.display import display
 
 
 class YomiModel:
@@ -23,6 +22,8 @@ class YomiModel:
         self.pars = pars
         self.data_dir = data_dir
         self.min_games = min_games
+        self.games["player_1_orig"] = self.games.player_1
+        self.games["player_2_orig"] = self.games.player_2
         if self.min_games > 0:
             games_played = (
                 self.games.player_1.append(self.games.player_2)

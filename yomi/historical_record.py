@@ -348,7 +348,7 @@ def games(autodata=None):
         except:
             logging.exception("Can't load %s as parquet", picked)
 
-    if games is None:
+    if True or games is None:
         historical_record = fetch_historical_record()
         win_record = as_boolean_win_record(historical_record)
         assert historical_record.wins_1.sum() + historical_record.wins_2.sum() == len(
@@ -381,6 +381,8 @@ def games(autodata=None):
 
     games["version_1"] = "2"
     games["version_2"] = "2"
+
+    display(mean_elo_by_date)
 
     display(games[games.isna().any(axis=1)])
 

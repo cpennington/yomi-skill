@@ -406,27 +406,40 @@ class YomiRender:
 
     def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
         summary = self.model.summary_dataframe(self.warmup, self.min_samples)
+        display(self.model.games[(self.model.games.player_1_orig == 'sturmhammerfaust') | (self.model.games.player_2_orig == 'sturmhammerfaust')])
 
         mu_index = self.model.mu_index
 
         os.makedirs(f"site/{game}/playerData", exist_ok=True)
-        for player in self.model.player_index:
-            p1_games = self.model.games[(self.model.games.player_1 == player)].rename(
+        orig_players = sorted(
+            set(
+                self.model.games.player_1_orig.append(
+                    self.model.games.player_2_orig
+                ).unique()
+            )
+        )
+        print('sturmhammerfaust' in orig_players)
+        for player in orig_players:
+            p1_games = self.model.games[
+                (self.model.games.player_1_orig == player)
+            ].rename(
                 columns={
                     col: (
-                        col.replace("player_2", "opponent")
-                        .replace("player_1", "player")
+                        col.replace("player_2_orig", "opponent")
+                        .replace("player_1_orig", "player")
                         .replace("_1", "_p")
                         .replace("_2", "_o")
                     )
                     for col in self.model.games.columns
                 }
             )
-            p2_games = self.model.games[(self.model.games.player_2 == player)].rename(
+            p2_games = self.model.games[
+                (self.model.games.player_2_orig == player)
+            ].rename(
                 columns={
                     col: (
-                        col.replace("player_1", "opponent")
-                        .replace("player_2", "player")
+                        col.replace("player_1_orig", "opponent")
+                        .replace("player_2_orig", "player")
                         .replace("_2", "_p")
                         .replace("_1", "_o")
                     )
@@ -438,6 +451,9 @@ class YomiRender:
             p1_games.append(p2_games).sort_values("match_date").to_json(
                 f"site/{game}/playerData/{player}.json", orient="records"
             )
+            if player == 'sturmhammerfaust':
+                print(p1_games)
+                print(p2_games)
 
         if any(col.startswith("mu[") for col in summary.columns):
             matchups = (
@@ -454,7 +470,6 @@ class YomiRender:
             matchups["c1"] = matchups["index"].apply(lambda x: x.split("-")[0])
             matchups["c2"] = matchups["index"].apply(lambda x: x.split("-")[1])
             del matchups["index"]
-            display(matchups)
 
             matchups["counts"] = matchups.apply(
                 lambda r: len(
@@ -478,7 +493,6 @@ class YomiRender:
         if any(col.startswith("vmu[") for col in summary.columns):
             version_mu_index = self.model.version_mu_index
 
-            display(set(col.partition("[")[0] for col in summary.columns))
             versioned_matchups = (
                 summary[[col for col in summary.columns if col.startswith("vmu[")]]
                 .rename(
@@ -551,15 +565,18 @@ class YomiRender:
         player_char_skill["character"] = player_char_skill["index"].apply(
             lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
         )
+        player_char_skill = player_char_skill.set_index(["player", "character"])
 
         del player_char_skill["index"]
 
         elo_by_player = (
-            self.model.games[["match_date", "player_1", "elo_before_1"]]
-            .rename(columns={"player_1": "player", "elo_before_1": "elo_before"})
+            self.model.games[["match_date", "player_1_orig", "elo_before_1"]]
+            .rename(columns={"player_1_orig": "player", "elo_before_1": "elo_before"})
             .append(
-                self.model.games[["match_date", "player_2", "elo_before_2"]].rename(
-                    columns={"player_2": "player", "elo_before_2": "elo_before"}
+                self.model.games[
+                    ["match_date", "player_2_orig", "elo_before_2"]
+                ].rename(
+                    columns={"player_2_orig": "player", "elo_before_2": "elo_before"}
                 )
             )
         )
@@ -569,14 +586,14 @@ class YomiRender:
             .elo_before.last()
         ).dropna()
 
-        if self.model.min_games > 0:
-            player_elo[self.model.min_games_player] = elo_by_player[
-                elo_by_player.player == self.model.min_games_player
-            ].elo_before.mean()
+        # if self.model.min_games > 0:
+        #     player_elo[self.model.min_games_player] = elo_by_player[
+        #         elo_by_player.player == self.model.min_games_player
+        #     ].elo_before.mean()
 
         player_game_counts = (
-            self.model.games.player_1.rename("player")
-            .append(self.model.games.player_2.rename("player"))
+            self.model.games.player_1_orig.rename("player")
+            .append(self.model.games.player_2_orig.rename("player"))
             .to_frame()
             .groupby("player")
             .size()
@@ -584,11 +601,11 @@ class YomiRender:
         ).dropna()
 
         player_character_counts = (
-            self.model.games[["player_1", "character_1"]]
-            .rename(columns={"player_1": "player", "character_1": "character"})
+            self.model.games[["player_1_orig", "character_1"]]
+            .rename(columns={"player_1_orig": "player", "character_1": "character"})
             .append(
-                self.model.games[["player_2", "character_2"]].rename(
-                    columns={"player_2": "player", "character_2": "character"}
+                self.model.games[["player_2_orig", "character_2"]].rename(
+                    columns={"player_2_orig": "player", "character_2": "character"}
                 )
             )
             .groupby(["player", "character"])
@@ -596,14 +613,20 @@ class YomiRender:
         ).dropna()
 
         player_data = defaultdict(dict)
-        for row in player_char_skill.itertuples():
-            player_data[row.player][row.character] = {
-                "mean": row.mean,
-                "std": row.std,
-                "played": int(
-                    player_character_counts[row.player].get(row.character, 0)
-                ),
-            }
+        for player in orig_players:
+            for character in self.model.characters:
+                play_counts = player_game_counts.loc[player]
+                player_summary = player_char_skill.loc[
+                    player
+                    if play_counts > self.model.min_games
+                    else self.model.min_games_player,
+                    character,
+                ]
+                player_data[player][character] = {
+                    "mean": player_summary['mean'],
+                    "std": player_summary['std'],
+                    "played": int(player_character_counts[player].get(character, 0)),
+                }
         for player, elo in player_elo.items():
             player_data[player]["elo"] = elo
         for player, count in player_game_counts.items():

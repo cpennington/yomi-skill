@@ -24,8 +24,8 @@
     <script type="text/json" id="game-id">${self.attr.game}</script>
     <script type="text/json" id="static-root">${static_root}</script>
     <script src="https://cdn.jsdelivr.net/npm/vega@5/build/vega.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-lite@3/build/vega-lite.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vega-embed@4/build/vega-embed.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.0.0-beta.8/build/vega-lite.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vega-embed@5/build/vega-embed.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/gaussian@1.1.0/lib/gaussian.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mathjs@5.8.0/dist/math.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-slider@10.6.1/dist/bootstrap-slider.min.js"></script>
@@ -81,9 +81,16 @@
           <button
             id="graph"
             onclick="return doGraph();"
-            class="col-sm-9 btn btn-primary justify-content-end"
+            class="col-sm-4 btn btn-primary justify-content-end"
           >
             Graph
+          </button>
+          <button
+            id="text"
+            onclick="return doText();"
+            class="col-sm-4 btn btn-primary justify-content-end"
+          >
+            Text
           </button>
           <div id="loading" class="col-sm-1 justify-content-end">
             <img id="arrows" src="${static_root}/loading.svg" />

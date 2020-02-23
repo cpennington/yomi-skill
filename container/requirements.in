@@ -1,4 +1,5 @@
 -e git+https://github.com/edx/bootstrapped.git@unpin-dependencies#egg=bootstrapped
+Cython
 pandas
 numpy
 skills

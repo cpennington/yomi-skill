@@ -1,6 +1,5 @@
 import pandas
 import re
-from IPython.core.display import display
 
 
 def normalize_types(games):

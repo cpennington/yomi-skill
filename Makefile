@@ -2,6 +2,14 @@
 build:
 	docker build container -t jupyter
 
+upgrade:
+	docker run -it  \
+		--mount="type=bind,src=$(PWD),dst=/code" \
+		--mount="type=volume,src=pipcache,dst=/root/.cache/pip" \
+		--entrypoint="/bin/bash" \
+		jupyter \
+		-c "pip install --upgrade pip pip-tools && pip-compile /code/container/requirements.in"
+
 lab: build
 	docker run -it \
 		--mount="type=bind,src=$(PWD),dst=/code" \
@@ -26,7 +34,7 @@ matchups: build
 		jupyter \
 		--game=yomi \
 		--dest=site/index.html \
-		--min-games=0 \
+		--min-games=30 \
 		--same-data \
 		--static-root=.
 
@@ -70,7 +78,7 @@ new-matchups: build
 		jupyter \
 		--game=yomi \
 		--dest=site/index.html \
-		--min-games=0 \
+		--min-games=30 \
 		--new-data \
 		--static-root=.
 
