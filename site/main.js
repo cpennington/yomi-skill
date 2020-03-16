@@ -30,7 +30,7 @@ const medianPlayerSkill = {};
 const medianPlayerElo = {};
 characters.forEach(function(char) {
   medianPlayerSkill[char] = {};
-  skillQValues = math.quantileSeq(
+  var skillQValues = math.quantileSeq(
     Object.entries(playerSkill)
       .map(function(skillsByChar) {
         var charStats = skillsByChar[1][char];
@@ -46,7 +46,7 @@ characters.forEach(function(char) {
     quantiles
   );
 
-  std = math.mean(
+  var std = math.mean(
     Object.entries(playerSkill)
       .map(function(skillsByChar) {
         var charStats = skillsByChar[1][char];
@@ -61,7 +61,7 @@ characters.forEach(function(char) {
       })
   );
 
-  eloQValues = math.quantileSeq(
+  var eloQValues = math.quantileSeq(
     Object.values(playerSkill)
       .map(function(skill) {
         return skill.elo;

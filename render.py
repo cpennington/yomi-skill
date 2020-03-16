@@ -406,7 +406,12 @@ class YomiRender:
 
     def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
         summary = self.model.summary_dataframe(self.warmup, self.min_samples)
-        display(self.model.games[(self.model.games.player_1_orig == 'sturmhammerfaust') | (self.model.games.player_2_orig == 'sturmhammerfaust')])
+        display(
+            self.model.games[
+                (self.model.games.player_1_orig == "sturmhammerfaust")
+                | (self.model.games.player_2_orig == "sturmhammerfaust")
+            ]
+        )
 
         mu_index = self.model.mu_index
 
@@ -418,7 +423,7 @@ class YomiRender:
                 ).unique()
             )
         )
-        print('sturmhammerfaust' in orig_players)
+        print("sturmhammerfaust" in orig_players)
         for player in orig_players:
             p1_games = self.model.games[
                 (self.model.games.player_1_orig == player)
@@ -451,7 +456,7 @@ class YomiRender:
             p1_games.append(p2_games).sort_values("match_date").to_json(
                 f"site/{game}/playerData/{player}.json", orient="records"
             )
-            if player == 'sturmhammerfaust':
+            if player == "sturmhammerfaust":
                 print(p1_games)
                 print(p2_games)
 
@@ -623,8 +628,8 @@ class YomiRender:
                     character,
                 ]
                 player_data[player][character] = {
-                    "mean": player_summary['mean'],
-                    "std": player_summary['std'],
+                    "mean": player_summary["mean"],
+                    "std": player_summary["std"],
                     "played": int(player_character_counts[player].get(character, 0)),
                 }
         for player, elo in player_elo.items():
