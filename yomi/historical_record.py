@@ -272,6 +272,7 @@ def as_player_elo(historical_elo):
     )
 
     all_player_elo = p1_elo.append(p2_elo)
+    all_player_elo[["elo_before", "elo_after"]].fillna(1500, inplace=True)
     return all_player_elo.set_index(["set_number", "player"])
 
 
@@ -348,7 +349,7 @@ def games(autodata=None):
         except:
             logging.exception("Can't load %s as parquet", picked)
 
-    if True or games is None:
+    if games is None:
         historical_record = fetch_historical_record()
         win_record = as_boolean_win_record(historical_record)
         assert historical_record.wins_1.sum() + historical_record.wins_2.sum() == len(
@@ -381,8 +382,6 @@ def games(autodata=None):
 
     games["version_1"] = "2"
     games["version_2"] = "2"
-
-    display(mean_elo_by_date)
 
     display(games[games.isna().any(axis=1)])
 

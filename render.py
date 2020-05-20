@@ -423,7 +423,6 @@ class YomiRender:
                 ).unique()
             )
         )
-        print("sturmhammerfaust" in orig_players)
         for player in orig_players:
             p1_games = self.model.games[
                 (self.model.games.player_1_orig == player)
@@ -453,12 +452,17 @@ class YomiRender:
             )
             p2_games.win = ~p2_games.win
 
-            p1_games.append(p2_games).sort_values("match_date").to_json(
-                f"site/{game}/playerData/{player}.json", orient="records"
-            )
-            if player == "sturmhammerfaust":
-                print(p1_games)
-                print(p2_games)
+            with open(f"site/{game}/playerData/{player}.json", "w") as outfile:
+                json.dump(
+                    json.loads(
+                        p1_games.append(p2_games)
+                        .sort_values("match_date")
+                        .to_json(orient="records", double_precision=3)
+                    ),
+                    outfile,
+                    indent=2,
+                    sort_keys=True,
+                )
 
         if any(col.startswith("mu[") for col in summary.columns):
             matchups = (
@@ -628,12 +632,12 @@ class YomiRender:
                     character,
                 ]
                 player_data[player][character] = {
-                    "mean": player_summary["mean"],
-                    "std": player_summary["std"],
+                    "mean": round(player_summary["mean"], 2),
+                    "std": round(player_summary["std"], 2),
                     "played": int(player_character_counts[player].get(character, 0)),
                 }
         for player, elo in player_elo.items():
-            player_data[player]["elo"] = elo
+            player_data[player]["elo"] = round(elo, 0)
         for player, count in player_game_counts.items():
             player_data[player]["gamesPlayed"] = count
 
@@ -672,8 +676,8 @@ class YomiRender:
         if matchups is not None:
             for row in matchups.itertuples():
                 matchup_dict[row.c1][row.c2] = {
-                    "mean": row.mean,
-                    "std": row.std,
+                    "mean": round(row.mean, 2),
+                    "std": round(row.std, 2),
                     "counts": row.counts,
                 }
 
@@ -682,24 +686,35 @@ class YomiRender:
                 matchup_dict.setdefault(row.c1, {}).setdefault(row.c2, {}).setdefault(
                     "versions", {}
                 ).setdefault(row.v1, {})[row.v2] = {
-                    "mean": row.mean,
-                    "std": row.std,
+                    "mean": round(row.mean, 2),
+                    "std": round(row.std, 2),
                     "counts": row.counts,
                 }
+
+        with open(f"site/{game}/matchupData.json", "w") as outfile:
+            json.dump(matchup_dict, outfile, indent=2, sort_keys=True)
+
+        with open(f"site/{game}/characters.json", "w") as outfile:
+            json.dump(list(characters), outfile, indent=2, sort_keys=True)
+
+        with open(f"site/{game}/playerSkill.json", "w") as outfile:
+            json.dump(player_data, outfile, indent=2, sort_keys=True)
+
+        with open(f"site/{game}/eloScale.json", "w") as outfile:
+            json.dump(
+                {
+                    "mean": round(summary.elo_logit_scale["mean"], 2),
+                    "std": round(summary.elo_logit_scale["std"], 2),
+                },
+                outfile,
+                indent=2,
+                sort_keys=True,
+            )
 
         with open(outfile_name, "w") as outfile:
             outfile.write(
                 templates.get_template(f"{game}.html").render_unicode(
-                    matchups=matchup_dict,
-                    versioned_matchups=versioned_matchups,
-                    characters=characters,
-                    player_data=player_data,
-                    elo_scale={
-                        "mean": summary.elo_logit_scale["mean"],
-                        "std": summary.elo_logit_scale["std"],
-                    },
-                    has_versions=versioned_matchups is not None,
-                    static_root=static_root,
+                    has_versions=versioned_matchups is not None, static_root=static_root
                 )
             )
 

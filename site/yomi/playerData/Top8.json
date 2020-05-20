@@ -1,1 +1,53 @@
-[{"character_o":"DeGrey","character_p":"Menelker","elo_after_o":1548.5,"elo_after_p":1452.0,"elo_before_o":1500.0,"elo_before_p":1500.0,"match_date":1433980800000,"opponent":"wampuh","player":"Top8","player_o":"wampuh","player_p":"< 30 games","tournament_name":"IYL Season 3","version_o":"2","version_p":"2","win":-2},{"character_o":"DeGrey","character_p":"Menelker","elo_after_o":1548.5,"elo_after_p":1452.0,"elo_before_o":1500.0,"elo_before_p":1500.0,"match_date":1433980800000,"opponent":"wampuh","player":"Top8","player_o":"wampuh","player_p":"< 30 games","tournament_name":"IYL Season 3","version_o":"2","version_p":"2","win":-2},{"character_o":"DeGrey","character_p":"Menelker","elo_after_o":1548.5,"elo_after_p":1452.0,"elo_before_o":1500.0,"elo_before_p":1500.0,"match_date":1433980800000,"opponent":"wampuh","player":"Top8","player_o":"wampuh","player_p":"< 30 games","tournament_name":"IYL Season 3","version_o":"2","version_p":"2","win":-2}]
+[
+  {
+    "character_o": "DeGrey",
+    "character_p": "Menelker",
+    "elo_after_o": 1548.5,
+    "elo_after_p": 1452.0,
+    "elo_before_o": 1500.0,
+    "elo_before_p": 1500.0,
+    "match_date": 1433980800000,
+    "opponent": "wampuh",
+    "player": "Top8",
+    "player_o": "wampuh",
+    "player_p": "< 30 games",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Menelker",
+    "elo_after_o": 1548.5,
+    "elo_after_p": 1452.0,
+    "elo_before_o": 1500.0,
+    "elo_before_p": 1500.0,
+    "match_date": 1433980800000,
+    "opponent": "wampuh",
+    "player": "Top8",
+    "player_o": "wampuh",
+    "player_p": "< 30 games",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Menelker",
+    "elo_after_o": 1548.5,
+    "elo_after_p": 1452.0,
+    "elo_before_o": 1500.0,
+    "elo_before_p": 1500.0,
+    "match_date": 1433980800000,
+    "opponent": "wampuh",
+    "player": "Top8",
+    "player_o": "wampuh",
+    "player_p": "< 30 games",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  }
+]
