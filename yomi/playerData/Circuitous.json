@@ -1,1 +1,53 @@
-[{"character_o":"Vendetta","character_p":"Setsuki","elo_after_o":1757.5871,"elo_after_p":1462.0,"elo_before_o":1719.713728,"elo_before_p":1500.0,"match_date":1443312000000,"opponent":"Niijima-San","player":"Circuitous","player_o":"Niijima-San","player_p":"< 30 games","tournament_name":"Best of the Rest","version_o":"2","version_p":"2","win":0},{"character_o":"Vendetta","character_p":"Setsuki","elo_after_o":1757.5871,"elo_after_p":1462.0,"elo_before_o":1719.713728,"elo_before_p":1500.0,"match_date":1443312000000,"opponent":"Niijima-San","player":"Circuitous","player_o":"Niijima-San","player_p":"< 30 games","tournament_name":"Best of the Rest","version_o":"2","version_p":"2","win":0},{"character_o":"Vendetta","character_p":"Setsuki","elo_after_o":1757.5871,"elo_after_p":1462.0,"elo_before_o":1719.713728,"elo_before_p":1500.0,"match_date":1443312000000,"opponent":"Niijima-San","player":"Circuitous","player_o":"Niijima-San","player_p":"< 30 games","tournament_name":"Best of the Rest","version_o":"2","version_p":"2","win":0}]
+[
+  {
+    "character_o": "Vendetta",
+    "character_p": "Setsuki",
+    "elo_after_o": 1757.587,
+    "elo_after_p": 1462.0,
+    "elo_before_o": 1719.714,
+    "elo_before_p": 1500.0,
+    "match_date": 1443312000000,
+    "opponent": "Niijima-San",
+    "player": "Circuitous",
+    "player_o": "Niijima-San",
+    "player_p": "< 30 games",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  },
+  {
+    "character_o": "Vendetta",
+    "character_p": "Setsuki",
+    "elo_after_o": 1757.587,
+    "elo_after_p": 1462.0,
+    "elo_before_o": 1719.714,
+    "elo_before_p": 1500.0,
+    "match_date": 1443312000000,
+    "opponent": "Niijima-San",
+    "player": "Circuitous",
+    "player_o": "Niijima-San",
+    "player_p": "< 30 games",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  },
+  {
+    "character_o": "Vendetta",
+    "character_p": "Setsuki",
+    "elo_after_o": 1757.587,
+    "elo_after_p": 1462.0,
+    "elo_before_o": 1719.714,
+    "elo_before_p": 1500.0,
+    "match_date": 1443312000000,
+    "opponent": "Niijima-San",
+    "player": "Circuitous",
+    "player_o": "Niijima-San",
+    "player_p": "< 30 games",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  }
+]

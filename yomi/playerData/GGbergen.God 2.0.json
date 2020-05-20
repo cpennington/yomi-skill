@@ -1,1 +1,36 @@
-[{"character_o":"DeGrey","character_p":"Rook","elo_after_o":1861.424089,"elo_after_p":1466.0,"elo_before_o":1825.8679115,"elo_before_p":1500.0,"match_date":1423008000000,"opponent":"MercyfulFate","player":"GGbergen.God 2.0","player_o":"MercyfulFate","player_p":"< 30 games","tournament_name":"Tag Team League","version_o":"2","version_p":"2","win":-2},{"character_o":"DeGrey","character_p":"Rook","elo_after_o":1861.424089,"elo_after_p":1466.0,"elo_before_o":1825.8679115,"elo_before_p":1500.0,"match_date":1423008000000,"opponent":"MercyfulFate","player":"GGbergen.God 2.0","player_o":"MercyfulFate","player_p":"< 30 games","tournament_name":"Tag Team League","version_o":"2","version_p":"2","win":-2}]
+[
+  {
+    "character_o": "DeGrey",
+    "character_p": "Rook",
+    "elo_after_o": 1861.424,
+    "elo_after_p": 1466.0,
+    "elo_before_o": 1825.868,
+    "elo_before_p": 1500.0,
+    "match_date": 1423008000000,
+    "opponent": "MercyfulFate",
+    "player": "GGbergen.God 2.0",
+    "player_o": "MercyfulFate",
+    "player_p": "< 30 games",
+    "tournament_name": "Tag Team League",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Rook",
+    "elo_after_o": 1861.424,
+    "elo_after_p": 1466.0,
+    "elo_before_o": 1825.868,
+    "elo_before_p": 1500.0,
+    "match_date": 1423008000000,
+    "opponent": "MercyfulFate",
+    "player": "GGbergen.God 2.0",
+    "player_o": "MercyfulFate",
+    "player_p": "< 30 games",
+    "tournament_name": "Tag Team League",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  }
+]
