@@ -34,23 +34,6 @@
     "win": -2
   },
   {
-    "character_o": "Persephone",
-    "character_p": "Zane",
-    "elo_after_o": 1570.078,
-    "elo_after_p": 1549.125,
-    "elo_before_o": 1555.52,
-    "elo_before_p": 1548.625,
-    "match_date": 1404604800000,
-    "opponent": "EricF",
-    "player": "Commacozzee",
-    "player_o": "EricF",
-    "player_p": "Commacozzee",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
-  },
-  {
     "character_o": "Onimaru",
     "character_p": "Troq",
     "elo_after_o": 1549.122,
@@ -170,6 +153,23 @@
     "win": -2
   },
   {
+    "character_o": "DeGrey",
+    "character_p": "Grave",
+    "elo_after_o": 1623.949,
+    "elo_after_p": 1549.125,
+    "elo_before_o": 1606.19,
+    "elo_before_p": 1548.625,
+    "match_date": 1404604800000,
+    "opponent": "ratxt1",
+    "player": "Commacozzee",
+    "player_o": "ratxt1",
+    "player_p": "Commacozzee",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
     "character_o": "Zane",
     "character_p": "Argagarg",
     "elo_after_o": 1549.122,
@@ -391,16 +391,16 @@
     "win": -2
   },
   {
-    "character_o": "DeGrey",
-    "character_p": "Grave",
-    "elo_after_o": 1623.949,
+    "character_o": "Persephone",
+    "character_p": "Zane",
+    "elo_after_o": 1570.078,
     "elo_after_p": 1549.125,
-    "elo_before_o": 1606.19,
+    "elo_before_o": 1555.52,
     "elo_before_p": 1548.625,
     "match_date": 1404604800000,
-    "opponent": "ratxt1",
+    "opponent": "EricF",
     "player": "Commacozzee",
-    "player_o": "ratxt1",
+    "player_o": "EricF",
     "player_p": "Commacozzee",
     "tournament_name": "Summer Smash",
     "version_o": "2",
@@ -422,10 +422,10 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
-    "character_o": "DeGrey",
+    "character_o": "Midori",
     "character_p": "Troq",
     "elo_after_o": 1451.611,
     "elo_after_p": 1551.0,
@@ -459,7 +459,7 @@
     "win": 1
   },
   {
-    "character_o": "Midori",
+    "character_o": "DeGrey",
     "character_p": "Troq",
     "elo_after_o": 1451.611,
     "elo_after_p": 1551.0,
@@ -473,7 +473,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": -2
   },
   {
     "character_o": "DeGrey",
@@ -490,7 +490,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": -2
   },
   {
     "character_o": "DeGrey",
@@ -541,7 +541,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "DeGrey",
@@ -605,23 +605,6 @@
     "opponent": "Shax",
     "player": "Commacozzee",
     "player_o": "Shax",
-    "player_p": "Commacozzee",
-    "tournament_name": "IYL Season 1",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
-    "character_o": "Troq",
-    "character_p": "Onimaru",
-    "elo_after_o": 1544.0,
-    "elo_after_p": 1634.021,
-    "elo_before_o": 1593.0,
-    "elo_before_p": 1585.145,
-    "match_date": 1410912000000,
-    "opponent": "HyDrO",
-    "player": "Commacozzee",
-    "player_o": "HyDrO",
     "player_p": "Commacozzee",
     "tournament_name": "IYL Season 1",
     "version_o": "2",
@@ -663,21 +646,21 @@
     "win": -1
   },
   {
-    "character_o": "Midori",
-    "character_p": "Midori",
-    "elo_after_o": 1422.0,
-    "elo_after_p": 1674.162,
-    "elo_before_o": 1462.0,
-    "elo_before_p": 1634.021,
-    "match_date": 1411776000000,
-    "opponent": "Leontes",
+    "character_o": "Troq",
+    "character_p": "Onimaru",
+    "elo_after_o": 1544.0,
+    "elo_after_p": 1634.021,
+    "elo_before_o": 1593.0,
+    "elo_before_p": 1585.145,
+    "match_date": 1410912000000,
+    "opponent": "HyDrO",
     "player": "Commacozzee",
-    "player_o": "Leontes",
+    "player_o": "HyDrO",
     "player_p": "Commacozzee",
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": 1
   },
   {
     "character_o": "Midori",
@@ -728,7 +711,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": 1
   },
   {
     "character_o": "Midori",
@@ -745,10 +728,44 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": -1
+  },
+  {
+    "character_o": "Midori",
+    "character_p": "Midori",
+    "elo_after_o": 1422.0,
+    "elo_after_p": 1674.162,
+    "elo_before_o": 1462.0,
+    "elo_before_p": 1634.021,
+    "match_date": 1411776000000,
+    "opponent": "Leontes",
+    "player": "Commacozzee",
+    "player_o": "Leontes",
+    "player_p": "Commacozzee",
+    "tournament_name": "IYL Season 1",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
   },
   {
     "character_o": "Argagarg",
+    "character_p": "Troq",
+    "elo_after_o": 1707.118,
+    "elo_after_p": 1625.0,
+    "elo_before_o": 1657.814,
+    "elo_before_p": 1674.0,
+    "match_date": 1412121600000,
+    "opponent": "Redless",
+    "player": "Commacozzee",
+    "player_o": "Redless",
+    "player_p": "Commacozzee",
+    "tournament_name": "IYL Season 1",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "Lum",
     "character_p": "Troq",
     "elo_after_o": 1707.118,
     "elo_after_p": 1625.0,
@@ -797,23 +814,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": -1
-  },
-  {
-    "character_o": "Lum",
-    "character_p": "Troq",
-    "elo_after_o": 1707.118,
-    "elo_after_p": 1625.0,
-    "elo_before_o": 1657.814,
-    "elo_before_p": 1674.0,
-    "match_date": 1412121600000,
-    "opponent": "Redless",
-    "player": "Commacozzee",
-    "player_o": "Redless",
-    "player_p": "Commacozzee",
-    "tournament_name": "IYL Season 1",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
   },
   {
     "character_o": "Lum",
@@ -881,7 +881,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": 0
   },
   {
     "character_o": "DeGrey",
@@ -915,7 +915,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": -1
   },
   {
     "character_o": "Onimaru",
@@ -932,7 +932,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": -2
   },
   {
     "character_o": "Midori",
@@ -983,53 +983,36 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
-  },
-  {
-    "character_o": "Midori",
-    "character_p": "Troq",
-    "elo_after_o": 1253.0,
-    "elo_after_p": 1646.203,
-    "elo_before_o": 1286.0,
-    "elo_before_p": 1613.213,
-    "match_date": 1415404800000,
-    "opponent": "ap49",
-    "player": "Commacozzee",
-    "player_o": "ap49",
-    "player_p": "Commacozzee",
-    "tournament_name": "IYL Season 1",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
-    "character_o": "Midori",
-    "character_p": "Troq",
-    "elo_after_o": 1253.0,
-    "elo_after_p": 1646.203,
-    "elo_before_o": 1286.0,
-    "elo_before_p": 1613.213,
-    "match_date": 1415404800000,
-    "opponent": "ap49",
-    "player": "Commacozzee",
-    "player_o": "ap49",
-    "player_p": "Commacozzee",
-    "tournament_name": "IYL Season 1",
-    "version_o": "2",
-    "version_p": "2",
     "win": -2
   },
   {
-    "character_o": "Gloria",
-    "character_p": "Onimaru",
-    "elo_after_o": 1343.0,
-    "elo_after_p": 1681.846,
-    "elo_before_o": 1378.0,
-    "elo_before_p": 1646.203,
-    "match_date": 1416614400000,
-    "opponent": "LK4O4",
+    "character_o": "Midori",
+    "character_p": "Troq",
+    "elo_after_o": 1253.0,
+    "elo_after_p": 1646.203,
+    "elo_before_o": 1286.0,
+    "elo_before_p": 1613.213,
+    "match_date": 1415404800000,
+    "opponent": "ap49",
     "player": "Commacozzee",
-    "player_o": "LK4O4",
+    "player_o": "ap49",
+    "player_p": "Commacozzee",
+    "tournament_name": "IYL Season 1",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
+  },
+  {
+    "character_o": "Midori",
+    "character_p": "Troq",
+    "elo_after_o": 1253.0,
+    "elo_after_p": 1646.203,
+    "elo_before_o": 1286.0,
+    "elo_before_p": 1613.213,
+    "match_date": 1415404800000,
+    "opponent": "ap49",
+    "player": "Commacozzee",
+    "player_o": "ap49",
     "player_p": "Commacozzee",
     "tournament_name": "IYL Season 1",
     "version_o": "2",
@@ -1052,6 +1035,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Onimaru",
+    "elo_after_o": 1343.0,
+    "elo_after_p": 1681.846,
+    "elo_before_o": 1378.0,
+    "elo_before_p": 1646.203,
+    "match_date": 1416614400000,
+    "opponent": "LK4O4",
+    "player": "Commacozzee",
+    "player_o": "LK4O4",
+    "player_p": "Commacozzee",
+    "tournament_name": "IYL Season 1",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "Gloria",

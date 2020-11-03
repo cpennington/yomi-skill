@@ -34,8 +34,8 @@
     "win": 0
   },
   {
-    "character_o": "Jaina",
-    "character_p": "Jaina",
+    "character_o": "Setsuki",
+    "character_p": "Setsuki",
     "elo_after_o": 1916.323,
     "elo_after_p": 1470.0,
     "elo_before_o": 1904.086,
@@ -85,8 +85,8 @@
     "win": -2
   },
   {
-    "character_o": "Setsuki",
-    "character_p": "Setsuki",
+    "character_o": "Jaina",
+    "character_p": "Jaina",
     "elo_after_o": 1916.323,
     "elo_after_p": 1470.0,
     "elo_before_o": 1904.086,
@@ -150,23 +150,6 @@
     "tournament_name": "Mixed Mirror Mayhem",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
-  },
-  {
-    "character_o": "Vendetta",
-    "character_p": "Vendetta",
-    "elo_after_o": 1786.424,
-    "elo_after_p": 1436.0,
-    "elo_before_o": 1772.363,
-    "elo_before_p": 1470.0,
-    "match_date": 1563753600000,
-    "opponent": "Caralad",
-    "player": "Truffaz",
-    "player_o": "Caralad",
-    "player_p": "< 30 games",
-    "tournament_name": "Mixed Mirror Mayhem",
-    "version_o": "2",
-    "version_p": "2",
     "win": -2
   },
   {
@@ -185,5 +168,22 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Vendetta",
+    "character_p": "Vendetta",
+    "elo_after_o": 1786.424,
+    "elo_after_p": 1436.0,
+    "elo_before_o": 1772.363,
+    "elo_before_p": 1470.0,
+    "match_date": 1563753600000,
+    "opponent": "Caralad",
+    "player": "Truffaz",
+    "player_o": "Caralad",
+    "player_p": "< 30 games",
+    "tournament_name": "Mixed Mirror Mayhem",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   }
 ]

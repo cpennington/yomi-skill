@@ -320,7 +320,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Argagarg",
@@ -337,7 +337,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": -2
   },
   {
     "character_o": "Argagarg",
@@ -372,6 +372,40 @@
     "version_o": "2",
     "version_p": "2",
     "win": 1
+  },
+  {
+    "character_o": "Troq",
+    "character_p": "DeGrey",
+    "elo_after_o": 1545.977,
+    "elo_after_p": 1493.0,
+    "elo_before_o": 1495.056,
+    "elo_before_p": 1544.0,
+    "match_date": 1445040000000,
+    "opponent": "Yamabushi",
+    "player": "LudicSavant",
+    "player_o": "Yamabushi",
+    "player_p": "LudicSavant",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  },
+  {
+    "character_o": "Troq",
+    "character_p": "Argagarg",
+    "elo_after_o": 1545.977,
+    "elo_after_p": 1493.0,
+    "elo_before_o": 1495.056,
+    "elo_before_p": 1544.0,
+    "match_date": 1445040000000,
+    "opponent": "Yamabushi",
+    "player": "LudicSavant",
+    "player_o": "Yamabushi",
+    "player_p": "LudicSavant",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
   },
   {
     "character_o": "Troq",
@@ -393,40 +427,6 @@
   {
     "character_o": "Troq",
     "character_p": "Jaina",
-    "elo_after_o": 1545.977,
-    "elo_after_p": 1493.0,
-    "elo_before_o": 1495.056,
-    "elo_before_p": 1544.0,
-    "match_date": 1445040000000,
-    "opponent": "Yamabushi",
-    "player": "LudicSavant",
-    "player_o": "Yamabushi",
-    "player_p": "LudicSavant",
-    "tournament_name": "Best of the Rest",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
-    "character_o": "Troq",
-    "character_p": "DeGrey",
-    "elo_after_o": 1545.977,
-    "elo_after_p": 1493.0,
-    "elo_before_o": 1495.056,
-    "elo_before_p": 1544.0,
-    "match_date": 1445040000000,
-    "opponent": "Yamabushi",
-    "player": "LudicSavant",
-    "player_o": "Yamabushi",
-    "player_p": "LudicSavant",
-    "tournament_name": "Best of the Rest",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
-    "character_o": "Troq",
-    "character_p": "Argagarg",
     "elo_after_o": 1545.977,
     "elo_after_p": 1493.0,
     "elo_before_o": 1495.056,
