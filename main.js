@@ -223,8 +223,8 @@ Promise.all([
       dist = playerDist;
     }
 
-    const upper = dist ? dist.cdf(logOdds(x + increment / 2)) : 0;
-    const lower = dist ? dist.cdf(logOdds(x - increment / 2)) : 0;
+    const upper = dist ? dist.cdf(logOdds(Math.min(x + increment / 2, 1))) : 0;
+    const lower = dist ? dist.cdf(logOdds(Math.max(x - increment / 2, 0))) : 0;
 
     var datum = {
       c1: c1,
@@ -253,8 +253,6 @@ Promise.all([
 
   function muPDF(c1, c2, player, opponent) {
     const mu = matchupData[c1][c2] || {};
-    const std = mu.std;
-    const mean = mu.mean;
     const versions = mu.versions;
 
     var data = xs.flatMap(function (x) {
@@ -334,6 +332,41 @@ Promise.all([
       document.getElementById("p2-games").textContent =
         playerSkill[opponent].gamesPlayed;
     }
+  }
+
+  function exportCSV(player, opponent) {
+    muPDFs = characters.flatMap(function (c1) {
+      return characters.flatMap(function (c2) {
+        return muPDF(c1, c2, player, opponent);
+      });
+    });
+
+    var muEstimates = Object.fromEntries(
+      characters.map((c1) => [
+        c1,
+        Object.fromEntries(characters.map((c2) => [c2, 0])),
+      ])
+    );
+    muPDFs.forEach(
+      (pdfSegment) =>
+        (muEstimates[pdfSegment.c1][pdfSegment.c2] +=
+          pdfSegment.winChance * pdfSegment.p)
+    );
+    if (!player && !opponent) {
+      characters.forEach((c) => (muEstimates[c][c] = 0.5));
+    }
+    var csvContent = "data:text/csv;charset=utf-8,";
+
+    csvContent += [["MU Estimates"].concat(characters).join(", ")]
+      .concat(
+        characters.map((c1) =>
+          [c1]
+            .concat(characters.map((c2) => muEstimates[c1][c2].toString()))
+            .join(", ")
+        )
+      )
+      .join("\n");
+    window.open(encodeURI(csvContent));
   }
 
   function comparePlayers(player, opponent, textOnly) {
@@ -1352,8 +1385,13 @@ Promise.all([
   function doText(event) {
     comparePlayers(playerInput.value, opponentInput.value, true);
   }
+
+  function doCSV(event) {
+    exportCSV(playerInput.value, opponentInput.value);
+  }
   window.doGraph = doGraph;
   window.doText = doText;
+  window.doCSV = doCSV;
 
   updatePlayerStats();
   doGraph();
