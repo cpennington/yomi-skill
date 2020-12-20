@@ -19,23 +19,6 @@
   {
     "character_o": "Setsuki",
     "character_p": "Troq",
-    "elo_after_o": 1610.302,
-    "elo_after_p": 1501.787,
-    "elo_before_o": 1590.141,
-    "elo_before_p": 1501.221,
-    "match_date": 1404604800000,
-    "opponent": "cpat",
-    "player": "PumpedAaron",
-    "player_o": "cpat",
-    "player_p": "PumpedAaron",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "Setsuki",
-    "character_p": "Troq",
     "elo_after_o": 1499.167,
     "elo_after_p": 1501.787,
     "elo_before_o": 1516.333,
@@ -153,6 +136,23 @@
     "win": -2
   },
   {
+    "character_o": "BBB",
+    "character_p": "Troq",
+    "elo_after_o": 1610.302,
+    "elo_after_p": 1501.787,
+    "elo_before_o": 1590.141,
+    "elo_before_p": 1501.221,
+    "match_date": 1404604800000,
+    "opponent": "cpat",
+    "player": "PumpedAaron",
+    "player_o": "cpat",
+    "player_p": "PumpedAaron",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
     "character_o": "Geiger",
     "character_p": "Troq",
     "elo_after_o": 1623.949,
@@ -255,7 +255,7 @@
     "win": -2
   },
   {
-    "character_o": "BBB",
+    "character_o": "Setsuki",
     "character_p": "Troq",
     "elo_after_o": 1610.302,
     "elo_after_p": 1501.787,
@@ -425,6 +425,23 @@
     "win": -1
   },
   {
+    "character_o": "Lum",
+    "character_p": "Lum",
+    "elo_after_o": 1539.404,
+    "elo_after_p": 1453.0,
+    "elo_before_o": 1490.322,
+    "elo_before_p": 1502.0,
+    "match_date": 1421452800000,
+    "opponent": "ntillerman",
+    "player": "PumpedAaron",
+    "player_o": "ntillerman",
+    "player_p": "PumpedAaron",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
+  },
+  {
     "character_o": "Argagarg",
     "character_p": "Lum",
     "elo_after_o": 1539.404,
@@ -474,23 +491,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
-  },
-  {
-    "character_o": "Lum",
-    "character_p": "Lum",
-    "elo_after_o": 1539.404,
-    "elo_after_p": 1453.0,
-    "elo_before_o": 1490.322,
-    "elo_before_p": 1502.0,
-    "match_date": 1421452800000,
-    "opponent": "ntillerman",
-    "player": "PumpedAaron",
-    "player_o": "ntillerman",
-    "player_p": "PumpedAaron",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
   },
   {
     "character_o": "Setsuki",

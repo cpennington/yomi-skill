@@ -3,92 +3,92 @@
     "Argagarg": {
       "counts": 35,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.48
     },
     "BBB": {
       "counts": 64,
       "mean": -0.26,
-      "std": 0.24
+      "std": 0.25
     },
     "DeGrey": {
       "counts": 121,
-      "mean": -0.16,
-      "std": 0.18
+      "mean": -0.15,
+      "std": 0.2
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.52
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.0,
       "std": 0.5
     },
     "FGwen": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.52
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.53
+      "mean": 0.01,
+      "std": 0.5
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
+      "mean": 0.01,
+      "std": 0.52
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.5
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.49
     },
     "FTroq": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.53
+      "mean": -0.0,
+      "std": 0.48
     },
     "FVendetta": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.51
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.49
     },
     "Geiger": {
       "counts": 126,
       "mean": -0.07,
-      "std": 0.2
+      "std": 0.19
     },
     "Gloria": {
-      "counts": 199,
-      "mean": -0.34,
-      "std": 0.16
+      "counts": 200,
+      "mean": -0.33,
+      "std": 0.17
     },
     "Grave": {
-      "counts": 232,
-      "mean": 0.08,
-      "std": 0.16
+      "counts": 234,
+      "mean": 0.06,
+      "std": 0.15
     },
     "Gwen": {
       "counts": 96,
@@ -96,141 +96,141 @@
       "std": 0.22
     },
     "Jaina": {
-      "counts": 82,
-      "mean": 0.58,
+      "counts": 83,
+      "mean": 0.55,
       "std": 0.24
     },
     "Lum": {
-      "counts": 120,
-      "mean": 0.39,
+      "counts": 123,
+      "mean": 0.4,
       "std": 0.2
     },
     "Menelker": {
-      "counts": 82,
-      "mean": 0.11,
-      "std": 0.23
+      "counts": 83,
+      "mean": 0.12,
+      "std": 0.22
     },
     "Midori": {
       "counts": 118,
-      "mean": 0.18,
+      "mean": 0.19,
       "std": 0.21
     },
     "Onimaru": {
       "counts": 199,
-      "mean": 0.59,
+      "mean": 0.58,
       "std": 0.17
     },
     "Persephone": {
-      "counts": 128,
-      "mean": -0.05,
-      "std": 0.19
+      "counts": 129,
+      "mean": -0.01,
+      "std": 0.2
     },
     "Quince": {
       "counts": 151,
-      "mean": -0.39,
-      "std": 0.19
+      "mean": -0.4,
+      "std": 0.18
     },
     "Rook": {
-      "counts": 208,
+      "counts": 211,
       "mean": 0.34,
-      "std": 0.17
+      "std": 0.16
     },
     "Setsuki": {
-      "counts": 181,
-      "mean": 0.04,
+      "counts": 185,
+      "mean": 0.03,
       "std": 0.17
     },
     "Troq": {
       "counts": 196,
-      "mean": -0.1,
+      "mean": -0.09,
       "std": 0.16
     },
     "Valerie": {
-      "counts": 143,
-      "mean": 0.14,
+      "counts": 146,
+      "mean": 0.11,
       "std": 0.18
     },
     "Vendetta": {
-      "counts": 147,
-      "mean": -0.21,
-      "std": 0.18
+      "counts": 148,
+      "mean": -0.23,
+      "std": 0.19
     },
     "Zane": {
-      "counts": 161,
-      "mean": -0.32,
-      "std": 0.18
+      "counts": 163,
+      "mean": -0.28,
+      "std": 0.17
     }
   },
   "BBB": {
     "Argagarg": {
       "counts": 64,
       "mean": 0.26,
-      "std": 0.24
+      "std": 0.25
     },
     "BBB": {
       "counts": 48,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.49
     },
     "DeGrey": {
       "counts": 79,
-      "mean": -0.41,
+      "mean": -0.4,
       "std": 0.24
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.53
     },
     "FGloria": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "FGwen": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.48
     },
     "FLum": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.54
+      "mean": 0.0,
+      "std": 0.51
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.49
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.49
     },
     "FRook": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "FTroq": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.01,
       "std": 0.5
     },
     "FVendetta": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.47
+      "mean": -0.0,
+      "std": 0.51
     },
     "FZane": {
       "counts": 0,
@@ -239,17 +239,17 @@
     },
     "Geiger": {
       "counts": 52,
-      "mean": -0.46,
-      "std": 0.26
+      "mean": -0.47,
+      "std": 0.27
     },
     "Gloria": {
       "counts": 47,
-      "mean": 0.18,
-      "std": 0.28
+      "mean": 0.17,
+      "std": 0.27
     },
     "Grave": {
       "counts": 118,
-      "mean": -0.48,
+      "mean": -0.49,
       "std": 0.2
     },
     "Gwen": {
@@ -258,24 +258,24 @@
       "std": 0.21
     },
     "Jaina": {
-      "counts": 53,
-      "mean": -0.18,
-      "std": 0.26
+      "counts": 54,
+      "mean": -0.22,
+      "std": 0.27
     },
     "Lum": {
       "counts": 65,
-      "mean": -0.11,
-      "std": 0.24
+      "mean": -0.12,
+      "std": 0.25
     },
     "Menelker": {
       "counts": 43,
-      "mean": -0.05,
-      "std": 0.29
+      "mean": -0.06,
+      "std": 0.28
     },
     "Midori": {
       "counts": 124,
       "mean": 0.2,
-      "std": 0.2
+      "std": 0.19
     },
     "Onimaru": {
       "counts": 75,
@@ -285,37 +285,37 @@
     "Persephone": {
       "counts": 68,
       "mean": 0.18,
-      "std": 0.25
+      "std": 0.26
     },
     "Quince": {
       "counts": 64,
-      "mean": 0.32,
-      "std": 0.26
+      "mean": 0.31,
+      "std": 0.25
     },
     "Rook": {
-      "counts": 207,
+      "counts": 208,
       "mean": 0.23,
       "std": 0.17
     },
     "Setsuki": {
-      "counts": 81,
-      "mean": -0.05,
-      "std": 0.23
+      "counts": 82,
+      "mean": -0.07,
+      "std": 0.22
     },
     "Troq": {
       "counts": 156,
       "mean": 0.12,
-      "std": 0.17
+      "std": 0.18
     },
     "Valerie": {
       "counts": 61,
-      "mean": 0.06,
-      "std": 0.25
+      "mean": 0.05,
+      "std": 0.26
     },
     "Vendetta": {
       "counts": 37,
       "mean": 0.08,
-      "std": 0.31
+      "std": 0.29
     },
     "Zane": {
       "counts": 90,
@@ -326,58 +326,58 @@
   "DeGrey": {
     "Argagarg": {
       "counts": 121,
-      "mean": 0.16,
-      "std": 0.18
+      "mean": 0.15,
+      "std": 0.2
     },
     "BBB": {
       "counts": 79,
-      "mean": 0.41,
+      "mean": 0.4,
       "std": 0.24
     },
     "DeGrey": {
-      "counts": 51,
-      "mean": -0.0,
-      "std": 0.52
+      "counts": 53,
+      "mean": 0.01,
+      "std": 0.51
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.49
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
+      "mean": -0.01,
+      "std": 0.5
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.0,
       "std": 0.5
     },
     "FLum": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.49
+      "std": 0.51
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.02,
+      "mean": -0.01,
       "std": 0.49
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
+      "mean": 0.01,
+      "std": 0.5
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.01,
+      "std": 0.52
     },
     "FSetsuki": {
       "counts": 0,
@@ -386,78 +386,78 @@
     },
     "FTroq": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.49
     },
     "FVendetta": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.48
+      "std": 0.52
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "Geiger": {
       "counts": 123,
-      "mean": 0.02,
+      "mean": 0.01,
       "std": 0.19
     },
     "Gloria": {
       "counts": 73,
       "mean": 0.2,
-      "std": 0.24
+      "std": 0.23
     },
     "Grave": {
       "counts": 186,
-      "mean": -0.07,
+      "mean": -0.08,
       "std": 0.17
     },
     "Gwen": {
       "counts": 106,
-      "mean": 0.21,
-      "std": 0.22
+      "mean": 0.22,
+      "std": 0.21
     },
     "Jaina": {
       "counts": 60,
-      "mean": 0.19,
-      "std": 0.24
+      "mean": 0.18,
+      "std": 0.26
     },
     "Lum": {
       "counts": 117,
-      "mean": 0.68,
+      "mean": 0.66,
       "std": 0.21
     },
     "Menelker": {
       "counts": 94,
-      "mean": 0.48,
-      "std": 0.22
+      "mean": 0.47,
+      "std": 0.21
     },
     "Midori": {
-      "counts": 98,
-      "mean": 0.2,
-      "std": 0.21
+      "counts": 100,
+      "mean": 0.22,
+      "std": 0.2
     },
     "Onimaru": {
       "counts": 189,
       "mean": 0.66,
-      "std": 0.17
+      "std": 0.16
     },
     "Persephone": {
-      "counts": 83,
-      "mean": 0.13,
-      "std": 0.22
+      "counts": 84,
+      "mean": 0.15,
+      "std": 0.24
     },
     "Quince": {
       "counts": 109,
       "mean": 0.09,
-      "std": 0.21
+      "std": 0.2
     },
     "Rook": {
       "counts": 133,
-      "mean": 0.29,
-      "std": 0.19
+      "mean": 0.28,
+      "std": 0.18
     },
     "Setsuki": {
       "counts": 172,
@@ -467,139 +467,139 @@
     "Troq": {
       "counts": 193,
       "mean": -0.27,
-      "std": 0.17
+      "std": 0.16
     },
     "Valerie": {
       "counts": 106,
-      "mean": 0.33,
-      "std": 0.2
+      "mean": 0.32,
+      "std": 0.21
     },
     "Vendetta": {
       "counts": 125,
-      "mean": -0.29,
+      "mean": -0.31,
       "std": 0.2
     },
     "Zane": {
-      "counts": 281,
-      "mean": -0.12,
+      "counts": 283,
+      "mean": -0.11,
       "std": 0.14
     }
   },
   "FBBB": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.52
     },
     "BBB": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.53
     },
     "DeGrey": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
-    },
-    "FBBB": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
-    },
-    "FGloria": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.49
     },
-    "FGwen": {
+    "FBBB": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.5
+    },
+    "FGloria": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.48
+    },
+    "FGwen": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.5
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.01,
       "std": 0.48
     },
     "FMidori": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.02,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.02,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.49
     },
     "FSetsuki": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
-    "FTroq": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.48
     },
+    "FTroq": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.5
+    },
     "FVendetta": {
       "counts": 5,
-      "mean": -0.08,
-      "std": 0.45
+      "mean": -0.1,
+      "std": 0.47
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.52
     },
     "Geiger": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.48
     },
     "Gloria": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.51
     },
     "Grave": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.48
+      "std": 0.49
     },
     "Gwen": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.48
     },
     "Jaina": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.51
     },
     "Lum": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.52
     },
     "Menelker": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.53
+      "mean": 0.02,
+      "std": 0.52
     },
     "Midori": {
       "counts": 0,
-      "mean": -0.02,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "Onimaru": {
       "counts": 0,
@@ -608,38 +608,38 @@
     },
     "Persephone": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.01,
       "std": 0.52
     },
     "Quince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.51
     },
     "Rook": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.48
     },
     "Setsuki": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": 0.01,
       "std": 0.51
     },
     "Troq": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "Valerie": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.49
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.53
     },
     "Zane": {
       "counts": 0,
@@ -650,88 +650,88 @@
   "FGloria": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.5
     },
     "BBB": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "DeGrey": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
-    },
-    "FBBB": {
-      "counts": 0,
       "mean": 0.0,
       "std": 0.49
     },
-    "FGloria": {
+    "DeGrey": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.5
+    },
+    "FBBB": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.48
+    },
+    "FGloria": {
+      "counts": 0,
+      "mean": -0.02,
+      "std": 0.51
     },
     "FGwen": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.51
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.47
+      "mean": -0.02,
+      "std": 0.52
     },
     "FMidori": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.51
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.52
     },
     "FRook": {
       "counts": 3,
-      "mean": -0.24,
-      "std": 0.46
+      "mean": -0.25,
+      "std": 0.47
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.01,
       "std": 0.5
     },
     "FTroq": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.52
     },
     "FVendetta": {
       "counts": 5,
-      "mean": -0.2,
-      "std": 0.47
+      "mean": -0.21,
+      "std": 0.46
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.5
     },
     "Geiger": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": -0.02,
+      "std": 0.51
     },
     "Gloria": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.49
     },
     "Grave": {
       "counts": 0,
@@ -740,13 +740,13 @@
     },
     "Gwen": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "Jaina": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.52
     },
     "Lum": {
       "counts": 0,
@@ -756,17 +756,17 @@
     "Menelker": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.47
+      "std": 0.5
     },
     "Midori": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.0,
       "std": 0.5
     },
     "Onimaru": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.49
     },
     "Persephone": {
       "counts": 0,
@@ -776,144 +776,144 @@
     "Quince": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.48
+      "std": 0.49
     },
     "Rook": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.52
     },
     "Setsuki": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "Troq": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "Valerie": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.52
+      "std": 0.49
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.0,
       "std": 0.49
     },
     "Zane": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.01,
       "std": 0.49
     }
   },
   "FGwen": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.52
     },
     "BBB": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.48
     },
     "DeGrey": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
-    },
-    "FBBB": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
-    },
-    "FGloria": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "FGwen": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "FLum": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
-    },
-    "FMidori": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.5
     },
+    "FBBB": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "FGloria": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.51
+    },
+    "FGwen": {
+      "counts": 0,
+      "mean": -0.02,
+      "std": 0.5
+    },
+    "FLum": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.52
+    },
+    "FMidori": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    },
     "FOnimaru": {
       "counts": 5,
-      "mean": -0.11,
-      "std": 0.47
+      "mean": -0.1,
+      "std": 0.45
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.0,
       "std": 0.5
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "FTroq": {
       "counts": 5,
       "mean": 0.19,
-      "std": 0.46
+      "std": 0.45
     },
     "FVendetta": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.48
+      "std": 0.51
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": -0.0,
       "std": 0.52
     },
     "Geiger": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.47
+      "std": 0.5
     },
     "Gloria": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.02,
+      "std": 0.5
     },
     "Grave": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": -0.0,
       "std": 0.5
     },
     "Gwen": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "Jaina": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.49
     },
     "Lum": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "Menelker": {
       "counts": 0,
@@ -923,94 +923,94 @@
     "Midori": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.51
+      "std": 0.52
     },
     "Onimaru": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.48
     },
     "Persephone": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.51
     },
     "Quince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.48
     },
     "Rook": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
-    },
-    "Setsuki": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.52
     },
+    "Setsuki": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.48
+    },
     "Troq": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.5
     },
     "Valerie": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.0,
       "std": 0.51
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "Zane": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.49
+      "std": 0.51
     }
   },
   "FLum": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.53
+      "mean": -0.01,
+      "std": 0.5
     },
     "BBB": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "DeGrey": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.49
+      "std": 0.51
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.48
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.47
+      "mean": 0.02,
+      "std": 0.52
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.52
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "FMidori": {
       "counts": 4,
-      "mean": -0.2,
-      "std": 0.44
+      "mean": -0.21,
+      "std": 0.46
     },
     "FOnimaru": {
       "counts": 4,
@@ -1019,18 +1019,18 @@
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": 0.0,
+      "std": 0.51
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.52
     },
     "FTroq": {
       "counts": 5,
@@ -1040,243 +1040,243 @@
     "FVendetta": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
-    },
-    "FZane": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
-    },
-    "Geiger": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.53
-    },
-    "Gloria": {
-      "counts": 0,
-      "mean": -0.0,
       "std": 0.5
     },
-    "Grave": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
-    },
-    "Gwen": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
-    },
-    "Jaina": {
+    "FZane": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.47
     },
-    "Lum": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
-    },
-    "Menelker": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
-    },
-    "Midori": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
-    },
-    "Onimaru": {
-      "counts": 0,
-      "mean": 0.02,
-      "std": 0.5
-    },
-    "Persephone": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
-    },
-    "Quince": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
-    },
-    "Rook": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
-    },
-    "Setsuki": {
+    "Geiger": {
       "counts": 0,
       "mean": 0.0,
       "std": 0.5
     },
-    "Troq": {
+    "Gloria": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.5
     },
-    "Valerie": {
+    "Grave": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "Gwen": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.5
+    },
+    "Jaina": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.49
+    },
+    "Lum": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.47
+    },
+    "Menelker": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "Midori": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "Onimaru": {
       "counts": 0,
       "mean": 0.01,
+      "std": 0.49
+    },
+    "Persephone": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.52
+    },
+    "Quince": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.52
+    },
+    "Rook": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.48
+    },
+    "Setsuki": {
+      "counts": 0,
+      "mean": -0.01,
       "std": 0.51
+    },
+    "Troq": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.49
+    },
+    "Valerie": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.49
     },
     "Vendetta": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "Zane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     }
   },
   "FMidori": {
     "Argagarg": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.5
     },
     "BBB": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.54
+      "mean": -0.0,
+      "std": 0.51
     },
     "DeGrey": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.0,
       "std": 0.5
     },
     "FBBB": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.5
     },
     "FGloria": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.51
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.51
     },
     "FLum": {
       "counts": 4,
-      "mean": 0.2,
-      "std": 0.44
+      "mean": 0.21,
+      "std": 0.46
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": -0.01,
+      "std": 0.49
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.02,
+      "std": 0.52
     },
     "FQuince": {
       "counts": 8,
-      "mean": -0.37,
+      "mean": -0.36,
       "std": 0.44
     },
     "FRook": {
       "counts": 10,
-      "mean": -0.06,
-      "std": 0.44
+      "mean": -0.05,
+      "std": 0.43
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "FTroq": {
       "counts": 3,
       "mean": 0.23,
-      "std": 0.47
+      "std": 0.49
     },
     "FVendetta": {
       "counts": 4,
       "mean": 0.19,
-      "std": 0.49
+      "std": 0.45
     },
     "FZane": {
       "counts": 8,
       "mean": -0.05,
-      "std": 0.45
+      "std": 0.43
     },
     "Geiger": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.46
     },
     "Gloria": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.02,
       "std": 0.51
     },
     "Grave": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.53
+      "mean": -0.01,
+      "std": 0.5
     },
     "Gwen": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
+      "mean": -0.01,
+      "std": 0.53
     },
     "Jaina": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "Lum": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.53
+      "std": 0.49
     },
     "Menelker": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "Midori": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "Onimaru": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
-    },
-    "Persephone": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
-    },
-    "Quince": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
-    },
-    "Rook": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.5
     },
+    "Midori": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.49
+    },
+    "Onimaru": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.49
+    },
+    "Persephone": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.52
+    },
+    "Quince": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.53
+    },
+    "Rook": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.5
+    },
     "Setsuki": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.02,
+      "std": 0.47
     },
     "Troq": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.0,
       "std": 0.5
     },
     "Valerie": {
@@ -1286,45 +1286,45 @@
     },
     "Vendetta": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.47
     },
     "Zane": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.49
     }
   },
   "FOnimaru": {
     "Argagarg": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.51
     },
     "BBB": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
+      "mean": -0.01,
+      "std": 0.49
     },
     "DeGrey": {
       "counts": 0,
-      "mean": -0.02,
+      "mean": 0.01,
       "std": 0.49
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.02,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.51
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": -0.0,
+      "std": 0.51
     },
     "FGwen": {
       "counts": 5,
-      "mean": 0.11,
-      "std": 0.47
+      "mean": 0.1,
+      "std": 0.45
     },
     "FLum": {
       "counts": 4,
@@ -1333,38 +1333,38 @@
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.02,
+      "std": 0.52
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.51
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.53
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "FTroq": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.5
     },
     "FVendetta": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.52
+      "std": 0.49
     },
     "FZane": {
       "counts": 5,
@@ -1373,8 +1373,8 @@
     },
     "Geiger": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.49
     },
     "Gloria": {
       "counts": 0,
@@ -1383,18 +1383,18 @@
     },
     "Grave": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.51
     },
     "Gwen": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.49
     },
     "Jaina": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.49
     },
     "Lum": {
       "counts": 0,
@@ -1403,561 +1403,399 @@
     },
     "Menelker": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "Midori": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "Onimaru": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.53
+      "mean": -0.01,
+      "std": 0.51
     },
     "Persephone": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.48
+      "std": 0.5
     },
     "Quince": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.5
     },
     "Rook": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.51
     },
     "Setsuki": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "Troq": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.0,
       "std": 0.49
     },
     "Valerie": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.0,
       "std": 0.51
     },
     "Vendetta": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "Zane": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     }
   },
   "FQuince": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
+      "mean": -0.01,
+      "std": 0.52
     },
     "BBB": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.49
     },
     "DeGrey": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
+      "mean": -0.01,
+      "std": 0.5
     },
     "FBBB": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "FGloria": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
-    },
-    "FGwen": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
-    },
-    "FLum": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
-    },
-    "FMidori": {
-      "counts": 8,
-      "mean": 0.37,
-      "std": 0.44
-    },
-    "FOnimaru": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
-    "FQuince": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
-    },
-    "FRook": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "FSetsuki": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.52
     },
-    "FTroq": {
+    "FGwen": {
       "counts": 0,
       "mean": 0.0,
+      "std": 0.5
+    },
+    "FLum": {
+      "counts": 0,
+      "mean": -0.0,
       "std": 0.51
     },
-    "FVendetta": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
+    "FMidori": {
+      "counts": 8,
+      "mean": 0.36,
+      "std": 0.44
     },
-    "FZane": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
-    },
-    "Geiger": {
+    "FOnimaru": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.51
     },
-    "Gloria": {
+    "FQuince": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.02,
+      "std": 0.48
+    },
+    "FRook": {
+      "counts": 0,
+      "mean": 0.0,
       "std": 0.49
     },
-    "Grave": {
+    "FSetsuki": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.49
+    },
+    "FTroq": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.5
     },
-    "Gwen": {
+    "FVendetta": {
       "counts": 0,
       "mean": -0.01,
+      "std": 0.5
+    },
+    "FZane": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.51
+    },
+    "Geiger": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.54
+    },
+    "Gloria": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "Grave": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.53
+    },
+    "Gwen": {
+      "counts": 0,
+      "mean": 0.01,
       "std": 0.5
     },
     "Jaina": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.48
+      "std": 0.5
     },
     "Lum": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
+      "mean": -0.01,
+      "std": 0.52
     },
     "Menelker": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.48
     },
     "Midori": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.49
     },
     "Onimaru": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.51
     },
     "Persephone": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.48
     },
     "Quince": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.5
     },
     "Rook": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "Setsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.52
     },
     "Troq": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.48
     },
     "Valerie": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.02,
       "std": 0.52
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.02,
+      "mean": -0.0,
       "std": 0.5
     },
     "Zane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.48
     }
   },
   "FRook": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.01,
+      "std": 0.5
     },
     "BBB": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.51
     },
     "DeGrey": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.52
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.02,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "FGloria": {
       "counts": 3,
-      "mean": 0.24,
-      "std": 0.46
+      "mean": 0.25,
+      "std": 0.47
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.0,
       "std": 0.5
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.0,
       "std": 0.51
     },
     "FMidori": {
       "counts": 10,
-      "mean": 0.06,
-      "std": 0.44
+      "mean": 0.05,
+      "std": 0.43
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.01,
+      "std": 0.53
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.51
     },
     "FSetsuki": {
       "counts": 5,
-      "mean": -0.09,
-      "std": 0.41
+      "mean": -0.08,
+      "std": 0.47
     },
     "FTroq": {
       "counts": 3,
-      "mean": -0.1,
-      "std": 0.46
+      "mean": -0.09,
+      "std": 0.5
     },
     "FVendetta": {
       "counts": 3,
-      "mean": 0.28,
-      "std": 0.48
+      "mean": 0.29,
+      "std": 0.46
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.54
     },
     "Geiger": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.53
+      "std": 0.47
     },
     "Gloria": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "Grave": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "Gwen": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.02,
       "std": 0.51
     },
     "Jaina": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.52
     },
     "Lum": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.02,
+      "std": 0.5
     },
     "Menelker": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": -0.01,
+      "std": 0.52
     },
     "Midori": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.53
+      "mean": -0.01,
+      "std": 0.49
     },
     "Onimaru": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "Persephone": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.51
     },
     "Quince": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": 0.01,
       "std": 0.52
     },
     "Rook": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.51
     },
     "Setsuki": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.48
+      "std": 0.51
     },
     "Troq": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.49
     },
     "Valerie": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.49
     },
     "Vendetta": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.53
+      "mean": 0.01,
+      "std": 0.51
     },
     "Zane": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.51
     }
   },
   "FSetsuki": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "BBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "DeGrey": {
       "counts": 0,
       "mean": 0.0,
       "std": 0.5
-    },
-    "FBBB": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
-    },
-    "FGloria": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
-    },
-    "FGwen": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "FLum": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "FMidori": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "FOnimaru": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "FQuince": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
-    },
-    "FRook": {
-      "counts": 5,
-      "mean": 0.09,
-      "std": 0.41
-    },
-    "FSetsuki": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
-    },
-    "FTroq": {
-      "counts": 4,
-      "mean": -0.15,
-      "std": 0.47
-    },
-    "FVendetta": {
-      "counts": 5,
-      "mean": 0.03,
-      "std": 0.46
-    },
-    "FZane": {
-      "counts": 3,
-      "mean": 0.27,
-      "std": 0.47
-    },
-    "Geiger": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "Gloria": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
-    "Grave": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "Gwen": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "Jaina": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.47
-    },
-    "Lum": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "Menelker": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "Midori": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
-    },
-    "Onimaru": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "Persephone": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "Quince": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
-    "Rook": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
-    },
-    "Setsuki": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
-    },
-    "Troq": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
-    },
-    "Valerie": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
-    },
-    "Vendetta": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
-    },
-    "Zane": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
-    }
-  },
-  "FTroq": {
-    "Argagarg": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.53
-    },
-    "BBB": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "DeGrey": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
     },
     "FBBB": {
       "counts": 0,
@@ -1966,13 +1804,175 @@
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.5
+    },
+    "FGwen": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.5
+    },
+    "FLum": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.52
+    },
+    "FMidori": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "FOnimaru": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "FQuince": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.49
+    },
+    "FRook": {
+      "counts": 5,
+      "mean": 0.08,
+      "std": 0.47
+    },
+    "FSetsuki": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.48
+    },
+    "FTroq": {
+      "counts": 4,
+      "mean": -0.17,
+      "std": 0.46
+    },
+    "FVendetta": {
+      "counts": 5,
+      "mean": 0.02,
+      "std": 0.46
+    },
+    "FZane": {
+      "counts": 3,
+      "mean": 0.28,
+      "std": 0.48
+    },
+    "Geiger": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.48
+    },
+    "Gloria": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.51
+    },
+    "Grave": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "Gwen": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "Jaina": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.49
+    },
+    "Lum": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "Menelker": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.49
+    },
+    "Midori": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.49
+    },
+    "Onimaru": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "Persephone": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.49
+    },
+    "Quince": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "Rook": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "Setsuki": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.49
+    },
+    "Troq": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    },
+    "Valerie": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    },
+    "Vendetta": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "Zane": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    }
+  },
+  "FTroq": {
+    "Argagarg": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.48
+    },
+    "BBB": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "DeGrey": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.49
+    },
+    "FBBB": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "FGloria": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.52
     },
     "FGwen": {
       "counts": 5,
       "mean": -0.19,
-      "std": 0.46
+      "std": 0.45
     },
     "FLum": {
       "counts": 5,
@@ -1982,77 +1982,77 @@
     "FMidori": {
       "counts": 3,
       "mean": -0.23,
-      "std": 0.47
+      "std": 0.49
     },
     "FOnimaru": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.5
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
+      "mean": 0.01,
+      "std": 0.5
     },
     "FRook": {
       "counts": 3,
-      "mean": 0.1,
-      "std": 0.46
+      "mean": 0.09,
+      "std": 0.5
     },
     "FSetsuki": {
       "counts": 4,
-      "mean": 0.15,
-      "std": 0.47
+      "mean": 0.17,
+      "std": 0.46
     },
     "FTroq": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.51
     },
     "FVendetta": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.48
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.52
     },
     "Geiger": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.48
+      "std": 0.47
     },
     "Gloria": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.48
+      "std": 0.5
     },
     "Grave": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": -0.0,
+      "std": 0.51
     },
     "Gwen": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.47
+    },
+    "Jaina": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.49
     },
-    "Jaina": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
     "Lum": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.48
     },
     "Menelker": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.49
     },
     "Midori": {
       "counts": 0,
@@ -2061,43 +2061,43 @@
     },
     "Onimaru": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.48
     },
     "Persephone": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.52
     },
     "Quince": {
       "counts": 0,
-      "mean": 0.02,
-      "std": 0.53
+      "mean": 0.0,
+      "std": 0.5
     },
     "Rook": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
+      "mean": -0.0,
+      "std": 0.49
     },
     "Setsuki": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
-    },
-    "Troq": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.51
     },
+    "Troq": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.5
+    },
     "Valerie": {
       "counts": 0,
       "mean": 0.02,
-      "std": 0.49
+      "std": 0.53
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.52
     },
     "Zane": {
       "counts": 0,
@@ -2108,118 +2108,118 @@
   "FVendetta": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.51
     },
     "BBB": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.47
+      "mean": 0.0,
+      "std": 0.51
     },
     "DeGrey": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.48
+      "std": 0.52
     },
     "FBBB": {
       "counts": 5,
-      "mean": 0.08,
-      "std": 0.45
+      "mean": 0.1,
+      "std": 0.47
     },
     "FGloria": {
       "counts": 5,
-      "mean": 0.2,
-      "std": 0.47
+      "mean": 0.21,
+      "std": 0.46
     },
     "FGwen": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.48
+      "std": 0.51
     },
     "FLum": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.5
     },
     "FMidori": {
       "counts": 4,
       "mean": -0.19,
-      "std": 0.49
+      "std": 0.45
     },
     "FOnimaru": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.52
+      "std": 0.49
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.5
     },
     "FRook": {
       "counts": 3,
-      "mean": -0.28,
-      "std": 0.48
+      "mean": -0.29,
+      "std": 0.46
     },
     "FSetsuki": {
       "counts": 5,
-      "mean": -0.03,
+      "mean": -0.02,
       "std": 0.46
     },
     "FTroq": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.48
     },
     "FVendetta": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.48
     },
     "FZane": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.48
+      "std": 0.5
     },
     "Geiger": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.51
     },
     "Gloria": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.51
+    },
+    "Grave": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.52
+    },
+    "Gwen": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    },
+    "Jaina": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.49
+    },
+    "Lum": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.48
     },
-    "Grave": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "Gwen": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
-    "Jaina": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
-    },
-    "Lum": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
-    },
     "Menelker": {
       "counts": 0,
-      "mean": 0.02,
+      "mean": -0.01,
       "std": 0.5
     },
     "Midori": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.53
+      "std": 0.51
     },
     "Onimaru": {
       "counts": 0,
@@ -2228,8 +2228,8 @@
     },
     "Persephone": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.49
     },
     "Quince": {
       "counts": 0,
@@ -2243,35 +2243,35 @@
     },
     "Setsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "Troq": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "Valerie": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.0,
       "std": 0.52
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
+      "mean": 0.01,
+      "std": 0.49
     },
     "Zane": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.5
     }
   },
   "FZane": {
     "Argagarg": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.49
     },
     "BBB": {
       "counts": 0,
@@ -2280,33 +2280,33 @@
     },
     "DeGrey": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
-    },
-    "FBBB": {
-      "counts": 0,
       "mean": 0.0,
       "std": 0.5
     },
-    "FGloria": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "FGwen": {
+    "FBBB": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.52
     },
-    "FLum": {
+    "FGloria": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "FGwen": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.49
+      "std": 0.52
+    },
+    "FLum": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.47
     },
     "FMidori": {
       "counts": 8,
       "mean": 0.05,
-      "std": 0.45
+      "std": 0.43
     },
     "FOnimaru": {
       "counts": 5,
@@ -2315,235 +2315,235 @@
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.51
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.54
     },
     "FSetsuki": {
       "counts": 3,
-      "mean": -0.27,
-      "std": 0.47
+      "mean": -0.28,
+      "std": 0.48
     },
     "FTroq": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "FVendetta": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
-    },
-    "FZane": {
-      "counts": 0,
-      "mean": 0.02,
-      "std": 0.46
-    },
-    "Geiger": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.46
-    },
-    "Gloria": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
-    },
-    "Grave": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
-    },
-    "Gwen": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "Jaina": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
-    },
-    "Lum": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
-    },
-    "Menelker": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
-    },
-    "Midori": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "Onimaru": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.47
-    },
-    "Persephone": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "Quince": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "Rook": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
-    },
-    "Setsuki": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
-    },
-    "Troq": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.52
     },
+    "FVendetta": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.5
+    },
+    "FZane": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.52
+    },
+    "Geiger": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.49
+    },
+    "Gloria": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "Grave": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "Gwen": {
+      "counts": 0,
+      "mean": 0.02,
+      "std": 0.5
+    },
+    "Jaina": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.51
+    },
+    "Lum": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.49
+    },
+    "Menelker": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.48
+    },
+    "Midori": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "Onimaru": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.49
+    },
+    "Persephone": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.49
+    },
+    "Quince": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.51
+    },
+    "Rook": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.52
+    },
+    "Setsuki": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.51
+    },
+    "Troq": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.49
+    },
     "Valerie": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "Vendetta": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": -0.0,
+      "std": 0.5
     },
     "Zane": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.53
     }
   },
   "Geiger": {
     "Argagarg": {
       "counts": 126,
       "mean": 0.07,
-      "std": 0.2
+      "std": 0.19
     },
     "BBB": {
       "counts": 52,
-      "mean": 0.46,
-      "std": 0.26
+      "mean": 0.47,
+      "std": 0.27
     },
     "DeGrey": {
       "counts": 123,
-      "mean": -0.02,
+      "mean": -0.01,
       "std": 0.19
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.48
     },
     "FGloria": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": 0.02,
+      "std": 0.51
     },
     "FGwen": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.47
+      "std": 0.5
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.53
+      "mean": -0.0,
+      "std": 0.5
     },
     "FMidori": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
-    },
-    "FOnimaru": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
-    },
-    "FQuince": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
-    },
-    "FRook": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.53
-    },
-    "FSetsuki": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "FTroq": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
-    },
-    "FVendetta": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "FZane": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.46
     },
+    "FOnimaru": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.49
+    },
+    "FQuince": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.54
+    },
+    "FRook": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.47
+    },
+    "FSetsuki": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.48
+    },
+    "FTroq": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.47
+    },
+    "FVendetta": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.51
+    },
+    "FZane": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.49
+    },
     "Geiger": {
       "counts": 57,
-      "mean": 0.0,
-      "std": 0.52
+      "mean": -0.01,
+      "std": 0.5
     },
     "Gloria": {
       "counts": 55,
-      "mean": 0.21,
+      "mean": 0.2,
       "std": 0.26
     },
     "Grave": {
       "counts": 146,
-      "mean": -0.29,
-      "std": 0.18
+      "mean": -0.3,
+      "std": 0.19
     },
     "Gwen": {
       "counts": 65,
-      "mean": 0.0,
+      "mean": 0.01,
       "std": 0.24
     },
     "Jaina": {
       "counts": 64,
-      "mean": 0.68,
-      "std": 0.25
+      "mean": 0.69,
+      "std": 0.26
     },
     "Lum": {
       "counts": 70,
-      "mean": 0.05,
+      "mean": 0.04,
       "std": 0.24
     },
     "Menelker": {
       "counts": 145,
-      "mean": -0.18,
-      "std": 0.19
+      "mean": -0.19,
+      "std": 0.18
     },
     "Midori": {
       "counts": 83,
       "mean": 0.31,
-      "std": 0.23
+      "std": 0.22
     },
     "Onimaru": {
       "counts": 81,
@@ -2552,13 +2552,13 @@
     },
     "Persephone": {
       "counts": 71,
-      "mean": -0.06,
-      "std": 0.24
+      "mean": -0.05,
+      "std": 0.25
     },
     "Quince": {
       "counts": 113,
       "mean": 0.34,
-      "std": 0.21
+      "std": 0.2
     },
     "Rook": {
       "counts": 161,
@@ -2566,70 +2566,70 @@
       "std": 0.18
     },
     "Setsuki": {
-      "counts": 113,
-      "mean": 0.06,
+      "counts": 114,
+      "mean": 0.07,
       "std": 0.2
     },
     "Troq": {
-      "counts": 304,
-      "mean": 0.18,
+      "counts": 305,
+      "mean": 0.2,
       "std": 0.14
     },
     "Valerie": {
       "counts": 108,
-      "mean": 0.27,
+      "mean": 0.26,
       "std": 0.21
     },
     "Vendetta": {
       "counts": 82,
-      "mean": -0.18,
+      "mean": -0.19,
       "std": 0.23
     },
     "Zane": {
       "counts": 240,
       "mean": -0.3,
-      "std": 0.14
+      "std": 0.15
     }
   },
   "Gloria": {
     "Argagarg": {
-      "counts": 199,
-      "mean": 0.34,
-      "std": 0.16
+      "counts": 200,
+      "mean": 0.33,
+      "std": 0.17
     },
     "BBB": {
       "counts": 47,
-      "mean": -0.18,
-      "std": 0.28
+      "mean": -0.17,
+      "std": 0.27
     },
     "DeGrey": {
       "counts": 73,
       "mean": -0.2,
-      "std": 0.24
+      "std": 0.23
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
-    },
-    "FGloria": {
-      "counts": 0,
-      "mean": 0.01,
+      "mean": -0.0,
       "std": 0.51
     },
-    "FGwen": {
+    "FGloria": {
       "counts": 0,
       "mean": 0.0,
       "std": 0.49
     },
+    "FGwen": {
+      "counts": 0,
+      "mean": -0.02,
+      "std": 0.5
+    },
     "FLum": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": 0.01,
       "std": 0.5
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.02,
       "std": 0.51
     },
     "FOnimaru": {
@@ -2639,53 +2639,53 @@
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.5
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": 0.01,
       "std": 0.5
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.51
     },
     "FTroq": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.48
+      "std": 0.5
     },
     "FVendetta": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": 0.0,
+      "std": 0.51
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
+      "mean": -0.0,
+      "std": 0.5
     },
     "Geiger": {
       "counts": 55,
-      "mean": -0.21,
+      "mean": -0.2,
       "std": 0.26
     },
     "Gloria": {
       "counts": 192,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.48
     },
     "Grave": {
       "counts": 99,
-      "mean": 0.31,
-      "std": 0.22
+      "mean": 0.3,
+      "std": 0.21
     },
     "Gwen": {
       "counts": 82,
       "mean": -0.15,
-      "std": 0.23
+      "std": 0.22
     },
     "Jaina": {
       "counts": 55,
@@ -2694,85 +2694,85 @@
     },
     "Lum": {
       "counts": 60,
-      "mean": 0.05,
-      "std": 0.26
+      "mean": 0.04,
+      "std": 0.25
     },
     "Menelker": {
       "counts": 112,
-      "mean": 0.13,
-      "std": 0.2
+      "mean": 0.12,
+      "std": 0.21
     },
     "Midori": {
-      "counts": 124,
-      "mean": -0.71,
+      "counts": 125,
+      "mean": -0.69,
       "std": 0.21
     },
     "Onimaru": {
-      "counts": 60,
-      "mean": 0.04,
+      "counts": 61,
+      "mean": 0.05,
       "std": 0.25
     },
     "Persephone": {
       "counts": 69,
-      "mean": -0.02,
+      "mean": -0.03,
       "std": 0.24
     },
     "Quince": {
       "counts": 52,
-      "mean": 0.23,
+      "mean": 0.24,
       "std": 0.28
     },
     "Rook": {
       "counts": 90,
-      "mean": 0.22,
-      "std": 0.22
+      "mean": 0.2,
+      "std": 0.21
     },
     "Setsuki": {
       "counts": 168,
-      "mean": 0.15,
+      "mean": 0.14,
       "std": 0.18
     },
     "Troq": {
       "counts": 86,
       "mean": -0.39,
-      "std": 0.23
+      "std": 0.22
     },
     "Valerie": {
       "counts": 58,
-      "mean": -0.09,
-      "std": 0.26
+      "mean": -0.1,
+      "std": 0.25
     },
     "Vendetta": {
       "counts": 51,
-      "mean": 0.38,
-      "std": 0.26
+      "mean": 0.37,
+      "std": 0.27
     },
     "Zane": {
       "counts": 220,
       "mean": -0.5,
-      "std": 0.16
+      "std": 0.15
     }
   },
   "Grave": {
     "Argagarg": {
-      "counts": 232,
-      "mean": -0.08,
-      "std": 0.16
+      "counts": 234,
+      "mean": -0.06,
+      "std": 0.15
     },
     "BBB": {
       "counts": 118,
-      "mean": 0.48,
+      "mean": 0.49,
       "std": 0.2
     },
     "DeGrey": {
       "counts": 186,
-      "mean": 0.07,
+      "mean": 0.08,
       "std": 0.17
     },
     "FBBB": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.48
+      "std": 0.49
     },
     "FGloria": {
       "counts": 0,
@@ -2781,138 +2781,138 @@
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.0,
       "std": 0.5
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.53
+      "mean": 0.01,
+      "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.53
     },
     "FRook": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "FTroq": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    },
+    "FVendetta": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.52
     },
-    "FVendetta": {
+    "FZane": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.5
     },
-    "FZane": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
-    },
     "Geiger": {
       "counts": 146,
-      "mean": 0.29,
-      "std": 0.18
+      "mean": 0.3,
+      "std": 0.19
     },
     "Gloria": {
       "counts": 99,
-      "mean": -0.31,
-      "std": 0.22
+      "mean": -0.3,
+      "std": 0.21
     },
     "Grave": {
-      "counts": 53,
-      "mean": -0.0,
-      "std": 0.49
+      "counts": 54,
+      "mean": -0.01,
+      "std": 0.5
     },
     "Gwen": {
       "counts": 104,
-      "mean": 0.35,
-      "std": 0.22
+      "mean": 0.36,
+      "std": 0.21
     },
     "Jaina": {
       "counts": 78,
-      "mean": 0.15,
-      "std": 0.23
+      "mean": 0.16,
+      "std": 0.25
     },
     "Lum": {
-      "counts": 85,
-      "mean": -0.28,
-      "std": 0.24
+      "counts": 87,
+      "mean": -0.27,
+      "std": 0.23
     },
     "Menelker": {
       "counts": 168,
-      "mean": 0.03,
-      "std": 0.18
+      "mean": 0.04,
+      "std": 0.17
     },
     "Midori": {
       "counts": 121,
-      "mean": -0.12,
+      "mean": -0.1,
       "std": 0.2
     },
     "Onimaru": {
-      "counts": 182,
-      "mean": 0.02,
+      "counts": 183,
+      "mean": 0.03,
       "std": 0.17
     },
     "Persephone": {
-      "counts": 125,
-      "mean": -0.38,
-      "std": 0.19
+      "counts": 127,
+      "mean": -0.4,
+      "std": 0.2
     },
     "Quince": {
-      "counts": 124,
-      "mean": -0.3,
+      "counts": 127,
+      "mean": -0.34,
       "std": 0.2
     },
     "Rook": {
-      "counts": 119,
-      "mean": 0.21,
+      "counts": 123,
+      "mean": 0.24,
       "std": 0.2
     },
     "Setsuki": {
-      "counts": 219,
-      "mean": 0.15,
+      "counts": 221,
+      "mean": 0.12,
       "std": 0.15
     },
     "Troq": {
       "counts": 168,
-      "mean": -0.12,
-      "std": 0.17
+      "mean": -0.1,
+      "std": 0.18
     },
     "Valerie": {
       "counts": 161,
-      "mean": 0.05,
+      "mean": 0.06,
       "std": 0.18
     },
     "Vendetta": {
       "counts": 139,
-      "mean": 0.35,
+      "mean": 0.34,
       "std": 0.2
     },
     "Zane": {
       "counts": 273,
       "mean": -0.2,
-      "std": 0.15
+      "std": 0.14
     }
   },
   "Gwen": {
@@ -2928,93 +2928,93 @@
     },
     "DeGrey": {
       "counts": 106,
-      "mean": -0.21,
-      "std": 0.22
+      "mean": -0.22,
+      "std": 0.21
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.48
     },
     "FGloria": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "FGwen": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "FLum": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.5
+    },
+    "FMidori": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.53
+    },
+    "FOnimaru": {
       "counts": 0,
       "mean": -0.0,
       "std": 0.49
     },
-    "FMidori": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
-    },
-    "FOnimaru": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.01,
       "std": 0.5
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.02,
       "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.51
     },
     "FTroq": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.47
     },
     "FVendetta": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": -0.0,
+      "std": 0.51
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": -0.02,
+      "std": 0.5
     },
     "Geiger": {
       "counts": 65,
-      "mean": -0.0,
+      "mean": -0.01,
       "std": 0.24
     },
     "Gloria": {
       "counts": 82,
       "mean": 0.15,
-      "std": 0.23
+      "std": 0.22
     },
     "Grave": {
       "counts": 104,
-      "mean": -0.35,
-      "std": 0.22
+      "mean": -0.36,
+      "std": 0.21
     },
     "Gwen": {
       "counts": 48,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "Jaina": {
       "counts": 86,
       "mean": 0.12,
-      "std": 0.23
+      "std": 0.22
     },
     "Lum": {
       "counts": 78,
@@ -3024,16 +3024,16 @@
     "Menelker": {
       "counts": 112,
       "mean": 0.14,
-      "std": 0.21
+      "std": 0.2
     },
     "Midori": {
-      "counts": 66,
-      "mean": -0.16,
+      "counts": 67,
+      "mean": -0.18,
       "std": 0.25
     },
     "Onimaru": {
       "counts": 87,
-      "mean": -0.34,
+      "mean": -0.33,
       "std": 0.22
     },
     "Persephone": {
@@ -3044,17 +3044,17 @@
     "Quince": {
       "counts": 71,
       "mean": 0.47,
-      "std": 0.25
+      "std": 0.24
     },
     "Rook": {
       "counts": 153,
-      "mean": -0.15,
+      "mean": -0.16,
       "std": 0.19
     },
     "Setsuki": {
-      "counts": 140,
-      "mean": 0.13,
-      "std": 0.18
+      "counts": 143,
+      "mean": 0.16,
+      "std": 0.19
     },
     "Troq": {
       "counts": 125,
@@ -3063,100 +3063,100 @@
     },
     "Valerie": {
       "counts": 115,
-      "mean": 0.19,
-      "std": 0.2
+      "mean": 0.18,
+      "std": 0.21
     },
     "Vendetta": {
       "counts": 92,
-      "mean": 0.04,
-      "std": 0.23
+      "mean": 0.05,
+      "std": 0.22
     },
     "Zane": {
       "counts": 119,
       "mean": -0.15,
-      "std": 0.19
+      "std": 0.21
     }
   },
   "Jaina": {
     "Argagarg": {
-      "counts": 82,
-      "mean": -0.58,
+      "counts": 83,
+      "mean": -0.55,
       "std": 0.24
     },
     "BBB": {
-      "counts": 53,
-      "mean": 0.18,
-      "std": 0.26
+      "counts": 54,
+      "mean": 0.22,
+      "std": 0.27
     },
     "DeGrey": {
       "counts": 60,
-      "mean": -0.19,
-      "std": 0.24
+      "mean": -0.18,
+      "std": 0.26
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.51
     },
     "FGloria": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.01,
+      "std": 0.52
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.01,
       "std": 0.49
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.47
+      "mean": 0.0,
+      "std": 0.49
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": 0.01,
       "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
+      "mean": -0.01,
+      "std": 0.49
     },
     "FQuince": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.48
+      "std": 0.5
     },
     "FRook": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.52
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.47
+      "mean": 0.0,
+      "std": 0.49
     },
     "FTroq": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.49
     },
     "FVendetta": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
-    },
-    "FZane": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.49
     },
+    "FZane": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
     "Geiger": {
       "counts": 64,
-      "mean": -0.68,
-      "std": 0.25
+      "mean": -0.69,
+      "std": 0.26
     },
     "Gloria": {
       "counts": 55,
@@ -3165,100 +3165,100 @@
     },
     "Grave": {
       "counts": 78,
-      "mean": -0.15,
-      "std": 0.23
+      "mean": -0.16,
+      "std": 0.25
     },
     "Gwen": {
       "counts": 86,
       "mean": -0.12,
-      "std": 0.23
+      "std": 0.22
     },
     "Jaina": {
       "counts": 17,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "Lum": {
-      "counts": 80,
-      "mean": -0.7,
-      "std": 0.24
+      "counts": 84,
+      "mean": -0.72,
+      "std": 0.23
     },
     "Menelker": {
-      "counts": 62,
+      "counts": 64,
       "mean": -0.47,
-      "std": 0.26
+      "std": 0.25
     },
     "Midori": {
-      "counts": 82,
-      "mean": 0.19,
+      "counts": 91,
+      "mean": 0.26,
       "std": 0.22
     },
     "Onimaru": {
       "counts": 66,
-      "mean": -0.39,
-      "std": 0.26
+      "mean": -0.38,
+      "std": 0.25
     },
     "Persephone": {
-      "counts": 56,
+      "counts": 63,
       "mean": 0.25,
-      "std": 0.26
+      "std": 0.27
     },
     "Quince": {
       "counts": 82,
-      "mean": 0.17,
-      "std": 0.24
-    },
-    "Rook": {
-      "counts": 84,
-      "mean": -0.58,
-      "std": 0.22
-    },
-    "Setsuki": {
-      "counts": 94,
-      "mean": -0.28,
-      "std": 0.22
-    },
-    "Troq": {
-      "counts": 77,
-      "mean": 0.37,
+      "mean": 0.15,
       "std": 0.23
     },
+    "Rook": {
+      "counts": 85,
+      "mean": -0.6,
+      "std": 0.23
+    },
+    "Setsuki": {
+      "counts": 99,
+      "mean": -0.25,
+      "std": 0.21
+    },
+    "Troq": {
+      "counts": 79,
+      "mean": 0.32,
+      "std": 0.24
+    },
     "Valerie": {
-      "counts": 90,
-      "mean": 0.26,
+      "counts": 91,
+      "mean": 0.27,
       "std": 0.22
     },
     "Vendetta": {
       "counts": 62,
       "mean": -0.44,
-      "std": 0.25
+      "std": 0.26
     },
     "Zane": {
       "counts": 109,
-      "mean": -0.38,
-      "std": 0.21
+      "mean": -0.39,
+      "std": 0.2
     }
   },
   "Lum": {
     "Argagarg": {
-      "counts": 120,
-      "mean": -0.39,
+      "counts": 123,
+      "mean": -0.4,
       "std": 0.2
     },
     "BBB": {
       "counts": 65,
-      "mean": 0.11,
-      "std": 0.24
+      "mean": 0.12,
+      "std": 0.25
     },
     "DeGrey": {
       "counts": 117,
-      "mean": -0.68,
+      "mean": -0.66,
       "std": 0.21
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.52
     },
     "FGloria": {
       "counts": 0,
@@ -3267,18 +3267,18 @@
     },
     "FGwen": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.49
     },
     "FLum": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.52
+      "std": 0.47
     },
     "FMidori": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.53
+      "std": 0.49
     },
     "FOnimaru": {
       "counts": 0,
@@ -3287,48 +3287,48 @@
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
+      "mean": 0.01,
+      "std": 0.52
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.02,
+      "std": 0.5
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.01,
       "std": 0.5
     },
     "FTroq": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.48
     },
     "FVendetta": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.48
     },
     "FZane": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.49
     },
     "Geiger": {
       "counts": 70,
-      "mean": -0.05,
+      "mean": -0.04,
       "std": 0.24
     },
     "Gloria": {
       "counts": 60,
-      "mean": -0.05,
-      "std": 0.26
+      "mean": -0.04,
+      "std": 0.25
     },
     "Grave": {
-      "counts": 85,
-      "mean": 0.28,
-      "std": 0.24
+      "counts": 87,
+      "mean": 0.27,
+      "std": 0.23
     },
     "Gwen": {
       "counts": 78,
@@ -3336,34 +3336,34 @@
       "std": 0.24
     },
     "Jaina": {
-      "counts": 80,
-      "mean": 0.7,
-      "std": 0.24
+      "counts": 84,
+      "mean": 0.72,
+      "std": 0.23
     },
     "Lum": {
       "counts": 14,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.49
     },
     "Menelker": {
       "counts": 69,
       "mean": -0.25,
-      "std": 0.25
+      "std": 0.24
     },
     "Midori": {
-      "counts": 91,
-      "mean": -0.05,
-      "std": 0.21
+      "counts": 93,
+      "mean": -0.08,
+      "std": 0.22
     },
     "Onimaru": {
-      "counts": 68,
-      "mean": 0.1,
-      "std": 0.23
+      "counts": 70,
+      "mean": 0.09,
+      "std": 0.24
     },
     "Persephone": {
-      "counts": 45,
-      "mean": 0.19,
-      "std": 0.29
+      "counts": 46,
+      "mean": 0.16,
+      "std": 0.27
     },
     "Quince": {
       "counts": 69,
@@ -3371,61 +3371,61 @@
       "std": 0.25
     },
     "Rook": {
-      "counts": 104,
-      "mean": 0.33,
+      "counts": 106,
+      "mean": 0.29,
       "std": 0.21
     },
     "Setsuki": {
-      "counts": 97,
-      "mean": 0.15,
+      "counts": 98,
+      "mean": 0.17,
       "std": 0.21
     },
     "Troq": {
       "counts": 114,
-      "mean": 0.07,
+      "mean": 0.08,
       "std": 0.2
     },
     "Valerie": {
-      "counts": 86,
-      "mean": 0.19,
+      "counts": 87,
+      "mean": 0.22,
       "std": 0.22
     },
     "Vendetta": {
       "counts": 55,
-      "mean": -0.22,
+      "mean": -0.23,
       "std": 0.27
     },
     "Zane": {
-      "counts": 109,
-      "mean": 0.13,
+      "counts": 110,
+      "mean": 0.12,
       "std": 0.2
     }
   },
   "Menelker": {
     "Argagarg": {
-      "counts": 82,
-      "mean": -0.11,
-      "std": 0.23
+      "counts": 83,
+      "mean": -0.12,
+      "std": 0.22
     },
     "BBB": {
       "counts": 43,
-      "mean": 0.05,
-      "std": 0.29
+      "mean": 0.06,
+      "std": 0.28
     },
     "DeGrey": {
       "counts": 94,
-      "mean": -0.48,
-      "std": 0.22
+      "mean": -0.47,
+      "std": 0.21
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.53
+      "mean": -0.02,
+      "std": 0.52
     },
     "FGloria": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.47
+      "std": 0.5
     },
     "FGwen": {
       "counts": 0,
@@ -3434,98 +3434,98 @@
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": -0.0,
+      "std": 0.5
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": -0.01,
+      "std": 0.48
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.52
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.49
     },
     "FTroq": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.49
     },
     "FVendetta": {
       "counts": 0,
-      "mean": -0.02,
+      "mean": 0.01,
       "std": 0.5
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.48
     },
     "Geiger": {
       "counts": 145,
-      "mean": 0.18,
-      "std": 0.19
+      "mean": 0.19,
+      "std": 0.18
     },
     "Gloria": {
       "counts": 112,
-      "mean": -0.13,
-      "std": 0.2
+      "mean": -0.12,
+      "std": 0.21
     },
     "Grave": {
       "counts": 168,
-      "mean": -0.03,
-      "std": 0.18
+      "mean": -0.04,
+      "std": 0.17
     },
     "Gwen": {
       "counts": 112,
       "mean": -0.14,
-      "std": 0.21
+      "std": 0.2
     },
     "Jaina": {
-      "counts": 62,
+      "counts": 64,
       "mean": 0.47,
-      "std": 0.26
+      "std": 0.25
     },
     "Lum": {
       "counts": 69,
       "mean": 0.25,
-      "std": 0.25
+      "std": 0.24
     },
     "Menelker": {
       "counts": 52,
-      "mean": -0.02,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.5
     },
     "Midori": {
-      "counts": 81,
-      "mean": -0.09,
-      "std": 0.22
+      "counts": 83,
+      "mean": -0.08,
+      "std": 0.24
     },
     "Onimaru": {
       "counts": 88,
       "mean": -0.47,
-      "std": 0.22
+      "std": 0.23
     },
     "Persephone": {
       "counts": 81,
       "mean": -0.03,
-      "std": 0.22
+      "std": 0.23
     },
     "Quince": {
       "counts": 73,
@@ -3539,90 +3539,90 @@
     },
     "Setsuki": {
       "counts": 97,
-      "mean": -0.29,
+      "mean": -0.3,
       "std": 0.21
     },
     "Troq": {
       "counts": 81,
-      "mean": -0.24,
+      "mean": -0.23,
       "std": 0.23
     },
     "Valerie": {
       "counts": 67,
       "mean": 0.06,
-      "std": 0.25
+      "std": 0.24
     },
     "Vendetta": {
       "counts": 63,
-      "mean": 0.17,
-      "std": 0.25
+      "mean": 0.16,
+      "std": 0.26
     },
     "Zane": {
       "counts": 158,
-      "mean": -0.34,
-      "std": 0.18
+      "mean": -0.33,
+      "std": 0.19
     }
   },
   "Midori": {
     "Argagarg": {
       "counts": 118,
-      "mean": -0.18,
+      "mean": -0.19,
       "std": 0.21
     },
     "BBB": {
       "counts": 124,
       "mean": -0.2,
-      "std": 0.2
+      "std": 0.19
     },
     "DeGrey": {
-      "counts": 98,
-      "mean": -0.2,
-      "std": 0.21
+      "counts": 100,
+      "mean": -0.22,
+      "std": 0.2
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.02,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.5
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": -0.0,
       "std": 0.5
     },
     "FGwen": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.52
     },
     "FLum": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.51
+      "std": 0.5
     },
     "FMidori": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.49
     },
     "FOnimaru": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.5
+    },
+    "FQuince": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.49
+    },
+    "FRook": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.49
     },
-    "FQuince": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
-    },
-    "FRook": {
-      "counts": 0,
-      "mean": 0.0,
-      "std": 0.53
-    },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.49
     },
     "FTroq": {
       "counts": 0,
@@ -3632,82 +3632,82 @@
     "FVendetta": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.53
+      "std": 0.51
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "Geiger": {
       "counts": 83,
       "mean": -0.31,
-      "std": 0.23
+      "std": 0.22
     },
     "Gloria": {
-      "counts": 124,
-      "mean": 0.71,
+      "counts": 125,
+      "mean": 0.69,
       "std": 0.21
     },
     "Grave": {
       "counts": 121,
-      "mean": 0.12,
+      "mean": 0.1,
       "std": 0.2
     },
     "Gwen": {
-      "counts": 66,
-      "mean": 0.16,
+      "counts": 67,
+      "mean": 0.18,
       "std": 0.25
     },
     "Jaina": {
-      "counts": 82,
-      "mean": -0.19,
+      "counts": 91,
+      "mean": -0.26,
       "std": 0.22
     },
     "Lum": {
-      "counts": 91,
-      "mean": 0.05,
-      "std": 0.21
+      "counts": 93,
+      "mean": 0.08,
+      "std": 0.22
     },
     "Menelker": {
-      "counts": 81,
-      "mean": 0.09,
-      "std": 0.22
+      "counts": 83,
+      "mean": 0.08,
+      "std": 0.24
     },
     "Midori": {
       "counts": 36,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.01,
+      "std": 0.49
     },
     "Onimaru": {
       "counts": 96,
-      "mean": -0.04,
+      "mean": -0.05,
       "std": 0.21
     },
     "Persephone": {
       "counts": 80,
-      "mean": 0.03,
-      "std": 0.24
+      "mean": 0.02,
+      "std": 0.23
     },
     "Quince": {
       "counts": 101,
       "mean": 0.25,
-      "std": 0.22
+      "std": 0.21
     },
     "Rook": {
       "counts": 89,
-      "mean": 0.35,
-      "std": 0.23
+      "mean": 0.34,
+      "std": 0.22
     },
     "Setsuki": {
-      "counts": 180,
-      "mean": 0.08,
+      "counts": 184,
+      "mean": 0.07,
       "std": 0.17
     },
     "Troq": {
       "counts": 91,
       "mean": -0.01,
-      "std": 0.21
+      "std": 0.22
     },
     "Valerie": {
       "counts": 54,
@@ -3715,20 +3715,20 @@
       "std": 0.26
     },
     "Vendetta": {
-      "counts": 69,
-      "mean": 0.17,
+      "counts": 70,
+      "mean": 0.18,
       "std": 0.24
     },
     "Zane": {
-      "counts": 135,
-      "mean": -0.06,
+      "counts": 136,
+      "mean": -0.08,
       "std": 0.19
     }
   },
   "Onimaru": {
     "Argagarg": {
       "counts": 199,
-      "mean": -0.59,
+      "mean": -0.58,
       "std": 0.17
     },
     "BBB": {
@@ -3739,7 +3739,7 @@
     "DeGrey": {
       "counts": 189,
       "mean": -0.66,
-      "std": 0.17
+      "std": 0.16
     },
     "FBBB": {
       "counts": 0,
@@ -3748,48 +3748,48 @@
     },
     "FGloria": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.49
     },
     "FGwen": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.0,
+      "std": 0.48
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.02,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.49
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.49
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.53
+      "mean": 0.01,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "FRook": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.5
     },
     "FTroq": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.01,
+      "std": 0.48
     },
     "FVendetta": {
       "counts": 0,
@@ -3798,8 +3798,8 @@
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.47
+      "mean": -0.01,
+      "std": 0.49
     },
     "Geiger": {
       "counts": 81,
@@ -3807,67 +3807,67 @@
       "std": 0.22
     },
     "Gloria": {
-      "counts": 60,
-      "mean": -0.04,
+      "counts": 61,
+      "mean": -0.05,
       "std": 0.25
     },
     "Grave": {
-      "counts": 182,
-      "mean": -0.02,
+      "counts": 183,
+      "mean": -0.03,
       "std": 0.17
     },
     "Gwen": {
       "counts": 87,
-      "mean": 0.34,
+      "mean": 0.33,
       "std": 0.22
     },
     "Jaina": {
       "counts": 66,
-      "mean": 0.39,
-      "std": 0.26
+      "mean": 0.38,
+      "std": 0.25
     },
     "Lum": {
-      "counts": 68,
-      "mean": -0.1,
-      "std": 0.23
+      "counts": 70,
+      "mean": -0.09,
+      "std": 0.24
     },
     "Menelker": {
       "counts": 88,
       "mean": 0.47,
-      "std": 0.22
+      "std": 0.23
     },
     "Midori": {
       "counts": 96,
-      "mean": 0.04,
+      "mean": 0.05,
       "std": 0.21
     },
     "Onimaru": {
       "counts": 113,
-      "mean": -0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "Persephone": {
       "counts": 60,
-      "mean": 0.29,
+      "mean": 0.3,
       "std": 0.26
     },
     "Quince": {
       "counts": 75,
-      "mean": -0.21,
-      "std": 0.23
+      "mean": -0.2,
+      "std": 0.24
     },
     "Rook": {
-      "counts": 150,
-      "mean": 0.12,
-      "std": 0.19
-    },
-    "Setsuki": {
-      "counts": 163,
-      "mean": 0.34,
+      "counts": 151,
+      "mean": 0.14,
       "std": 0.18
     },
+    "Setsuki": {
+      "counts": 164,
+      "mean": 0.32,
+      "std": 0.17
+    },
     "Troq": {
-      "counts": 231,
+      "counts": 232,
       "mean": 0.54,
       "std": 0.15
     },
@@ -3879,33 +3879,33 @@
     "Vendetta": {
       "counts": 79,
       "mean": 0.23,
-      "std": 0.23
+      "std": 0.24
     },
     "Zane": {
       "counts": 213,
-      "mean": 0.13,
-      "std": 0.16
+      "mean": 0.15,
+      "std": 0.15
     }
   },
   "Persephone": {
     "Argagarg": {
-      "counts": 128,
-      "mean": 0.05,
-      "std": 0.19
+      "counts": 129,
+      "mean": 0.01,
+      "std": 0.2
     },
     "BBB": {
       "counts": 68,
       "mean": -0.18,
-      "std": 0.25
+      "std": 0.26
     },
     "DeGrey": {
-      "counts": 83,
-      "mean": -0.13,
-      "std": 0.22
+      "counts": 84,
+      "mean": -0.15,
+      "std": 0.24
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": -0.01,
       "std": 0.52
     },
     "FGloria": {
@@ -3916,67 +3916,67 @@
     "FGwen": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.51
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": -0.01,
+      "std": 0.52
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.52
     },
     "FOnimaru": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.48
+      "std": 0.5
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
+      "mean": -0.0,
+      "std": 0.48
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.49
     },
     "FTroq": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.52
     },
     "FVendetta": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.49
     },
     "FZane": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.5
+      "std": 0.49
     },
     "Geiger": {
       "counts": 71,
-      "mean": 0.06,
-      "std": 0.24
+      "mean": 0.05,
+      "std": 0.25
     },
     "Gloria": {
       "counts": 69,
-      "mean": 0.02,
+      "mean": 0.03,
       "std": 0.24
     },
     "Grave": {
-      "counts": 125,
-      "mean": 0.38,
-      "std": 0.19
+      "counts": 127,
+      "mean": 0.4,
+      "std": 0.2
     },
     "Gwen": {
       "counts": 123,
@@ -3984,49 +3984,49 @@
       "std": 0.2
     },
     "Jaina": {
-      "counts": 56,
+      "counts": 63,
       "mean": -0.25,
-      "std": 0.26
+      "std": 0.27
     },
     "Lum": {
-      "counts": 45,
-      "mean": -0.19,
-      "std": 0.29
+      "counts": 46,
+      "mean": -0.16,
+      "std": 0.27
     },
     "Menelker": {
       "counts": 81,
       "mean": 0.03,
-      "std": 0.22
+      "std": 0.23
     },
     "Midori": {
       "counts": 80,
-      "mean": -0.03,
-      "std": 0.24
+      "mean": -0.02,
+      "std": 0.23
     },
     "Onimaru": {
       "counts": 60,
-      "mean": -0.29,
+      "mean": -0.3,
       "std": 0.26
     },
     "Persephone": {
       "counts": 90,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.5
     },
     "Quince": {
       "counts": 104,
-      "mean": -0.14,
+      "mean": -0.13,
       "std": 0.21
     },
     "Rook": {
-      "counts": 116,
-      "mean": 0.0,
-      "std": 0.21
+      "counts": 119,
+      "mean": 0.01,
+      "std": 0.2
     },
     "Setsuki": {
-      "counts": 126,
-      "mean": -0.49,
-      "std": 0.2
+      "counts": 127,
+      "mean": -0.51,
+      "std": 0.19
     },
     "Troq": {
       "counts": 91,
@@ -4035,12 +4035,12 @@
     },
     "Valerie": {
       "counts": 70,
-      "mean": -0.04,
+      "mean": -0.05,
       "std": 0.24
     },
     "Vendetta": {
-      "counts": 78,
-      "mean": -0.17,
+      "counts": 79,
+      "mean": -0.19,
       "std": 0.23
     },
     "Zane": {
@@ -4052,68 +4052,68 @@
   "Quince": {
     "Argagarg": {
       "counts": 151,
-      "mean": 0.39,
-      "std": 0.19
+      "mean": 0.4,
+      "std": 0.18
     },
     "BBB": {
       "counts": 64,
-      "mean": -0.32,
-      "std": 0.26
+      "mean": -0.31,
+      "std": 0.25
     },
     "DeGrey": {
       "counts": 109,
       "mean": -0.09,
-      "std": 0.21
+      "std": 0.2
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.51
     },
     "FGloria": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.48
+      "std": 0.49
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.48
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.52
     },
     "FMidori": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.48
+      "std": 0.53
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.01,
       "std": 0.5
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": 0.0,
+      "std": 0.5
     },
     "FRook": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.52
-    },
-    "FSetsuki": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.52
     },
+    "FSetsuki": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.51
+    },
     "FTroq": {
       "counts": 0,
-      "mean": -0.02,
-      "std": 0.53
+      "mean": -0.0,
+      "std": 0.5
     },
     "FVendetta": {
       "counts": 0,
@@ -4123,32 +4123,32 @@
     "FZane": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.5
+      "std": 0.51
     },
     "Geiger": {
       "counts": 113,
       "mean": -0.34,
-      "std": 0.21
+      "std": 0.2
     },
     "Gloria": {
       "counts": 52,
-      "mean": -0.23,
+      "mean": -0.24,
       "std": 0.28
     },
     "Grave": {
-      "counts": 124,
-      "mean": 0.3,
+      "counts": 127,
+      "mean": 0.34,
       "std": 0.2
     },
     "Gwen": {
       "counts": 71,
       "mean": -0.47,
-      "std": 0.25
+      "std": 0.24
     },
     "Jaina": {
       "counts": 82,
-      "mean": -0.17,
-      "std": 0.24
+      "mean": -0.15,
+      "std": 0.23
     },
     "Lum": {
       "counts": 69,
@@ -4163,27 +4163,27 @@
     "Midori": {
       "counts": 101,
       "mean": -0.25,
-      "std": 0.22
+      "std": 0.21
     },
     "Onimaru": {
       "counts": 75,
-      "mean": 0.21,
-      "std": 0.23
+      "mean": 0.2,
+      "std": 0.24
     },
     "Persephone": {
       "counts": 104,
-      "mean": 0.14,
+      "mean": 0.13,
       "std": 0.21
     },
     "Quince": {
       "counts": 153,
       "mean": -0.01,
-      "std": 0.48
+      "std": 0.5
     },
     "Rook": {
-      "counts": 126,
-      "mean": -0.46,
-      "std": 0.2
+      "counts": 129,
+      "mean": -0.42,
+      "std": 0.19
     },
     "Setsuki": {
       "counts": 231,
@@ -4192,7 +4192,7 @@
     },
     "Troq": {
       "counts": 92,
-      "mean": -0.52,
+      "mean": -0.51,
       "std": 0.22
     },
     "Valerie": {
@@ -4203,79 +4203,79 @@
     "Vendetta": {
       "counts": 115,
       "mean": -0.17,
-      "std": 0.21
+      "std": 0.22
     },
     "Zane": {
       "counts": 147,
-      "mean": -0.37,
+      "mean": -0.36,
       "std": 0.18
     }
   },
   "Rook": {
     "Argagarg": {
-      "counts": 208,
+      "counts": 211,
       "mean": -0.34,
-      "std": 0.17
+      "std": 0.16
     },
     "BBB": {
-      "counts": 207,
+      "counts": 208,
       "mean": -0.23,
       "std": 0.17
     },
     "DeGrey": {
       "counts": 133,
-      "mean": -0.29,
-      "std": 0.19
+      "mean": -0.28,
+      "std": 0.18
     },
     "FBBB": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.49
+      "std": 0.48
     },
     "FGloria": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.52
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.52
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": 0.01,
+      "std": 0.48
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.01,
+      "mean": 0.0,
       "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.0,
+      "std": 0.49
     },
     "FRook": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.01,
       "std": 0.51
     },
     "FTroq": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.49
     },
     "FVendetta": {
       "counts": 0,
@@ -4284,8 +4284,8 @@
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.52
     },
     "Geiger": {
       "counts": 161,
@@ -4294,27 +4294,27 @@
     },
     "Gloria": {
       "counts": 90,
-      "mean": -0.22,
-      "std": 0.22
+      "mean": -0.2,
+      "std": 0.21
     },
     "Grave": {
-      "counts": 119,
-      "mean": -0.21,
+      "counts": 123,
+      "mean": -0.24,
       "std": 0.2
     },
     "Gwen": {
       "counts": 153,
-      "mean": 0.15,
+      "mean": 0.16,
       "std": 0.19
     },
     "Jaina": {
-      "counts": 84,
-      "mean": 0.58,
-      "std": 0.22
+      "counts": 85,
+      "mean": 0.6,
+      "std": 0.23
     },
     "Lum": {
-      "counts": 104,
-      "mean": -0.33,
+      "counts": 106,
+      "mean": -0.29,
       "std": 0.21
     },
     "Menelker": {
@@ -4324,65 +4324,65 @@
     },
     "Midori": {
       "counts": 89,
-      "mean": -0.35,
-      "std": 0.23
+      "mean": -0.34,
+      "std": 0.22
     },
     "Onimaru": {
-      "counts": 150,
-      "mean": -0.12,
-      "std": 0.19
+      "counts": 151,
+      "mean": -0.14,
+      "std": 0.18
     },
     "Persephone": {
-      "counts": 116,
-      "mean": -0.0,
-      "std": 0.21
+      "counts": 119,
+      "mean": -0.01,
+      "std": 0.2
     },
     "Quince": {
-      "counts": 126,
-      "mean": 0.46,
-      "std": 0.2
+      "counts": 129,
+      "mean": 0.42,
+      "std": 0.19
     },
     "Rook": {
       "counts": 77,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "Setsuki": {
       "counts": 162,
-      "mean": -0.04,
-      "std": 0.18
+      "mean": -0.03,
+      "std": 0.17
     },
     "Troq": {
-      "counts": 94,
-      "mean": 0.03,
-      "std": 0.22
+      "counts": 96,
+      "mean": 0.04,
+      "std": 0.21
     },
     "Valerie": {
       "counts": 93,
-      "mean": 0.17,
+      "mean": 0.18,
       "std": 0.22
     },
     "Vendetta": {
       "counts": 135,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.19
     },
     "Zane": {
       "counts": 178,
-      "mean": 0.28,
+      "mean": 0.29,
       "std": 0.17
     }
   },
   "Setsuki": {
     "Argagarg": {
-      "counts": 181,
-      "mean": -0.04,
+      "counts": 185,
+      "mean": -0.03,
       "std": 0.17
     },
     "BBB": {
-      "counts": 81,
-      "mean": 0.05,
-      "std": 0.23
+      "counts": 82,
+      "mean": 0.07,
+      "std": 0.22
     },
     "DeGrey": {
       "counts": 172,
@@ -4391,113 +4391,113 @@
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": -0.01,
       "std": 0.51
     },
     "FGloria": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
+      "mean": -0.0,
+      "std": 0.48
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.51
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.49
+      "mean": 0.02,
+      "std": 0.47
     },
     "FOnimaru": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "FQuince": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.52
     },
     "FRook": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.48
+      "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.52
-    },
-    "FTroq": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
-    },
-    "FVendetta": {
-      "counts": 0,
-      "mean": 0.01,
+      "mean": -0.0,
       "std": 0.49
     },
-    "FZane": {
+    "FTroq": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.51
     },
+    "FVendetta": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.5
+    },
+    "FZane": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.51
+    },
     "Geiger": {
-      "counts": 113,
-      "mean": -0.06,
+      "counts": 114,
+      "mean": -0.07,
       "std": 0.2
     },
     "Gloria": {
       "counts": 168,
-      "mean": -0.15,
+      "mean": -0.14,
       "std": 0.18
     },
     "Grave": {
-      "counts": 219,
-      "mean": -0.15,
+      "counts": 221,
+      "mean": -0.12,
       "std": 0.15
     },
     "Gwen": {
-      "counts": 140,
-      "mean": -0.13,
-      "std": 0.18
+      "counts": 143,
+      "mean": -0.16,
+      "std": 0.19
     },
     "Jaina": {
-      "counts": 94,
-      "mean": 0.28,
-      "std": 0.22
+      "counts": 99,
+      "mean": 0.25,
+      "std": 0.21
     },
     "Lum": {
-      "counts": 97,
-      "mean": -0.15,
+      "counts": 98,
+      "mean": -0.17,
       "std": 0.21
     },
     "Menelker": {
       "counts": 97,
-      "mean": 0.29,
+      "mean": 0.3,
       "std": 0.21
     },
     "Midori": {
-      "counts": 180,
-      "mean": -0.08,
+      "counts": 184,
+      "mean": -0.07,
       "std": 0.17
     },
     "Onimaru": {
-      "counts": 163,
-      "mean": -0.34,
-      "std": 0.18
+      "counts": 164,
+      "mean": -0.32,
+      "std": 0.17
     },
     "Persephone": {
-      "counts": 126,
-      "mean": 0.49,
-      "std": 0.2
+      "counts": 127,
+      "mean": 0.51,
+      "std": 0.19
     },
     "Quince": {
       "counts": 231,
@@ -4506,11 +4506,11 @@
     },
     "Rook": {
       "counts": 162,
-      "mean": 0.04,
-      "std": 0.18
+      "mean": 0.03,
+      "std": 0.17
     },
     "Setsuki": {
-      "counts": 243,
+      "counts": 244,
       "mean": 0.0,
       "std": 0.48
     },
@@ -4520,76 +4520,76 @@
       "std": 0.13
     },
     "Valerie": {
-      "counts": 191,
-      "mean": -0.02,
-      "std": 0.16
+      "counts": 195,
+      "mean": -0.05,
+      "std": 0.17
     },
     "Vendetta": {
-      "counts": 103,
-      "mean": 0.22,
+      "counts": 107,
+      "mean": 0.17,
       "std": 0.21
     },
     "Zane": {
       "counts": 313,
-      "mean": -0.31,
-      "std": 0.13
+      "mean": -0.3,
+      "std": 0.14
     }
   },
   "Troq": {
     "Argagarg": {
       "counts": 196,
-      "mean": 0.1,
+      "mean": 0.09,
       "std": 0.16
     },
     "BBB": {
       "counts": 156,
       "mean": -0.12,
-      "std": 0.17
+      "std": 0.18
     },
     "DeGrey": {
       "counts": 193,
       "mean": 0.27,
-      "std": 0.17
+      "std": 0.16
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
+      "mean": -0.0,
+      "std": 0.5
     },
     "FGloria": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "FGwen": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.5
     },
     "FLum": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "FMidori": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.0,
       "std": 0.5
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.0,
       "std": 0.49
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.48
     },
     "FRook": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": 0.01,
+      "std": 0.49
     },
     "FSetsuki": {
       "counts": 0,
@@ -4599,32 +4599,32 @@
     "FTroq": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.51
+      "std": 0.5
     },
     "FVendetta": {
       "counts": 0,
       "mean": 0.01,
-      "std": 0.51
+      "std": 0.49
     },
     "FZane": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.49
     },
     "Geiger": {
-      "counts": 304,
-      "mean": -0.18,
+      "counts": 305,
+      "mean": -0.2,
       "std": 0.14
     },
     "Gloria": {
       "counts": 86,
       "mean": 0.39,
-      "std": 0.23
+      "std": 0.22
     },
     "Grave": {
       "counts": 168,
-      "mean": 0.12,
-      "std": 0.17
+      "mean": 0.1,
+      "std": 0.18
     },
     "Gwen": {
       "counts": 125,
@@ -4632,27 +4632,27 @@
       "std": 0.2
     },
     "Jaina": {
-      "counts": 77,
-      "mean": -0.37,
-      "std": 0.23
+      "counts": 79,
+      "mean": -0.32,
+      "std": 0.24
     },
     "Lum": {
       "counts": 114,
-      "mean": -0.07,
+      "mean": -0.08,
       "std": 0.2
     },
     "Menelker": {
       "counts": 81,
-      "mean": 0.24,
+      "mean": 0.23,
       "std": 0.23
     },
     "Midori": {
       "counts": 91,
       "mean": 0.01,
-      "std": 0.21
+      "std": 0.22
     },
     "Onimaru": {
-      "counts": 231,
+      "counts": 232,
       "mean": -0.54,
       "std": 0.15
     },
@@ -4663,13 +4663,13 @@
     },
     "Quince": {
       "counts": 92,
-      "mean": 0.52,
+      "mean": 0.51,
       "std": 0.22
     },
     "Rook": {
-      "counts": 94,
-      "mean": -0.03,
-      "std": 0.22
+      "counts": 96,
+      "mean": -0.04,
+      "std": 0.21
     },
     "Setsuki": {
       "counts": 342,
@@ -4679,59 +4679,59 @@
     "Troq": {
       "counts": 79,
       "mean": -0.0,
-      "std": 0.48
+      "std": 0.51
     },
     "Valerie": {
       "counts": 154,
-      "mean": 0.45,
-      "std": 0.18
+      "mean": 0.44,
+      "std": 0.19
     },
     "Vendetta": {
       "counts": 122,
       "mean": -0.03,
-      "std": 0.2
+      "std": 0.19
     },
     "Zane": {
-      "counts": 376,
+      "counts": 377,
       "mean": 0.68,
-      "std": 0.12
+      "std": 0.13
     }
   },
   "Valerie": {
     "Argagarg": {
-      "counts": 143,
-      "mean": -0.14,
+      "counts": 146,
+      "mean": -0.11,
       "std": 0.18
     },
     "BBB": {
       "counts": 61,
-      "mean": -0.06,
-      "std": 0.25
+      "mean": -0.05,
+      "std": 0.26
     },
     "DeGrey": {
       "counts": 106,
-      "mean": -0.33,
-      "std": 0.2
+      "mean": -0.32,
+      "std": 0.21
     },
     "FBBB": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.49
     },
     "FGloria": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.52
+      "std": 0.49
     },
     "FGwen": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.0,
       "std": 0.51
     },
     "FLum": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.49
     },
     "FMidori": {
       "counts": 0,
@@ -4740,73 +4740,73 @@
     },
     "FOnimaru": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.51
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": -0.02,
       "std": 0.52
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.49
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
+      "mean": -0.0,
+      "std": 0.51
     },
     "FTroq": {
       "counts": 0,
       "mean": -0.02,
-      "std": 0.49
+      "std": 0.53
     },
     "FVendetta": {
       "counts": 0,
-      "mean": 0.0,
+      "mean": -0.0,
       "std": 0.52
     },
     "FZane": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "Geiger": {
       "counts": 108,
-      "mean": -0.27,
+      "mean": -0.26,
       "std": 0.21
     },
     "Gloria": {
       "counts": 58,
-      "mean": 0.09,
-      "std": 0.26
+      "mean": 0.1,
+      "std": 0.25
     },
     "Grave": {
       "counts": 161,
-      "mean": -0.05,
+      "mean": -0.06,
       "std": 0.18
     },
     "Gwen": {
       "counts": 115,
-      "mean": -0.19,
-      "std": 0.2
+      "mean": -0.18,
+      "std": 0.21
     },
     "Jaina": {
-      "counts": 90,
-      "mean": -0.26,
+      "counts": 91,
+      "mean": -0.27,
       "std": 0.22
     },
     "Lum": {
-      "counts": 86,
-      "mean": -0.19,
+      "counts": 87,
+      "mean": -0.22,
       "std": 0.22
     },
     "Menelker": {
       "counts": 67,
       "mean": -0.06,
-      "std": 0.25
+      "std": 0.24
     },
     "Midori": {
       "counts": 54,
@@ -4820,7 +4820,7 @@
     },
     "Persephone": {
       "counts": 70,
-      "mean": 0.04,
+      "mean": 0.05,
       "std": 0.24
     },
     "Quince": {
@@ -4830,23 +4830,23 @@
     },
     "Rook": {
       "counts": 93,
-      "mean": -0.17,
+      "mean": -0.18,
       "std": 0.22
     },
     "Setsuki": {
-      "counts": 191,
-      "mean": 0.02,
-      "std": 0.16
+      "counts": 195,
+      "mean": 0.05,
+      "std": 0.17
     },
     "Troq": {
       "counts": 154,
-      "mean": -0.45,
-      "std": 0.18
+      "mean": -0.44,
+      "std": 0.19
     },
     "Valerie": {
       "counts": 15,
-      "mean": -0.0,
-      "std": 0.52
+      "mean": 0.0,
+      "std": 0.49
     },
     "Vendetta": {
       "counts": 105,
@@ -4855,155 +4855,155 @@
     },
     "Zane": {
       "counts": 161,
-      "mean": -0.09,
-      "std": 0.17
+      "mean": -0.08,
+      "std": 0.18
     }
   },
   "Vendetta": {
     "Argagarg": {
-      "counts": 147,
-      "mean": 0.21,
-      "std": 0.18
+      "counts": 148,
+      "mean": 0.23,
+      "std": 0.19
     },
     "BBB": {
       "counts": 37,
       "mean": -0.08,
-      "std": 0.31
+      "std": 0.29
     },
     "DeGrey": {
       "counts": 125,
-      "mean": 0.29,
+      "mean": 0.31,
       "std": 0.2
     },
     "FBBB": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.5
+      "mean": 0.01,
+      "std": 0.53
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": -0.0,
       "std": 0.49
     },
     "FGwen": {
       "counts": 0,
-      "mean": -0.0,
+      "mean": 0.01,
       "std": 0.5
     },
     "FLum": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.5
+      "std": 0.49
     },
     "FMidori": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.47
     },
     "FOnimaru": {
       "counts": 0,
       "mean": -0.0,
-      "std": 0.51
+      "std": 0.49
     },
     "FQuince": {
       "counts": 0,
-      "mean": -0.02,
+      "mean": 0.0,
       "std": 0.5
     },
     "FRook": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.53
+      "mean": -0.01,
+      "std": 0.51
     },
     "FSetsuki": {
       "counts": 0,
-      "mean": 0.0,
-      "std": 0.51
+      "mean": -0.0,
+      "std": 0.5
     },
     "FTroq": {
+      "counts": 0,
+      "mean": 0.0,
+      "std": 0.52
+    },
+    "FVendetta": {
       "counts": 0,
       "mean": -0.01,
       "std": 0.49
     },
-    "FVendetta": {
-      "counts": 0,
-      "mean": -0.0,
-      "std": 0.51
-    },
     "FZane": {
       "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
+      "mean": 0.0,
+      "std": 0.5
     },
     "Geiger": {
       "counts": 82,
-      "mean": 0.18,
+      "mean": 0.19,
       "std": 0.23
     },
     "Gloria": {
       "counts": 51,
-      "mean": -0.38,
-      "std": 0.26
+      "mean": -0.37,
+      "std": 0.27
     },
     "Grave": {
       "counts": 139,
-      "mean": -0.35,
+      "mean": -0.34,
       "std": 0.2
     },
     "Gwen": {
       "counts": 92,
-      "mean": -0.04,
-      "std": 0.23
+      "mean": -0.05,
+      "std": 0.22
     },
     "Jaina": {
       "counts": 62,
       "mean": 0.44,
-      "std": 0.25
+      "std": 0.26
     },
     "Lum": {
       "counts": 55,
-      "mean": 0.22,
+      "mean": 0.23,
       "std": 0.27
     },
     "Menelker": {
       "counts": 63,
-      "mean": -0.17,
-      "std": 0.25
+      "mean": -0.16,
+      "std": 0.26
     },
     "Midori": {
-      "counts": 69,
-      "mean": -0.17,
+      "counts": 70,
+      "mean": -0.18,
       "std": 0.24
     },
     "Onimaru": {
       "counts": 79,
       "mean": -0.23,
-      "std": 0.23
+      "std": 0.24
     },
     "Persephone": {
-      "counts": 78,
-      "mean": 0.17,
+      "counts": 79,
+      "mean": 0.19,
       "std": 0.23
     },
     "Quince": {
       "counts": 115,
       "mean": 0.17,
-      "std": 0.21
+      "std": 0.22
     },
     "Rook": {
       "counts": 135,
-      "mean": -0.0,
+      "mean": 0.0,
       "std": 0.19
     },
     "Setsuki": {
-      "counts": 103,
-      "mean": -0.22,
+      "counts": 107,
+      "mean": -0.17,
       "std": 0.21
     },
     "Troq": {
       "counts": 122,
       "mean": 0.03,
-      "std": 0.2
+      "std": 0.19
     },
     "Valerie": {
       "counts": 105,
@@ -5012,20 +5012,20 @@
     },
     "Vendetta": {
       "counts": 24,
-      "mean": -0.0,
-      "std": 0.5
+      "mean": -0.01,
+      "std": 0.51
     },
     "Zane": {
       "counts": 119,
-      "mean": -0.09,
+      "mean": -0.08,
       "std": 0.2
     }
   },
   "Zane": {
     "Argagarg": {
-      "counts": 161,
-      "mean": 0.32,
-      "std": 0.18
+      "counts": 163,
+      "mean": 0.28,
+      "std": 0.17
     },
     "BBB": {
       "counts": 90,
@@ -5033,8 +5033,8 @@
       "std": 0.23
     },
     "DeGrey": {
-      "counts": 281,
-      "mean": 0.12,
+      "counts": 283,
+      "mean": 0.11,
       "std": 0.14
     },
     "FBBB": {
@@ -5044,43 +5044,43 @@
     },
     "FGloria": {
       "counts": 0,
-      "mean": -0.01,
+      "mean": 0.01,
       "std": 0.49
     },
     "FGwen": {
       "counts": 0,
       "mean": 0.0,
-      "std": 0.49
+      "std": 0.51
     },
     "FLum": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.49
-    },
-    "FMidori": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "FOnimaru": {
       "counts": 0,
       "mean": 0.0,
       "std": 0.5
     },
-    "FQuince": {
-      "counts": 0,
-      "mean": 0.01,
-      "std": 0.5
-    },
-    "FRook": {
-      "counts": 0,
-      "mean": -0.01,
-      "std": 0.48
-    },
-    "FSetsuki": {
+    "FMidori": {
       "counts": 0,
       "mean": 0.01,
       "std": 0.49
+    },
+    "FOnimaru": {
+      "counts": 0,
+      "mean": -0.01,
+      "std": 0.51
+    },
+    "FQuince": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.48
+    },
+    "FRook": {
+      "counts": 0,
+      "mean": 0.01,
+      "std": 0.51
+    },
+    "FSetsuki": {
+      "counts": 0,
+      "mean": -0.0,
+      "std": 0.51
     },
     "FTroq": {
       "counts": 0,
@@ -5089,58 +5089,58 @@
     },
     "FVendetta": {
       "counts": 0,
-      "mean": -0.0,
-      "std": 0.48
+      "mean": -0.01,
+      "std": 0.5
     },
     "FZane": {
       "counts": 0,
       "mean": -0.01,
-      "std": 0.49
+      "std": 0.53
     },
     "Geiger": {
       "counts": 240,
       "mean": 0.3,
-      "std": 0.14
+      "std": 0.15
     },
     "Gloria": {
       "counts": 220,
       "mean": 0.5,
-      "std": 0.16
+      "std": 0.15
     },
     "Grave": {
       "counts": 273,
       "mean": 0.2,
-      "std": 0.15
+      "std": 0.14
     },
     "Gwen": {
       "counts": 119,
       "mean": 0.15,
-      "std": 0.19
+      "std": 0.21
     },
     "Jaina": {
       "counts": 109,
-      "mean": 0.38,
-      "std": 0.21
+      "mean": 0.39,
+      "std": 0.2
     },
     "Lum": {
-      "counts": 109,
-      "mean": -0.13,
+      "counts": 110,
+      "mean": -0.12,
       "std": 0.2
     },
     "Menelker": {
       "counts": 158,
-      "mean": 0.34,
-      "std": 0.18
+      "mean": 0.33,
+      "std": 0.19
     },
     "Midori": {
-      "counts": 135,
-      "mean": 0.06,
+      "counts": 136,
+      "mean": 0.08,
       "std": 0.19
     },
     "Onimaru": {
       "counts": 213,
-      "mean": -0.13,
-      "std": 0.16
+      "mean": -0.15,
+      "std": 0.15
     },
     "Persephone": {
       "counts": 145,
@@ -5149,38 +5149,38 @@
     },
     "Quince": {
       "counts": 147,
-      "mean": 0.37,
+      "mean": 0.36,
       "std": 0.18
     },
     "Rook": {
       "counts": 178,
-      "mean": -0.28,
+      "mean": -0.29,
       "std": 0.17
     },
     "Setsuki": {
       "counts": 313,
-      "mean": 0.31,
-      "std": 0.13
+      "mean": 0.3,
+      "std": 0.14
     },
     "Troq": {
-      "counts": 376,
+      "counts": 377,
       "mean": -0.68,
-      "std": 0.12
+      "std": 0.13
     },
     "Valerie": {
       "counts": 161,
-      "mean": 0.09,
-      "std": 0.17
+      "mean": 0.08,
+      "std": 0.18
     },
     "Vendetta": {
       "counts": 119,
-      "mean": 0.09,
+      "mean": 0.08,
       "std": 0.2
     },
     "Zane": {
       "counts": 114,
-      "mean": -0.0,
-      "std": 0.49
+      "mean": 0.01,
+      "std": 0.48
     }
   }
 }

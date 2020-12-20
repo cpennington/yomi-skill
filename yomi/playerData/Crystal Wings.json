@@ -17,6 +17,23 @@
     "win": 1
   },
   {
+    "character_o": "Setsuki",
+    "character_p": "Setsuki",
+    "elo_after_o": 1708.618,
+    "elo_after_p": 1549.338,
+    "elo_before_o": 1709.812,
+    "elo_before_p": 1515.814,
+    "match_date": 1429315200000,
+    "opponent": "Fivec",
+    "player": "Crystal Wings",
+    "player_o": "Fivec",
+    "player_p": "Crystal Wings",
+    "tournament_name": "Los Angeles Meetup",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
     "character_o": "Midori",
     "character_p": "Setsuki",
     "elo_after_o": 1771.007,
@@ -255,23 +272,6 @@
     "win": 1
   },
   {
-    "character_o": "Setsuki",
-    "character_p": "Setsuki",
-    "elo_after_o": 1708.618,
-    "elo_after_p": 1549.338,
-    "elo_before_o": 1709.812,
-    "elo_before_p": 1515.814,
-    "match_date": 1429315200000,
-    "opponent": "Fivec",
-    "player": "Crystal Wings",
-    "player_o": "Fivec",
-    "player_p": "Crystal Wings",
-    "tournament_name": "Los Angeles Meetup",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
     "character_o": "BBB",
     "character_p": "Setsuki",
     "elo_after_o": 1587.746,
@@ -422,7 +422,7 @@
     "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "Troq",
@@ -490,7 +490,7 @@
     "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Zane",
@@ -864,7 +864,7 @@
     "tournament_name": "Los Angeles Meetup 2",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Gloria",
@@ -898,7 +898,7 @@
     "tournament_name": "Los Angeles Meetup 2",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "Valerie",
