@@ -116,7 +116,7 @@
     "tournament_name": "IYL Season 4",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": 0
   },
   {
     "character_o": "Rook",
@@ -133,7 +133,7 @@
     "tournament_name": "IYL Season 4",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "BBB",
@@ -473,41 +473,41 @@
     "tournament_name": "IYL Season 4",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "DeGrey",
-    "character_p": "Grave",
-    "elo_after_o": 2064.649,
-    "elo_after_p": 1223.0,
-    "elo_before_o": 2057.61,
-    "elo_before_p": 1239.0,
-    "match_date": 1462665600000,
-    "opponent": "mastrblastr",
-    "player": "Skoptic",
-    "player_o": "mastrblastr",
-    "player_p": "Skoptic",
-    "tournament_name": "IYL Season 4",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "DeGrey",
-    "character_p": "Grave",
-    "elo_after_o": 2064.649,
-    "elo_after_p": 1223.0,
-    "elo_before_o": 2057.61,
-    "elo_before_p": 1239.0,
-    "match_date": 1462665600000,
-    "opponent": "mastrblastr",
-    "player": "Skoptic",
-    "player_o": "mastrblastr",
-    "player_p": "Skoptic",
-    "tournament_name": "IYL Season 4",
-    "version_o": "2",
-    "version_p": "2",
     "win": -1
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Grave",
+    "elo_after_o": 2064.649,
+    "elo_after_p": 1223.0,
+    "elo_before_o": 2057.61,
+    "elo_before_p": 1239.0,
+    "match_date": 1462665600000,
+    "opponent": "mastrblastr",
+    "player": "Skoptic",
+    "player_o": "mastrblastr",
+    "player_p": "Skoptic",
+    "tournament_name": "IYL Season 4",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Grave",
+    "elo_after_o": 2064.649,
+    "elo_after_p": 1223.0,
+    "elo_before_o": 2057.61,
+    "elo_before_p": 1239.0,
+    "match_date": 1462665600000,
+    "opponent": "mastrblastr",
+    "player": "Skoptic",
+    "player_o": "mastrblastr",
+    "player_p": "Skoptic",
+    "tournament_name": "IYL Season 4",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
   },
   {
     "character_o": "DeGrey",

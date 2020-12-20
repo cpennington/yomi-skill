@@ -320,7 +320,7 @@
     "tournament_name": "IYL Season 6",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": 1
   },
   {
     "character_o": "Argagarg",
@@ -333,6 +333,23 @@
     "opponent": "ArthurWynne",
     "player": "jamie-chan",
     "player_o": "ArthurWynne",
+    "player_p": "jamie-chan",
+    "tournament_name": "IYL Season 6",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "Argagarg",
+    "character_p": "Rook",
+    "elo_after_o": 1354.648,
+    "elo_after_p": 1381.0,
+    "elo_before_o": 1375.571,
+    "elo_before_p": 1330.0,
+    "match_date": 1521676800000,
+    "opponent": "zytearK",
+    "player": "jamie-chan",
+    "player_o": "zytearK",
     "player_p": "jamie-chan",
     "tournament_name": "IYL Season 6",
     "version_o": "2",
@@ -357,7 +374,7 @@
     "win": -1
   },
   {
-    "character_o": "Argagarg",
+    "character_o": "BBB",
     "character_p": "Rook",
     "elo_after_o": 1354.648,
     "elo_after_p": 1381.0,
@@ -391,23 +408,6 @@
     "win": -2
   },
   {
-    "character_o": "BBB",
-    "character_p": "Rook",
-    "elo_after_o": 1354.648,
-    "elo_after_p": 1381.0,
-    "elo_before_o": 1375.571,
-    "elo_before_p": 1330.0,
-    "match_date": 1521676800000,
-    "opponent": "zytearK",
-    "player": "jamie-chan",
-    "player_o": "zytearK",
-    "player_p": "jamie-chan",
-    "tournament_name": "IYL Season 6",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
     "character_o": "Argagarg",
     "character_p": "Rook",
     "elo_after_o": 1354.648,
@@ -422,7 +422,7 @@
     "tournament_name": "IYL Season 6",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Troq",
@@ -525,23 +525,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": 1
-  },
-  {
-    "character_o": "Menelker",
-    "character_p": "Grave",
-    "elo_after_o": 1306.0,
-    "elo_after_p": 1449.566,
-    "elo_before_o": 1325.0,
-    "elo_before_p": 1405.0,
-    "match_date": 1524700800000,
-    "opponent": "variable",
-    "player": "jamie-chan",
-    "player_o": "variable",
-    "player_p": "jamie-chan",
-    "tournament_name": "IYL Season 6",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
   },
   {
     "character_o": "Grave",
@@ -595,33 +578,16 @@
     "win": 1
   },
   {
-    "character_o": "Zane",
-    "character_p": "Geiger",
-    "elo_after_o": 1672.119,
-    "elo_after_p": 1411.0,
-    "elo_before_o": 1656.249,
-    "elo_before_p": 1450.0,
-    "match_date": 1525651200000,
-    "opponent": "Southpaw Hare",
-    "player": "jamie-chan",
-    "player_o": "Southpaw Hare",
-    "player_p": "jamie-chan",
-    "tournament_name": "IYL Season 6",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
-    "character_o": "Zane",
+    "character_o": "Menelker",
     "character_p": "Grave",
-    "elo_after_o": 1672.119,
-    "elo_after_p": 1411.0,
-    "elo_before_o": 1656.249,
-    "elo_before_p": 1450.0,
-    "match_date": 1525651200000,
-    "opponent": "Southpaw Hare",
+    "elo_after_o": 1306.0,
+    "elo_after_p": 1449.566,
+    "elo_before_o": 1325.0,
+    "elo_before_p": 1405.0,
+    "match_date": 1524700800000,
+    "opponent": "variable",
     "player": "jamie-chan",
-    "player_o": "Southpaw Hare",
+    "player_o": "variable",
     "player_p": "jamie-chan",
     "tournament_name": "IYL Season 6",
     "version_o": "2",
@@ -644,6 +610,40 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
+  },
+  {
+    "character_o": "Zane",
+    "character_p": "Grave",
+    "elo_after_o": 1672.119,
+    "elo_after_p": 1411.0,
+    "elo_before_o": 1656.249,
+    "elo_before_p": 1450.0,
+    "match_date": 1525651200000,
+    "opponent": "Southpaw Hare",
+    "player": "jamie-chan",
+    "player_o": "Southpaw Hare",
+    "player_p": "jamie-chan",
+    "tournament_name": "IYL Season 6",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  },
+  {
+    "character_o": "Zane",
+    "character_p": "Geiger",
+    "elo_after_o": 1672.119,
+    "elo_after_p": 1411.0,
+    "elo_before_o": 1656.249,
+    "elo_before_p": 1450.0,
+    "match_date": 1525651200000,
+    "opponent": "Southpaw Hare",
+    "player": "jamie-chan",
+    "player_o": "Southpaw Hare",
+    "player_p": "jamie-chan",
+    "tournament_name": "IYL Season 6",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
   },
   {
     "character_o": "Gloria",
