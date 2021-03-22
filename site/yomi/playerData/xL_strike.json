@@ -99,6 +99,23 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
+    "win": 1
+  },
+  {
+    "character_o": "Lum",
+    "character_p": "Lum",
+    "elo_after_o": 1742.557,
+    "elo_after_p": 1415.0,
+    "elo_before_o": 1728.051,
+    "elo_before_p": 1450.0,
+    "match_date": 1444953600000,
+    "opponent": "Dietz",
+    "player": "xL_strike",
+    "player_o": "Dietz",
+    "player_p": "< 30 games",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
     "win": -2
   },
   {
@@ -117,22 +134,5 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
-  },
-  {
-    "character_o": "Lum",
-    "character_p": "Lum",
-    "elo_after_o": 1742.557,
-    "elo_after_p": 1415.0,
-    "elo_before_o": 1728.051,
-    "elo_before_p": 1450.0,
-    "match_date": 1444953600000,
-    "opponent": "Dietz",
-    "player": "xL_strike",
-    "player_o": "Dietz",
-    "player_p": "< 30 games",
-    "tournament_name": "Best of the Rest",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
   }
 ]

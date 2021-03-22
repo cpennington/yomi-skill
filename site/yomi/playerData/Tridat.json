@@ -119,6 +119,57 @@
     "win": -1
   },
   {
+    "character_o": "Geiger",
+    "character_p": "Zane",
+    "elo_after_o": 1595.338,
+    "elo_after_p": 1469.461,
+    "elo_before_o": 1571.529,
+    "elo_before_p": 1484.5,
+    "match_date": 1404604800000,
+    "opponent": "Southpaw Hare",
+    "player": "Tridat",
+    "player_o": "Southpaw Hare",
+    "player_p": "Tridat",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "Geiger",
+    "character_p": "Zane",
+    "elo_after_o": 1595.338,
+    "elo_after_p": 1469.461,
+    "elo_before_o": 1571.529,
+    "elo_before_p": 1484.5,
+    "match_date": 1404604800000,
+    "opponent": "Southpaw Hare",
+    "player": "Tridat",
+    "player_o": "Southpaw Hare",
+    "player_p": "Tridat",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "Geiger",
+    "character_p": "Midori",
+    "elo_after_o": 1595.338,
+    "elo_after_p": 1469.461,
+    "elo_before_o": 1571.529,
+    "elo_before_p": 1484.5,
+    "match_date": 1404604800000,
+    "opponent": "Southpaw Hare",
+    "player": "Tridat",
+    "player_o": "Southpaw Hare",
+    "player_p": "Tridat",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
     "character_o": "Jaina",
     "character_p": "Midori",
     "elo_after_o": 1449.0,
@@ -134,57 +185,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": -1
-  },
-  {
-    "character_o": "Geiger",
-    "character_p": "Zane",
-    "elo_after_o": 1595.338,
-    "elo_after_p": 1469.461,
-    "elo_before_o": 1571.529,
-    "elo_before_p": 1484.5,
-    "match_date": 1404604800000,
-    "opponent": "Southpaw Hare",
-    "player": "Tridat",
-    "player_o": "Southpaw Hare",
-    "player_p": "Tridat",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "Geiger",
-    "character_p": "Midori",
-    "elo_after_o": 1595.338,
-    "elo_after_p": 1469.461,
-    "elo_before_o": 1571.529,
-    "elo_before_p": 1484.5,
-    "match_date": 1404604800000,
-    "opponent": "Southpaw Hare",
-    "player": "Tridat",
-    "player_o": "Southpaw Hare",
-    "player_p": "Tridat",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "Geiger",
-    "character_p": "Zane",
-    "elo_after_o": 1595.338,
-    "elo_after_p": 1469.461,
-    "elo_before_o": 1571.529,
-    "elo_before_p": 1484.5,
-    "match_date": 1404604800000,
-    "opponent": "Southpaw Hare",
-    "player": "Tridat",
-    "player_o": "Southpaw Hare",
-    "player_p": "Tridat",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
   },
   {
     "character_o": "Quince",
@@ -507,7 +507,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "Zane",
@@ -524,7 +524,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Vendetta",
@@ -714,23 +714,6 @@
     "win": 0
   },
   {
-    "character_o": "Rook",
-    "character_p": "Menelker",
-    "elo_after_o": 1436.0,
-    "elo_after_p": 1527.744,
-    "elo_before_o": 1484.0,
-    "elo_before_p": 1525.486,
-    "match_date": 1412121600000,
-    "opponent": "Djister",
-    "player": "Tridat",
-    "player_o": "Djister",
-    "player_p": "Tridat",
-    "tournament_name": "IYL Season 1",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
     "character_o": "Onimaru",
     "character_p": "Menelker",
     "elo_after_o": 1700.476,
@@ -746,6 +729,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
+  },
+  {
+    "character_o": "Rook",
+    "character_p": "Menelker",
+    "elo_after_o": 1436.0,
+    "elo_after_p": 1527.744,
+    "elo_before_o": 1484.0,
+    "elo_before_p": 1525.486,
+    "match_date": 1412121600000,
+    "opponent": "Djister",
+    "player": "Tridat",
+    "player_o": "Djister",
+    "player_p": "Tridat",
+    "tournament_name": "IYL Season 1",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
   },
   {
     "character_o": "Rook",
@@ -936,7 +936,7 @@
   },
   {
     "character_o": "Menelker",
-    "character_p": "Menelker",
+    "character_p": "Midori",
     "elo_after_o": 1109.0,
     "elo_after_p": 1567.77,
     "elo_before_o": 1139.0,
@@ -983,11 +983,11 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": -1
   },
   {
     "character_o": "Menelker",
-    "character_p": "Midori",
+    "character_p": "Menelker",
     "elo_after_o": 1109.0,
     "elo_after_p": 1567.77,
     "elo_before_o": 1139.0,
@@ -1000,6 +1000,6 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": -2
   }
 ]

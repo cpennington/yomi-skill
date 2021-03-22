@@ -51,23 +51,6 @@
     "win": -1
   },
   {
-    "character_o": "Geiger",
-    "character_p": "Gwen",
-    "elo_after_o": 1595.338,
-    "elo_after_p": 1474.007,
-    "elo_before_o": 1571.529,
-    "elo_before_p": 1486.961,
-    "match_date": 1404604800000,
-    "opponent": "Southpaw Hare",
-    "player": "Captain",
-    "player_o": "Southpaw Hare",
-    "player_p": "< 30 games",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
     "character_o": "Gwen",
     "character_p": "Onimaru",
     "elo_after_o": 1523.0,
@@ -187,6 +170,23 @@
     "win": 0
   },
   {
+    "character_o": "Troq",
+    "character_p": "Troq",
+    "elo_after_o": 1523.0,
+    "elo_after_p": 1474.007,
+    "elo_before_o": 1524.5,
+    "elo_before_p": 1486.961,
+    "match_date": 1404604800000,
+    "opponent": "Hooves",
+    "player": "Captain",
+    "player_o": "< 30 games",
+    "player_p": "< 30 games",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  },
+  {
     "character_o": "Zane",
     "character_p": "Troq",
     "elo_after_o": 1549.122,
@@ -272,21 +272,21 @@
     "win": 1
   },
   {
-    "character_o": "Troq",
-    "character_p": "Troq",
-    "elo_after_o": 1523.0,
+    "character_o": "Geiger",
+    "character_p": "Gwen",
+    "elo_after_o": 1595.338,
     "elo_after_p": 1474.007,
-    "elo_before_o": 1524.5,
+    "elo_before_o": 1571.529,
     "elo_before_p": 1486.961,
     "match_date": 1404604800000,
-    "opponent": "Hooves",
+    "opponent": "Southpaw Hare",
     "player": "Captain",
-    "player_o": "< 30 games",
+    "player_o": "Southpaw Hare",
     "player_p": "< 30 games",
     "tournament_name": "Summer Smash",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Gwen",

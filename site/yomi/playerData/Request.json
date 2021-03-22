@@ -187,6 +187,23 @@
     "win": -2
   },
   {
+    "character_o": "Setsuki",
+    "character_p": "Setsuki",
+    "elo_after_o": 1341.0,
+    "elo_after_p": 1417.444,
+    "elo_before_o": 1391.0,
+    "elo_before_p": 1367.82,
+    "match_date": 1411344000000,
+    "opponent": "Doctor Blue",
+    "player": "Request",
+    "player_o": "< 30 games",
+    "player_p": "Request",
+    "tournament_name": "IYL Season 1",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
     "character_o": "Vendetta",
     "character_p": "Zane",
     "elo_after_o": 1341.0,
@@ -240,23 +257,6 @@
   {
     "character_o": "Setsuki",
     "character_p": "Setsuki",
-    "elo_after_o": 1341.0,
-    "elo_after_p": 1417.444,
-    "elo_before_o": 1391.0,
-    "elo_before_p": 1367.82,
-    "match_date": 1411344000000,
-    "opponent": "Doctor Blue",
-    "player": "Request",
-    "player_o": "< 30 games",
-    "player_p": "Request",
-    "tournament_name": "IYL Season 1",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
-    "character_o": "Setsuki",
-    "character_p": "Zane",
     "elo_after_o": 1552.0,
     "elo_after_p": 1475.28,
     "elo_before_o": 1610.0,
@@ -286,7 +286,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": 0
   },
   {
     "character_o": "Troq",
@@ -307,7 +307,7 @@
   },
   {
     "character_o": "Setsuki",
-    "character_p": "Setsuki",
+    "character_p": "Zane",
     "elo_after_o": 1552.0,
     "elo_after_p": 1475.28,
     "elo_before_o": 1610.0,
@@ -320,7 +320,7 @@
     "tournament_name": "IYL Season 1",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Persephone",
