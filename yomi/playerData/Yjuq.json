@@ -31,23 +31,6 @@
     "tournament_name": "Solo Shodown",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
-  },
-  {
-    "character_o": "Gloria",
-    "character_p": "Gloria",
-    "elo_after_o": 1511.212,
-    "elo_after_p": 1450.0,
-    "elo_before_o": 1460.785,
-    "elo_before_p": 1500.0,
-    "match_date": 1595030400000,
-    "opponent": "DanielStretulch",
-    "player": "Yjuq",
-    "player_o": "< 30 games",
-    "player_p": "< 30 games",
-    "tournament_name": "Solo Shodown",
-    "version_o": "2",
-    "version_p": "2",
     "win": -2
   },
   {
@@ -66,6 +49,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Gloria",
+    "elo_after_o": 1511.212,
+    "elo_after_p": 1450.0,
+    "elo_before_o": 1460.785,
+    "elo_before_p": 1500.0,
+    "match_date": 1595030400000,
+    "opponent": "DanielStretulch",
+    "player": "Yjuq",
+    "player_o": "< 30 games",
+    "player_p": "< 30 games",
+    "tournament_name": "Solo Shodown",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "Gwen",

@@ -136,23 +136,6 @@
     "win": 0
   },
   {
-    "character_o": "Argagarg",
-    "character_p": "Argagarg",
-    "elo_after_o": 1697.937,
-    "elo_after_p": 1468.667,
-    "elo_before_o": 1669.453,
-    "elo_before_p": 1483.833,
-    "match_date": 1404604800000,
-    "opponent": "MadKing",
-    "player": "Pepperpwni",
-    "player_o": "MadKing",
-    "player_p": "< 30 games",
-    "tournament_name": "Summer Smash",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
     "character_o": "Vendetta",
     "character_p": "Argagarg",
     "elo_after_o": 1427.5,
@@ -236,6 +219,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Argagarg",
+    "character_p": "Argagarg",
+    "elo_after_o": 1697.937,
+    "elo_after_p": 1468.667,
+    "elo_before_o": 1669.453,
+    "elo_before_p": 1483.833,
+    "match_date": 1404604800000,
+    "opponent": "MadKing",
+    "player": "Pepperpwni",
+    "player_o": "MadKing",
+    "player_p": "< 30 games",
+    "tournament_name": "Summer Smash",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "Persephone",

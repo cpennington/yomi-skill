@@ -1,7 +1,7 @@
 [
   {
-    "character_o": "Rook",
-    "character_p": "Rook",
+    "character_o": "Grave",
+    "character_p": "Lum",
     "elo_after_o": 1692.636,
     "elo_after_p": 1460.08,
     "elo_before_o": 1686.24,
@@ -14,11 +14,11 @@
     "tournament_name": "Slippery Spag Saturday I",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": -2
   },
   {
-    "character_o": "Grave",
-    "character_p": "Lum",
+    "character_o": "Rook",
+    "character_p": "Rook",
     "elo_after_o": 1692.636,
     "elo_after_p": 1460.08,
     "elo_before_o": 1686.24,
