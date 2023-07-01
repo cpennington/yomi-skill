@@ -1,4 +1,4 @@
-FROM python:3.7-slim-stretch
+FROM python:3.10-slim
 
 RUN apt-get update && apt-get -y install git build-essential libsnappy-dev automake libtool
 
@@ -13,7 +13,9 @@ RUN pip install -U pip
 RUN pip install -U pip-tools
 
 RUN pip-sync /tmp/requirements.txt
-RUN pip install -e /src/gambit/src/python
+RUN cd /src/gambit && python setup.py build && python setup.py install
+
+RUN install_cmdstan
 
 EXPOSE 9999
 

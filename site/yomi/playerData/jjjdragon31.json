@@ -48,7 +48,7 @@
     "tournament_name": "Lum's Lucky Lottery: The Full Half Dozen",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": -1
   },
   {
     "character_o": "Gwen",
@@ -70,9 +70,9 @@
   {
     "character_o": "Valerie",
     "character_p": "Midori",
-    "elo_after_o": 1654.587,
+    "elo_after_o": 1641.908,
     "elo_after_p": 1430.0,
-    "elo_before_o": 1637.946,
+    "elo_before_o": 1625.012,
     "elo_before_p": 1471.0,
     "match_date": 1598918400000,
     "opponent": "Ivan",
@@ -87,9 +87,9 @@
   {
     "character_o": "Valerie",
     "character_p": "Rook",
-    "elo_after_o": 1654.587,
+    "elo_after_o": 1641.908,
     "elo_after_p": 1430.0,
-    "elo_before_o": 1637.946,
+    "elo_before_o": 1625.012,
     "elo_before_p": 1471.0,
     "match_date": 1598918400000,
     "opponent": "Ivan",
@@ -104,9 +104,9 @@
   {
     "character_o": "Gwen",
     "character_p": "Rook",
-    "elo_after_o": 1654.587,
+    "elo_after_o": 1641.908,
     "elo_after_p": 1430.0,
-    "elo_before_o": 1637.946,
+    "elo_before_o": 1625.012,
     "elo_before_p": 1471.0,
     "match_date": 1598918400000,
     "opponent": "Ivan",
@@ -121,9 +121,9 @@
   {
     "character_o": "Gwen",
     "character_p": "Midori",
-    "elo_after_o": 1654.587,
+    "elo_after_o": 1641.908,
     "elo_after_p": 1430.0,
-    "elo_before_o": 1637.946,
+    "elo_before_o": 1625.012,
     "elo_before_p": 1471.0,
     "match_date": 1598918400000,
     "opponent": "Ivan",

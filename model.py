@@ -1,17 +1,16 @@
-import functools
 import pandas
 import io
 import hashlib
 import pickle
 import logging
-import shutil
 import os
-import pystan
+from cmdstanpy import CmdStanModel, from_csv
 from arviz.data import InferenceData
 import arviz
 import xarray
 from cached_property import cached_property
 import numpy
+logger = logging.getLogger(__name__)
 
 
 class YomiModel:
@@ -26,7 +25,7 @@ class YomiModel:
         self.games["player_2_orig"] = self.games.player_2
         if self.min_games > 0:
             games_played = (
-                self.games.player_1.append(self.games.player_2)
+                pandas.concat([self.games.player_1, self.games.player_2])
                 .rename("player")
                 .to_frame()
                 .groupby("player")
@@ -59,30 +58,10 @@ class YomiModel:
         return model_hash
 
     @cached_property
-    def model(self):
-        model_dir = f"models/{self.model_name}"
-        pickled_model = f"{model_dir}/{self.model_name}-{self.model_hash[:6]}.model"
-        hashed_stan = f"{model_dir}/{self.model_name}-{self.model_hash[:6]}.stan"
-
-        os.makedirs(os.path.dirname(pickled_model), exist_ok=True)
-        os.makedirs(os.path.dirname(hashed_stan), exist_ok=True)
-        try:
-            with open(pickled_model, "rb") as model_file:
-                unpickled_model = pickle.load(model_file)
-                print("Unpickled successfully", unpickled_model)
-                return unpickled_model
-        except IOError:
-            shutil.copy(self.model_filename, hashed_stan)
-            model = pystan.StanModel(file=self.model_filename)
-            with open(pickled_model, "wb") as model_file:
-                pickle.dump(model, model_file, protocol=-1)
-            return model
-
-    @cached_property
     def player_index(self):
         return dict(
             zip(
-                sorted(self.games.player_1.append(self.games.player_2).unique()),
+                sorted(pandas.concat([self.games.player_1, self.games.player_2]).unique()),
                 range(1, 10000),
             )
         )
@@ -119,21 +98,28 @@ class YomiModel:
 
     @cached_property
     def characters(self):
-        return sorted(self.games.character_1.append(self.games.character_2).unique())
+        return sorted(
+            pandas.concat([self.games.character_1, self.games.character_2]).unique()
+        )
 
     @cached_property
     def versions(self):
-        return sorted(self.games.version_1.append(self.games.version_2).unique())
+        return sorted(
+            pandas.concat([self.games.version_1, self.games.version_2]).unique()
+        )
 
     @cached_property
     def character_versions(self):
         return sorted(
-            self.games[["character_1", "version_1"]]
-            .rename(columns={"character_1": "character", "version_1": "version"})
-            .append(
-                self.games[["character_2", "version_2"]].rename(
-                    columns={"character_2": "character", "version_2": "version"}
-                )
+            pandas.concat(
+                [
+                    self.games[["character_1", "version_1"]].rename(
+                        columns={"character_1": "character", "version_1": "version"}
+                    ),
+                    self.games[["character_2", "version_2"]].rename(
+                        columns={"character_2": "character", "version_2": "version"}
+                    ),
+                ]
             )
             .drop_duplicates()
             .itertuples(index=False)
@@ -164,7 +150,7 @@ class YomiModel:
             columns={"player_2": "player"}
         )
         return (
-            p1_games.append(p2_games)
+            pandas.concat([p1_games, p2_games])
             .groupby(["player", "tournament_name"])
             .match_date.quantile(0.5)
             .reset_index()
@@ -222,7 +208,7 @@ class YomiModel:
             "NC": len(self.characters),
             "NMV": len(self.version_mu_index),
             # "tp": tournament_player,
-            "win": self.games.win.astype(int),
+            "win": self.games.win.to_numpy(int),
             # "pt1": self.games.apply(
             #     lambda r: self.player_tournament_index[(r.player_1, r.tournament_name)],
             #     axis=1,
@@ -233,13 +219,13 @@ class YomiModel:
             # ),
             "mup": self.games.apply(
                 lambda r: self.mu_index[(r.character_1, r.character_2)], axis=1
-            ).astype(int),
+            ).to_numpy(int),
             "vmup": self.games.apply(
                 lambda r: self.version_mu_index[
                     (r.character_1, r.version_1, r.character_2, r.version_2)
                 ],
                 axis=1,
-            ).astype(int),
+            ).to_numpy(int),
             "mu_for_v": [
                 self.mu_index[(c1, c2)]
                 for ((c1, v1, c2, v2), vix) in sorted(
@@ -248,19 +234,21 @@ class YomiModel:
             ],
             "non_mirror": self.games.apply(
                 lambda r: float(r.character_1 != r.character_2), axis=1
-            ).astype(int),
-            # "prev_tournament": self.player_tournament_dates.previous.astype(int).apply(
+            ).to_numpy(int),
+            # "prev_tournament": self.player_tournament_dates.previous.to_numpy(int).apply(
             #     lambda x: x + 1
             # ),
-            "char1": self.games.character_1.apply(self.character_index.get).astype(int),
-            "char2": self.games.character_2.apply(self.character_index.get).astype(int),
-            "version1": self.games.version_1.apply(self.version_index.get).astype(int),
-            "version2": self.games.version_2.apply(self.version_index.get).astype(int),
-            "player1": self.games.player_1.apply(self.player_index.get).astype(int),
-            "player2": self.games.player_2.apply(self.player_index.get).astype(int),
-            "elo_logit": elo_logit,
+            "char1": self.games.character_1.apply(self.character_index.get).to_numpy(int),
+            "char2": self.games.character_2.apply(self.character_index.get).to_numpy(int),
+            "version1": self.games.version_1.apply(self.version_index.get).to_numpy(int),
+            "version2": self.games.version_2.apply(self.version_index.get).to_numpy(int),
+            "player1": self.games.player_1.apply(self.player_index.get).to_numpy(int),
+            "player2": self.games.player_2.apply(self.player_index.get).to_numpy(int),
+            "elo_logit": elo_logit.to_numpy(),
             # Scale so that mininum elo sum gets 0.25 weight, max sum gets 2 weight
-            "obs_weights": normalized_weights,
+            "obs_weights": normalized_weights.to_numpy(),
+            # Disable predictions
+            "predict": 0,
         }
 
     @cached_property
@@ -283,7 +271,7 @@ class YomiModel:
             if dataframe is None:
                 dataframe = sample.dataframe
             else:
-                dataframe = dataframe.append(sample.dataframe)
+                dataframe = pandas.concat([dataframe, sample.dataframe])
         return dataframe
 
     def summary_dataframe(self, warmup=1000, min_samples=1000):
@@ -297,14 +285,14 @@ class YomiModel:
         path.append(f"summary-{min_samples}-samples.parquet")
         parquet_filename = os.path.join(*path)
         try:
-            logging.info(f"Loading parquet {parquet_filename}")
+            logger.info(f"Loading parquet {parquet_filename}")
             summary_results = pandas.read_parquet(parquet_filename)
-            for par in self.pars:
+            for par in self.model.pars:
                 assert any(
                     col.startswith(par) for col in summary_results.columns
                 ), f"No parameter {par} found in exported data"
         except (FileNotFoundError, AssertionError):
-            logging.info("Dataframe loading failed", exc_info=True)
+            logger.info("Dataframe loading failed", exc_info=True)
             summary_results = self.sample_dataframe(
                 warmup=warmup, min_samples=min_samples
             ).agg(["mean", "std"])
@@ -367,7 +355,7 @@ class YomiModelChain:
         self.model = model
         self.warmup = warmup
         self.index = index
-        self.samples = 500
+        self.samples = 1000
 
     @cached_property
     def _file_base(self):
@@ -383,32 +371,24 @@ class YomiModelChain:
 
     @cached_property
     def fit_filename(self):
-        return f"{self._file_base}.pickle"
+        return f"{self._file_base}"
 
     @property
     def fit(self):
-        # Have to unpickle the model first
-        self.model.model
         try:
-            with open(self.fit_filename, "rb") as fit_file:
-                fit = pickle.load(fit_file)
-                assert set(self.model.pars) <= set(fit.sim["pars_oi"])
+            fit = from_csv(self.fit_filename, 'sample')
         except:
-            logging.info("Unable to unpickle fit, resampling", exc_info=True)
-
-            fit = self.model.model.sampling(
+            logger.info("Unable to load fit, resampling", exc_info=True)
+            model = CmdStanModel(stan_file=self.model.model_filename)
+            os.makedirs(self.fit_filename)
+            fit = model.sample(
                 data=self.model.input_data,
-                pars=self.model.pars,
-                iter=self.warmup + self.samples,
-                warmup=self.warmup,
+                iter_warmup=self.warmup,
+                iter_sampling=self.samples,
                 chains=1,
-                n_jobs=1,
-                check_hmc_diagnostics=False,
+                output_dir=self.fit_filename
             )
-
-            os.makedirs(os.path.dirname(self.fit_filename), exist_ok=True)
-            with open(self.fit_filename, "wb") as fit_file:
-                pickle.dump(fit, fit_file, protocol=-1)
+            logger.info("Wrote fit to %s", self.fit_filename)
 
         return fit
 
@@ -419,17 +399,21 @@ class YomiModelChain:
     @property
     def dataframe(self):
         try:
-            logging.info(f"Loading parquet {self.parquet_filename}")
+            logger.info(f"Loading parquet {self.parquet_filename}")
             fit_results = pandas.read_parquet(self.parquet_filename)
             for par in self.model.pars:
                 assert any(
                     col.startswith(par) for col in fit_results.columns
                 ), f"No parameter {par} found in exported data"
         except (FileNotFoundError, AssertionError):
-            logging.info("Dataframe loading failed", exc_info=True)
-            fit_results = self.fit.to_dataframe(permuted=False)
+            logger.info("Dataframe loading failed", exc_info=True)
+            fit_results = self.fit.draws_pd(
+                vars=self.model.pars
+            )
+            logger.info("Loaded parameters into dataframe")
             os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
             fit_results.to_parquet(self.parquet_filename, compression="gzip")
+            logger.info("Wrote fit to parquet %s", self.parquet_filename)
         return fit_results
 
     @cached_property

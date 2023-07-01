@@ -336,7 +336,7 @@ class YomiRender:
         )
         flipped["win_rate"] = -flipped["win_rate"]
 
-        matchups = matchups.append(flipped)
+        matchups = pandas.concat([matchups, flipped])
 
         matchups["win_rate"] = pandas.to_numeric(
             10
@@ -406,20 +406,13 @@ class YomiRender:
 
     def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
         summary = self.model.summary_dataframe(self.warmup, self.min_samples)
-        display(
-            self.model.games[
-                (self.model.games.player_1_orig == "sturmhammerfaust")
-                | (self.model.games.player_2_orig == "sturmhammerfaust")
-            ]
-        )
-
         mu_index = self.model.mu_index
 
         os.makedirs(f"site/{game}/playerData", exist_ok=True)
         orig_players = sorted(
             set(
-                self.model.games.player_1_orig.append(
-                    self.model.games.player_2_orig
+                pandas.concat(
+                    [self.model.games.player_1_orig, self.model.games.player_2_orig]
                 ).unique()
             )
         )
@@ -455,7 +448,7 @@ class YomiRender:
             with open(f"site/{game}/playerData/{player}.json", "w") as outfile:
                 json.dump(
                     json.loads(
-                        p1_games.append(p2_games)
+                        pandas.concat([p1_games, p2_games])
                         .sort_values("match_date")
                         .to_json(orient="records", double_precision=3)
                     ),
@@ -495,7 +488,7 @@ class YomiRender:
             )
             flipped["mean"] = -flipped["mean"]
 
-            matchups = matchups.append(flipped).sort_values(["c1", "c2"])
+            matchups = pandas.concat([matchups, flipped]).sort_values(["c1", "c2"])
         else:
             matchups = None
 
@@ -547,9 +540,9 @@ class YomiRender:
             ].rename(columns={"c1": "c2", "v1": "v2", "c2": "c1", "v2": "v1"})
             vflipped["mean"] = -vflipped["mean"]
 
-            versioned_matchups = versioned_matchups.append(vflipped).sort_values(
-                ["c1", "v1", "c2", "v2"]
-            )
+            versioned_matchups = pandas.concat(
+                [versioned_matchups, vflipped]
+            ).sort_values(["c1", "v1", "c2", "v2"])
             display(versioned_matchups)
         else:
             versioned_matchups = None
@@ -578,16 +571,19 @@ class YomiRender:
 
         del player_char_skill["index"]
 
-        elo_by_player = (
-            self.model.games[["match_date", "player_1_orig", "elo_before_1"]]
-            .rename(columns={"player_1_orig": "player", "elo_before_1": "elo_before"})
-            .append(
+        elo_by_player = pandas.concat(
+            [
+                self.model.games[
+                    ["match_date", "player_1_orig", "elo_before_1"]
+                ].rename(
+                    columns={"player_1_orig": "player", "elo_before_1": "elo_before"}
+                ),
                 self.model.games[
                     ["match_date", "player_2_orig", "elo_before_2"]
                 ].rename(
                     columns={"player_2_orig": "player", "elo_before_2": "elo_before"}
-                )
-            )
+                ),
+            ]
         )
         player_elo = (
             elo_by_player.sort_values(["match_date"])
@@ -601,8 +597,12 @@ class YomiRender:
         #     ].elo_before.mean()
 
         player_game_counts = (
-            self.model.games.player_1_orig.rename("player")
-            .append(self.model.games.player_2_orig.rename("player"))
+            pandas.concat(
+                [
+                    self.model.games.player_1_orig.rename("player"),
+                    self.model.games.player_2_orig.rename("player"),
+                ]
+            )
             .to_frame()
             .groupby("player")
             .size()
@@ -610,12 +610,15 @@ class YomiRender:
         ).dropna()
 
         player_character_counts = (
-            self.model.games[["player_1_orig", "character_1"]]
-            .rename(columns={"player_1_orig": "player", "character_1": "character"})
-            .append(
-                self.model.games[["player_2_orig", "character_2"]].rename(
-                    columns={"player_2_orig": "player", "character_2": "character"}
-                )
+            pandas.concat(
+                [
+                    self.model.games[["player_1_orig", "character_1"]].rename(
+                        columns={"player_1_orig": "player", "character_1": "character"}
+                    ),
+                    self.model.games[["player_2_orig", "character_2"]].rename(
+                        columns={"player_2_orig": "player", "character_2": "character"}
+                    ),
+                ]
             )
             .groupby(["player", "character"])
             .size()

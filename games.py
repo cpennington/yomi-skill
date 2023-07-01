@@ -5,7 +5,7 @@ import re
 def normalize_types(games):
 
     all_chars = (
-        games.character_1.append(games.character_2).rename("character").to_frame()
+        pandas.concat([games.character_1, games.character_2]).rename("character").to_frame()
     )
     all_chars["normalized"] = all_chars.character.apply(lambda v: v.lower())
 
@@ -24,10 +24,10 @@ def normalize_types(games):
     games.character_2 = games.character_2.apply(lambda c: all_chars.standardized[c])
 
     character_category = pandas.api.types.CategoricalDtype(
-        sorted(games.character_1.append(games.character_2).unique()), ordered=True
+        sorted(pandas.concat([games.character_1, games.character_2]).unique()), ordered=True
     )
 
-    all_players = games.player_1.append(games.player_2).rename("player").to_frame()
+    all_players = pandas.concat([games.player_1, games.player_2]).rename("player").to_frame()
     all_players["normalized"] = all_players.player.apply(
         lambda v: re.sub(r"[^a-z0-9]", "", v.lower())
     )
@@ -43,7 +43,7 @@ def normalize_types(games):
     games.player_2 = games.player_2.apply(lambda p: all_players.standardized[p])
 
     player_category = pandas.api.types.CategoricalDtype(
-        sorted(games.player_1.append(games.player_2).unique()), ordered=True
+        sorted(pandas.concat([games.player_1, games.player_2]).unique()), ordered=True
     )
 
     return games.astype(

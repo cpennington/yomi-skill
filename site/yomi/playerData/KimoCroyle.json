@@ -51,7 +51,7 @@
     "win": 1
   },
   {
-    "character_o": "Grave",
+    "character_o": "Argagarg",
     "character_p": "Argagarg",
     "elo_after_o": 1406.0,
     "elo_after_p": 1546.169,
@@ -68,7 +68,7 @@
     "win": 0
   },
   {
-    "character_o": "Argagarg",
+    "character_o": "Grave",
     "character_p": "Argagarg",
     "elo_after_o": 1406.0,
     "elo_after_p": 1546.169,
@@ -82,7 +82,7 @@
     "tournament_name": "Summer Smash II",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": 0
   },
   {
     "character_o": "Geiger",

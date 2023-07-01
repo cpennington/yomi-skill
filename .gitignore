@@ -5,3 +5,5 @@ images
 fits/
 games/
 container/.ipynb_checkpoints
+__pycache__
+.vscode

@@ -1,6 +1,23 @@
 [
   {
     "character_o": "Gwen",
+    "character_p": "Gwen",
+    "elo_after_o": 1692.797,
+    "elo_after_p": 1541.131,
+    "elo_before_o": 1704.887,
+    "elo_before_p": 1529.5,
+    "match_date": 1431129600000,
+    "opponent": "noshots00",
+    "player": "Kenji",
+    "player_o": "noshots00",
+    "player_p": "< 30 games",
+    "tournament_name": "Double Blind",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
+  },
+  {
+    "character_o": "Gwen",
     "character_p": "DeGrey",
     "elo_after_o": 1692.797,
     "elo_after_p": 1541.131,
@@ -100,23 +117,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
-  },
-  {
-    "character_o": "Gwen",
-    "character_p": "Gwen",
-    "elo_after_o": 1692.797,
-    "elo_after_p": 1541.131,
-    "elo_before_o": 1704.887,
-    "elo_before_p": 1529.5,
-    "match_date": 1431129600000,
-    "opponent": "noshots00",
-    "player": "Kenji",
-    "player_o": "noshots00",
-    "player_p": "< 30 games",
-    "tournament_name": "Double Blind",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
   },
   {
     "character_o": "DeGrey",

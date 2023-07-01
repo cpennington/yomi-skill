@@ -51,23 +51,6 @@
     "win": -1
   },
   {
-    "character_o": "Setsuki",
-    "character_p": "Setsuki",
-    "elo_after_o": 1708.618,
-    "elo_after_p": 1549.338,
-    "elo_before_o": 1709.812,
-    "elo_before_p": 1515.814,
-    "match_date": 1429315200000,
-    "opponent": "Fivec",
-    "player": "Crystal Wings",
-    "player_o": "Fivec",
-    "player_p": "Crystal Wings",
-    "tournament_name": "Los Angeles Meetup",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
     "character_o": "Midori",
     "character_p": "Setsuki",
     "elo_after_o": 1771.007,
@@ -252,6 +235,23 @@
     "tournament_name": "Los Angeles Meetup",
     "version_o": "2",
     "version_p": "2",
+    "win": 0
+  },
+  {
+    "character_o": "Setsuki",
+    "character_p": "Setsuki",
+    "elo_after_o": 1708.618,
+    "elo_after_p": 1549.338,
+    "elo_before_o": 1709.812,
+    "elo_before_p": 1515.814,
+    "match_date": 1429315200000,
+    "opponent": "Fivec",
+    "player": "Crystal Wings",
+    "player_o": "Fivec",
+    "player_p": "Crystal Wings",
+    "tournament_name": "Los Angeles Meetup",
+    "version_o": "2",
+    "version_p": "2",
     "win": 1
   },
   {
@@ -269,7 +269,7 @@
     "tournament_name": "Los Angeles Meetup",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "BBB",
@@ -337,6 +337,40 @@
     "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Setsuki",
+    "elo_after_o": 1582.347,
+    "elo_after_p": 1529.0,
+    "elo_before_o": 1531.485,
+    "elo_before_p": 1580.0,
+    "match_date": 1435104000000,
+    "opponent": "sim the sppoky ghost",
+    "player": "Crystal Wings",
+    "player_o": "sim the sppoky ghost",
+    "player_p": "Crystal Wings",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "DeGrey",
+    "character_p": "Setsuki",
+    "elo_after_o": 1582.347,
+    "elo_after_p": 1529.0,
+    "elo_before_o": 1531.485,
+    "elo_before_p": 1580.0,
+    "match_date": 1435104000000,
+    "opponent": "sim the sppoky ghost",
+    "player": "Crystal Wings",
+    "player_o": "sim the sppoky ghost",
+    "player_p": "Crystal Wings",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
     "win": -1
   },
   {
@@ -374,38 +408,21 @@
     "win": -2
   },
   {
-    "character_o": "DeGrey",
+    "character_o": "Troq",
     "character_p": "Setsuki",
-    "elo_after_o": 1582.347,
-    "elo_after_p": 1529.0,
-    "elo_before_o": 1531.485,
-    "elo_before_p": 1580.0,
-    "match_date": 1435104000000,
-    "opponent": "sim the sppoky ghost",
+    "elo_after_o": 1461.0,
+    "elo_after_p": 1574.988,
+    "elo_before_o": 1505.5,
+    "elo_before_p": 1528.691,
+    "match_date": 1435795200000,
+    "opponent": "Vujak",
     "player": "Crystal Wings",
-    "player_o": "sim the sppoky ghost",
+    "player_o": "Vujak",
     "player_p": "Crystal Wings",
     "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "DeGrey",
-    "character_p": "Setsuki",
-    "elo_after_o": 1582.347,
-    "elo_after_p": 1529.0,
-    "elo_before_o": 1531.485,
-    "elo_before_p": 1580.0,
-    "match_date": 1435104000000,
-    "opponent": "sim the sppoky ghost",
-    "player": "Crystal Wings",
-    "player_o": "sim the sppoky ghost",
-    "player_p": "Crystal Wings",
-    "tournament_name": "IYL Season 3",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
+    "win": 0
   },
   {
     "character_o": "Troq",
@@ -476,23 +493,6 @@
     "win": 0
   },
   {
-    "character_o": "Troq",
-    "character_p": "Setsuki",
-    "elo_after_o": 1461.0,
-    "elo_after_p": 1574.988,
-    "elo_before_o": 1505.5,
-    "elo_before_p": 1528.691,
-    "match_date": 1435795200000,
-    "opponent": "Vujak",
-    "player": "Crystal Wings",
-    "player_o": "Vujak",
-    "player_p": "Crystal Wings",
-    "tournament_name": "IYL Season 3",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
     "character_o": "Zane",
     "character_p": "Setsuki",
     "elo_after_o": 1954.0,
@@ -508,23 +508,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
-  },
-  {
-    "character_o": "Zane",
-    "character_p": "Setsuki",
-    "elo_after_o": 1954.0,
-    "elo_after_p": 1642.446,
-    "elo_before_o": 1982.0,
-    "elo_before_p": 1574.988,
-    "match_date": 1436400000000,
-    "opponent": "Raziek",
-    "player": "Crystal Wings",
-    "player_o": "Raziek",
-    "player_p": "Crystal Wings",
-    "tournament_name": "IYL Season 3",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
   },
   {
     "character_o": "Zane",
@@ -576,6 +559,40 @@
     "version_o": "2",
     "version_p": "2",
     "win": 1
+  },
+  {
+    "character_o": "Zane",
+    "character_p": "Setsuki",
+    "elo_after_o": 1954.0,
+    "elo_after_p": 1642.446,
+    "elo_before_o": 1982.0,
+    "elo_before_p": 1574.988,
+    "match_date": 1436400000000,
+    "opponent": "Raziek",
+    "player": "Crystal Wings",
+    "player_o": "Raziek",
+    "player_p": "Crystal Wings",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
+  },
+  {
+    "character_o": "Argagarg",
+    "character_p": "Setsuki",
+    "elo_after_o": 1453.767,
+    "elo_after_p": 1582.0,
+    "elo_before_o": 1393.271,
+    "elo_before_p": 1642.0,
+    "match_date": 1437264000000,
+    "opponent": "HyDrO",
+    "player": "Crystal Wings",
+    "player_o": "HyDrO",
+    "player_p": "Crystal Wings",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "Argagarg",
@@ -644,23 +661,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
-  },
-  {
-    "character_o": "Argagarg",
-    "character_p": "Setsuki",
-    "elo_after_o": 1453.767,
-    "elo_after_p": 1582.0,
-    "elo_before_o": 1393.271,
-    "elo_before_p": 1642.0,
-    "match_date": 1437264000000,
-    "opponent": "HyDrO",
-    "player": "Crystal Wings",
-    "player_o": "HyDrO",
-    "player_p": "Crystal Wings",
-    "tournament_name": "IYL Season 3",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
   },
   {
     "character_o": "Rook",
@@ -762,7 +762,7 @@
     "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": -2
   },
   {
     "character_o": "Quince",
@@ -779,23 +779,6 @@
     "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "DeGrey",
-    "character_p": "Setsuki",
-    "elo_after_o": 1329.0,
-    "elo_after_p": 1532.856,
-    "elo_before_o": 1372.0,
-    "elo_before_p": 1490.135,
-    "match_date": 1438819200000,
-    "opponent": "FSFred",
-    "player": "Crystal Wings",
-    "player_o": "FSFred",
-    "player_p": "Crystal Wings",
-    "tournament_name": "IYL Season 3",
-    "version_o": "2",
-    "version_p": "2",
     "win": -1
   },
   {
@@ -833,21 +816,21 @@
     "win": -1
   },
   {
-    "character_o": "Gloria",
+    "character_o": "DeGrey",
     "character_p": "Setsuki",
-    "elo_after_o": 1528.743,
-    "elo_after_p": 1472.5,
-    "elo_before_o": 1524.826,
-    "elo_before_p": 1514.5,
-    "match_date": 1438992000000,
-    "opponent": "LK4O4",
+    "elo_after_o": 1329.0,
+    "elo_after_p": 1532.856,
+    "elo_before_o": 1372.0,
+    "elo_before_p": 1490.135,
+    "match_date": 1438819200000,
+    "opponent": "FSFred",
     "player": "Crystal Wings",
-    "player_o": "LK4O4",
+    "player_o": "FSFred",
     "player_p": "Crystal Wings",
-    "tournament_name": "Los Angeles Meetup 2",
+    "tournament_name": "IYL Season 3",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Valerie",
@@ -898,7 +881,7 @@
     "tournament_name": "Los Angeles Meetup 2",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "Valerie",
@@ -915,7 +898,24 @@
     "tournament_name": "Los Angeles Meetup 2",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Setsuki",
+    "elo_after_o": 1528.743,
+    "elo_after_p": 1472.5,
+    "elo_before_o": 1524.826,
+    "elo_before_p": 1514.5,
+    "match_date": 1438992000000,
+    "opponent": "LK4O4",
+    "player": "Crystal Wings",
+    "player_o": "LK4O4",
+    "player_p": "Crystal Wings",
+    "tournament_name": "Los Angeles Meetup 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
   },
   {
     "character_o": "Valerie",

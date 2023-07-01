@@ -1,25 +1,27 @@
 #! /usr/bin/env python
 
-import pandas
 import yomi.historical_record
-import bacon
 from render import *
 import click
+import click_log
+import logging
+
+logger = logging.getLogger()
+click_log.basic_config(logger)
 
 
 @click.command()
-@click.option("--game", type=click.Choice(["yomi", "bacon"]), default="yomi")
+@click.option("--game", type=click.Choice(["yomi"]), default="yomi")
 @click.option("--dest")
 @click.option("--min-games", default=50, type=int)
 @click.option("--with-versions/--no-versions", "versions", default=False)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
 @click.option("--static-root", default=".")
+@click_log.simple_verbosity_option(logger)
 def render(game, dest, min_games, versions, autodata, static_root):
     if game == "yomi":
         data_name, hist_games = yomi.historical_record.games(autodata=autodata)
-    elif game == "bacon":
-        data_name, hist_games = bacon.games(autodata=autodata)
 
     fit_dir = f"fits/{data_name}"
     from model import YomiModel
@@ -37,8 +39,8 @@ def render(game, dest, min_games, versions, autodata, static_root):
                 "vmu",
                 "char_skill",
                 "elo_logit_scale",
-                "log_lik",
-                "win_hat",
+                # "log_lik",
+                # "win_hat",
             ],
             min_games,
         )
@@ -47,7 +49,9 @@ def render(game, dest, min_games, versions, autodata, static_root):
             hist_games,
             fit_dir,
             "char_skill_elo_skill_deficit.stan",
-            ["mu", "char_skill", "elo_logit_scale", "log_lik", "win_hat"],
+            ["mu", "char_skill", "elo_logit_scale"
+            #  , "log_lik", "win_hat"
+             ],
             min_games,
         )
 

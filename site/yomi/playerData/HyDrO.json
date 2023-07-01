@@ -646,40 +646,6 @@
     "win": 1
   },
   {
-    "character_o": "Menelker",
-    "character_p": "Troq",
-    "elo_after_o": 1736.314,
-    "elo_after_p": 1544.0,
-    "elo_before_o": 1693.006,
-    "elo_before_p": 1587.0,
-    "match_date": 1421625600000,
-    "opponent": "MercyfulFate",
-    "player": "HyDrO",
-    "player_o": "MercyfulFate",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
-    "character_o": "Troq",
-    "character_p": "Troq",
-    "elo_after_o": 1736.314,
-    "elo_after_p": 1544.0,
-    "elo_before_o": 1693.006,
-    "elo_before_p": 1587.0,
-    "match_date": 1421625600000,
-    "opponent": "MercyfulFate",
-    "player": "HyDrO",
-    "player_o": "MercyfulFate",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
     "character_o": "Troq",
     "character_p": "Troq",
     "elo_after_o": 1736.314,
@@ -711,10 +677,44 @@
     "tournament_name": "IYL Season 2",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Menelker",
+    "character_p": "Troq",
+    "elo_after_o": 1736.314,
+    "elo_after_p": 1544.0,
+    "elo_before_o": 1693.006,
+    "elo_before_p": 1587.0,
+    "match_date": 1421625600000,
+    "opponent": "MercyfulFate",
+    "player": "HyDrO",
+    "player_o": "MercyfulFate",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
+  },
+  {
+    "character_o": "Menelker",
+    "character_p": "Troq",
+    "elo_after_o": 1736.314,
+    "elo_after_p": 1544.0,
+    "elo_before_o": 1693.006,
+    "elo_before_p": 1587.0,
+    "match_date": 1421625600000,
+    "opponent": "MercyfulFate",
+    "player": "HyDrO",
+    "player_o": "MercyfulFate",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "Troq",
     "character_p": "Troq",
     "elo_after_o": 1736.314,
     "elo_after_p": 1544.0,
@@ -813,7 +813,7 @@
     "tournament_name": "IYL Season 2",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Geiger",
@@ -830,7 +830,24 @@
     "tournament_name": "IYL Season 2",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": -2
+  },
+  {
+    "character_o": "Zane",
+    "character_p": "Geiger",
+    "elo_after_o": 1347.895,
+    "elo_after_p": 1511.0,
+    "elo_before_o": 1285.651,
+    "elo_before_p": 1573.0,
+    "match_date": 1423612800000,
+    "opponent": "Southpaw Hare",
+    "player": "HyDrO",
+    "player_o": "Southpaw Hare",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
   },
   {
     "character_o": "Zane",
@@ -884,16 +901,33 @@
     "win": 0
   },
   {
-    "character_o": "Zane",
+    "character_o": "Setsuki",
     "character_p": "Geiger",
-    "elo_after_o": 1347.895,
-    "elo_after_p": 1511.0,
-    "elo_before_o": 1285.651,
-    "elo_before_p": 1573.0,
-    "match_date": 1423612800000,
-    "opponent": "Southpaw Hare",
+    "elo_after_o": 1451.491,
+    "elo_after_p": 1491.5,
+    "elo_before_o": 1451.002,
+    "elo_before_p": 1489.0,
+    "match_date": 1424822400000,
+    "opponent": "theodorelogan",
     "player": "HyDrO",
-    "player_o": "Southpaw Hare",
+    "player_o": "theodorelogan",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
+  },
+  {
+    "character_o": "Setsuki",
+    "character_p": "Grave",
+    "elo_after_o": 1451.491,
+    "elo_after_p": 1491.5,
+    "elo_before_o": 1451.002,
+    "elo_before_p": 1489.0,
+    "match_date": 1424822400000,
+    "opponent": "theodorelogan",
+    "player": "HyDrO",
+    "player_o": "theodorelogan",
     "player_p": "HyDrO",
     "tournament_name": "IYL Season 2",
     "version_o": "2",
@@ -936,23 +970,6 @@
   },
   {
     "character_o": "Setsuki",
-    "character_p": "Geiger",
-    "elo_after_o": 1451.491,
-    "elo_after_p": 1491.5,
-    "elo_before_o": 1451.002,
-    "elo_before_p": 1489.0,
-    "match_date": 1424822400000,
-    "opponent": "theodorelogan",
-    "player": "HyDrO",
-    "player_o": "theodorelogan",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
-    "character_o": "Setsuki",
     "character_p": "Grave",
     "elo_after_o": 1451.491,
     "elo_after_p": 1491.5,
@@ -1035,23 +1052,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
-  },
-  {
-    "character_o": "Setsuki",
-    "character_p": "Grave",
-    "elo_after_o": 1451.491,
-    "elo_after_p": 1491.5,
-    "elo_before_o": 1451.002,
-    "elo_before_p": 1489.0,
-    "match_date": 1424822400000,
-    "opponent": "theodorelogan",
-    "player": "HyDrO",
-    "player_o": "theodorelogan",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
   },
   {
     "character_o": "Zane",
@@ -1103,6 +1103,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
+  },
+  {
+    "character_o": "Lum",
+    "character_p": "Argagarg",
+    "elo_after_o": 1373.727,
+    "elo_after_p": 1408.0,
+    "elo_before_o": 1318.125,
+    "elo_before_p": 1464.0,
+    "match_date": 1426204800000,
+    "opponent": "Dietz",
+    "player": "HyDrO",
+    "player_o": "Dietz",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
   },
   {
     "character_o": "Persephone",
@@ -1156,23 +1173,6 @@
     "win": 0
   },
   {
-    "character_o": "Lum",
-    "character_p": "Argagarg",
-    "elo_after_o": 1373.727,
-    "elo_after_p": 1408.0,
-    "elo_before_o": 1318.125,
-    "elo_before_p": 1464.0,
-    "match_date": 1426204800000,
-    "opponent": "Dietz",
-    "player": "HyDrO",
-    "player_o": "Dietz",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
     "character_o": "Gloria",
     "character_p": "Argagarg",
     "elo_after_o": 1424.169,
@@ -1191,7 +1191,7 @@
   },
   {
     "character_o": "Troq",
-    "character_p": "Argagarg",
+    "character_p": "Troq",
     "elo_after_o": 1588.0,
     "elo_after_p": 1389.156,
     "elo_before_o": 1650.0,
@@ -1204,7 +1204,24 @@
     "tournament_name": "Feature Film Festival Fight",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Argagarg",
+    "elo_after_o": 1424.169,
+    "elo_after_p": 1389.156,
+    "elo_before_o": 1373.997,
+    "elo_before_p": 1382.928,
+    "match_date": 1426809600000,
+    "opponent": "Altimit01",
+    "player": "HyDrO",
+    "player_o": "Altimit01",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
   },
   {
     "character_o": "Grave",
@@ -1225,40 +1242,6 @@
   },
   {
     "character_o": "Troq",
-    "character_p": "Troq",
-    "elo_after_o": 1588.0,
-    "elo_after_p": 1389.156,
-    "elo_before_o": 1650.0,
-    "elo_before_p": 1382.928,
-    "match_date": 1426809600000,
-    "opponent": "Bomber678",
-    "player": "HyDrO",
-    "player_o": "Bomber678",
-    "player_p": "HyDrO",
-    "tournament_name": "Feature Film Festival Fight",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
-    "character_o": "Grave",
-    "character_p": "Troq",
-    "elo_after_o": 1588.0,
-    "elo_after_p": 1389.156,
-    "elo_before_o": 1650.0,
-    "elo_before_p": 1382.928,
-    "match_date": 1426809600000,
-    "opponent": "Bomber678",
-    "player": "HyDrO",
-    "player_o": "Bomber678",
-    "player_p": "HyDrO",
-    "tournament_name": "Feature Film Festival Fight",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
-    "character_o": "Troq",
     "character_p": "Argagarg",
     "elo_after_o": 1588.0,
     "elo_after_p": 1389.156,
@@ -1270,57 +1253,6 @@
     "player_o": "Bomber678",
     "player_p": "HyDrO",
     "tournament_name": "Feature Film Festival Fight",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
-    "character_o": "Gloria",
-    "character_p": "Troq",
-    "elo_after_o": 1424.169,
-    "elo_after_p": 1389.156,
-    "elo_before_o": 1373.997,
-    "elo_before_p": 1382.928,
-    "match_date": 1426809600000,
-    "opponent": "Altimit01",
-    "player": "HyDrO",
-    "player_o": "Altimit01",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -2
-  },
-  {
-    "character_o": "Gloria",
-    "character_p": "Argagarg",
-    "elo_after_o": 1424.169,
-    "elo_after_p": 1389.156,
-    "elo_before_o": 1373.997,
-    "elo_before_p": 1382.928,
-    "match_date": 1426809600000,
-    "opponent": "Altimit01",
-    "player": "HyDrO",
-    "player_o": "Altimit01",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 1
-  },
-  {
-    "character_o": "Gloria",
-    "character_p": "Argagarg",
-    "elo_after_o": 1424.169,
-    "elo_after_p": 1389.156,
-    "elo_before_o": 1373.997,
-    "elo_before_p": 1382.928,
-    "match_date": 1426809600000,
-    "opponent": "Altimit01",
-    "player": "HyDrO",
-    "player_o": "Altimit01",
-    "player_p": "HyDrO",
-    "tournament_name": "IYL Season 2",
     "version_o": "2",
     "version_p": "2",
     "win": 0
@@ -1358,6 +1290,74 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Troq",
+    "elo_after_o": 1424.169,
+    "elo_after_p": 1389.156,
+    "elo_before_o": 1373.997,
+    "elo_before_p": 1382.928,
+    "match_date": 1426809600000,
+    "opponent": "Altimit01",
+    "player": "HyDrO",
+    "player_o": "Altimit01",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -2
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Argagarg",
+    "elo_after_o": 1424.169,
+    "elo_after_p": 1389.156,
+    "elo_before_o": 1373.997,
+    "elo_before_p": 1382.928,
+    "match_date": 1426809600000,
+    "opponent": "Altimit01",
+    "player": "HyDrO",
+    "player_o": "Altimit01",
+    "player_p": "HyDrO",
+    "tournament_name": "IYL Season 2",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
+  },
+  {
+    "character_o": "Troq",
+    "character_p": "Argagarg",
+    "elo_after_o": 1588.0,
+    "elo_after_p": 1389.156,
+    "elo_before_o": 1650.0,
+    "elo_before_p": 1382.928,
+    "match_date": 1426809600000,
+    "opponent": "Bomber678",
+    "player": "HyDrO",
+    "player_o": "Bomber678",
+    "player_p": "HyDrO",
+    "tournament_name": "Feature Film Festival Fight",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
+  },
+  {
+    "character_o": "Grave",
+    "character_p": "Troq",
+    "elo_after_o": 1588.0,
+    "elo_after_p": 1389.156,
+    "elo_before_o": 1650.0,
+    "elo_before_p": 1382.928,
+    "match_date": 1426809600000,
+    "opponent": "Bomber678",
+    "player": "HyDrO",
+    "player_o": "Bomber678",
+    "player_p": "HyDrO",
+    "tournament_name": "Feature Film Festival Fight",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "Midori",
@@ -2924,23 +2924,6 @@
     "win": 1
   },
   {
-    "character_o": "Gloria",
-    "character_p": "Troq",
-    "elo_after_o": 1425.574,
-    "elo_after_p": 1367.5,
-    "elo_before_o": 1481.421,
-    "elo_before_p": 1359.0,
-    "match_date": 1443225600000,
-    "opponent": "Reaverb Tau",
-    "player": "HyDrO",
-    "player_o": "Reaverb Tau",
-    "player_p": "HyDrO",
-    "tournament_name": "Slippery Spag Saturday I",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
     "character_o": "Geiger",
     "character_p": "Midori",
     "elo_after_o": 1425.574,
@@ -2973,6 +2956,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Gloria",
+    "character_p": "Troq",
+    "elo_after_o": 1425.574,
+    "elo_after_p": 1367.5,
+    "elo_before_o": 1481.421,
+    "elo_before_p": 1359.0,
+    "match_date": 1443225600000,
+    "opponent": "Reaverb Tau",
+    "player": "HyDrO",
+    "player_o": "Reaverb Tau",
+    "player_p": "HyDrO",
+    "tournament_name": "Slippery Spag Saturday I",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "BBB",
@@ -3023,7 +3023,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "DeGrey",
@@ -3057,7 +3057,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Argagarg",
@@ -3074,7 +3074,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": 0
   },
   {
     "character_o": "Argagarg",
@@ -3108,7 +3108,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Argagarg",
@@ -4026,7 +4026,7 @@
     "tournament_name": "IYL Season 4",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Midori",

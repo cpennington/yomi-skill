@@ -579,23 +579,6 @@
   },
   {
     "character_o": "Argagarg",
-    "character_p": "Argagarg",
-    "elo_after_o": 1505.0,
-    "elo_after_p": 1408.964,
-    "elo_before_o": 1564.0,
-    "elo_before_p": 1350.128,
-    "match_date": 1439942400000,
-    "opponent": "Zejety",
-    "player": "Tripping the light fantastic",
-    "player_o": "Zejety",
-    "player_p": "Tripping the light fantastic",
-    "tournament_name": "IYL Season 3",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
-    "character_o": "Argagarg",
     "character_p": "BBB",
     "elo_after_o": 1505.0,
     "elo_after_p": 1408.964,
@@ -610,6 +593,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Argagarg",
+    "character_p": "Argagarg",
+    "elo_after_o": 1505.0,
+    "elo_after_p": 1408.964,
+    "elo_before_o": 1564.0,
+    "elo_before_p": 1350.128,
+    "match_date": 1439942400000,
+    "opponent": "Zejety",
+    "player": "Tripping the light fantastic",
+    "player_o": "Zejety",
+    "player_p": "Tripping the light fantastic",
+    "tournament_name": "IYL Season 3",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
   },
   {
     "character_o": "Troq",
@@ -663,23 +663,6 @@
     "win": 0
   },
   {
-    "character_o": "Onimaru",
-    "character_p": "BBB",
-    "elo_after_o": 1544.037,
-    "elo_after_p": 1365.0,
-    "elo_before_o": 1500.0,
-    "elo_before_p": 1409.0,
-    "match_date": 1443657600000,
-    "opponent": "mzum",
-    "player": "Tripping the light fantastic",
-    "player_o": "< 30 games",
-    "player_p": "Tripping the light fantastic",
-    "tournament_name": "Best of the Rest",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
     "character_o": "BBB",
     "character_p": "BBB",
     "elo_after_o": 1544.037,
@@ -694,7 +677,24 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": -2
+  },
+  {
+    "character_o": "Onimaru",
+    "character_p": "BBB",
+    "elo_after_o": 1544.037,
+    "elo_after_p": 1365.0,
+    "elo_before_o": 1500.0,
+    "elo_before_p": 1409.0,
+    "match_date": 1443657600000,
+    "opponent": "mzum",
+    "player": "Tripping the light fantastic",
+    "player_o": "< 30 games",
+    "player_p": "Tripping the light fantastic",
+    "tournament_name": "Best of the Rest",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
   },
   {
     "character_o": "Onimaru",
@@ -864,7 +864,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "DeGrey",
@@ -881,7 +881,7 @@
     "tournament_name": "Best of the Rest",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "DeGrey",

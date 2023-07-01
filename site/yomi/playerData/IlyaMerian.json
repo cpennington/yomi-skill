@@ -103,7 +103,7 @@
   },
   {
     "character_o": "Gloria",
-    "character_p": "Persephone",
+    "character_p": "Jaina",
     "elo_after_o": 1743.43,
     "elo_after_p": 1438.416,
     "elo_before_o": 1740.968,
@@ -116,7 +116,7 @@
     "tournament_name": "Emperor Series V - Week 3",
     "version_o": "2",
     "version_p": "2",
-    "win": -1
+    "win": -2
   },
   {
     "character_o": "Gloria",
@@ -171,7 +171,7 @@
   },
   {
     "character_o": "Gloria",
-    "character_p": "Jaina",
+    "character_p": "Persephone",
     "elo_after_o": 1743.43,
     "elo_after_p": 1438.416,
     "elo_before_o": 1740.968,
@@ -184,7 +184,7 @@
     "tournament_name": "Emperor Series V - Week 3",
     "version_o": "2",
     "version_p": "2",
-    "win": -2
+    "win": -1
   },
   {
     "character_o": "Zane",
@@ -206,19 +206,19 @@
   {
     "character_o": "Rook",
     "character_p": "Persephone",
-    "elo_after_o": 1569.063,
+    "elo_after_o": 1612.46,
     "elo_after_p": 1462.212,
-    "elo_before_o": 1547.46,
+    "elo_before_o": 1567.669,
     "elo_before_p": 1440.817,
     "match_date": 1454716800000,
-    "opponent": "FreezeBug",
+    "opponent": "BillyTheBanana",
     "player": "IlyaMerian",
-    "player_o": "FreezeBug",
+    "player_o": "< 30 games",
     "player_p": "IlyaMerian",
     "tournament_name": "Midori's Mentournament: The Next Generation",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "Argagarg",
@@ -286,19 +286,19 @@
     "tournament_name": "Midori's Mentournament: The Next Generation",
     "version_o": "2",
     "version_p": "2",
-    "win": 0
+    "win": 1
   },
   {
     "character_o": "Rook",
     "character_p": "Persephone",
-    "elo_after_o": 1612.46,
+    "elo_after_o": 1569.063,
     "elo_after_p": 1462.212,
-    "elo_before_o": 1567.669,
+    "elo_before_o": 1547.46,
     "elo_before_p": 1440.817,
     "match_date": 1454716800000,
-    "opponent": "BillyTheBanana",
+    "opponent": "FreezeBug",
     "player": "IlyaMerian",
-    "player_o": "< 30 games",
+    "player_o": "FreezeBug",
     "player_p": "IlyaMerian",
     "tournament_name": "Midori's Mentournament: The Next Generation",
     "version_o": "2",
@@ -318,23 +318,6 @@
     "player_o": "< 30 games",
     "player_p": "IlyaMerian",
     "tournament_name": "Midori's Mentournament: The Next Generation",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
-    "character_o": "Persephone",
-    "character_p": "Persephone",
-    "elo_after_o": 1413.503,
-    "elo_after_p": 1535.976,
-    "elo_before_o": 1405.766,
-    "elo_before_p": 1537.238,
-    "match_date": 1455321600000,
-    "opponent": "Shax",
-    "player": "IlyaMerian",
-    "player_o": "Shax",
-    "player_p": "IlyaMerian",
-    "tournament_name": "Emperor Series V - Championship",
     "version_o": "2",
     "version_p": "2",
     "win": 0
@@ -374,6 +357,40 @@
     "win": -2
   },
   {
+    "character_o": "Lum",
+    "character_p": "Persephone",
+    "elo_after_o": 1573.736,
+    "elo_after_p": 1535.976,
+    "elo_before_o": 1571.693,
+    "elo_before_p": 1537.238,
+    "match_date": 1455321600000,
+    "opponent": "snoc",
+    "player": "IlyaMerian",
+    "player_o": "snoc",
+    "player_p": "IlyaMerian",
+    "tournament_name": "Midori's Mentournament: The Next Generation",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
+  },
+  {
+    "character_o": "Persephone",
+    "character_p": "Persephone",
+    "elo_after_o": 1413.503,
+    "elo_after_p": 1535.976,
+    "elo_before_o": 1405.766,
+    "elo_before_p": 1537.238,
+    "match_date": 1455321600000,
+    "opponent": "Shax",
+    "player": "IlyaMerian",
+    "player_o": "Shax",
+    "player_p": "IlyaMerian",
+    "tournament_name": "Emperor Series V - Championship",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
+  },
+  {
     "character_o": "Zane",
     "character_p": "Jaina",
     "elo_after_o": 1465.236,
@@ -406,23 +423,6 @@
     "version_o": "2",
     "version_p": "2",
     "win": 0
-  },
-  {
-    "character_o": "Lum",
-    "character_p": "Persephone",
-    "elo_after_o": 1573.736,
-    "elo_after_p": 1535.976,
-    "elo_before_o": 1571.693,
-    "elo_before_p": 1537.238,
-    "match_date": 1455321600000,
-    "opponent": "snoc",
-    "player": "IlyaMerian",
-    "player_o": "snoc",
-    "player_p": "IlyaMerian",
-    "tournament_name": "Midori's Mentournament: The Next Generation",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
   },
   {
     "character_o": "Lum",
@@ -732,23 +732,6 @@
   },
   {
     "character_o": "Lum",
-    "character_p": "Jaina",
-    "elo_after_o": 1475.406,
-    "elo_after_p": 1303.0,
-    "elo_before_o": 1430.979,
-    "elo_before_p": 1348.0,
-    "match_date": 1459382400000,
-    "opponent": "snoc",
-    "player": "IlyaMerian",
-    "player_o": "snoc",
-    "player_p": "IlyaMerian",
-    "tournament_name": "IYL Season 4",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
-    "character_o": "Lum",
     "character_p": "Setsuki",
     "elo_after_o": 1475.406,
     "elo_after_p": 1303.0,
@@ -763,6 +746,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -2
+  },
+  {
+    "character_o": "Lum",
+    "character_p": "Jaina",
+    "elo_after_o": 1475.406,
+    "elo_after_p": 1303.0,
+    "elo_before_o": 1430.979,
+    "elo_before_p": 1348.0,
+    "match_date": 1459382400000,
+    "opponent": "snoc",
+    "player": "IlyaMerian",
+    "player_o": "snoc",
+    "player_p": "IlyaMerian",
+    "tournament_name": "IYL Season 4",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 0
   },
   {
     "character_o": "Lum",

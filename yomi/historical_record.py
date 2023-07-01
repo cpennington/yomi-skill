@@ -25,7 +25,11 @@ def fetch_name_map(url=HISTORICAL_GSHEET):
     ].dropna(subset=["tournament_name"])
 
     names = pandas.DataFrame(
-        {"name": historical_record.player_1.append(historical_record.player_2)}
+        {
+            "name": pandas.concat(
+                [historical_record.player_1, historical_record.player_2]
+            )
+        }
     )
     names["lower"] = names.apply(lambda r: r["name"].lower(), axis=1)
     name_map = names.groupby("lower").first()
@@ -52,7 +56,7 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
     historical_record.wins_2 = historical_record.wins_2.fillna(0)
 
     all_chars = (
-        historical_record.character_1.append(historical_record.character_2)
+        pandas.concat([historical_record.character_1, historical_record.character_2])
         .rename("character")
         .to_frame()
     )
@@ -74,13 +78,15 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
 
     character_category = pandas.api.types.CategoricalDtype(
         sorted(
-            historical_record.character_1.append(historical_record.character_2).unique()
+            pandas.concat(
+                [historical_record.character_1, historical_record.character_2]
+            ).unique()
         ),
         ordered=True,
     )
 
     all_players = (
-        historical_record.player_1.append(historical_record.player_2)
+        pandas.concat([historical_record.player_1, historical_record.player_2])
         .rename("player")
         .to_frame()
     )
@@ -103,7 +109,11 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
     )
 
     player_category = pandas.api.types.CategoricalDtype(
-        sorted(historical_record.player_1.append(historical_record.player_2).unique()),
+        sorted(
+            pandas.concat(
+                [historical_record.player_1, historical_record.player_2]
+            ).unique()
+        ),
         ordered=True,
     )
 
@@ -167,7 +177,9 @@ def fetch_historical_elo(url=ELO_GSHEET):
     )
 
     player_category = pandas.api.types.CategoricalDtype(
-        sorted(historical_elo.player_1.append(historical_elo.player_2).unique()),
+        sorted(
+            pandas.concat([historical_elo.player_1, historical_elo.player_2]).unique()
+        ),
         ordered=True,
     )
 
@@ -233,7 +245,7 @@ def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOF
         newRating1 = rating1 + k1 * (wins1 - expected1 * gamesPlayed)
         newRating2 = rating2 + k2 * (wins2 - expected2 * gamesPlayed)
 
-        elo_records.append(
+        elo_records.extend(
             {
                 "elo_before_1": rating1,
                 "elo_before_2": rating2,
@@ -271,8 +283,9 @@ def as_player_elo(historical_elo):
         }
     )
 
-    all_player_elo = p1_elo.append(p2_elo)
-    all_player_elo[["elo_before", "elo_after"]].fillna(1500, inplace=True)
+    all_player_elo = pandas.concat([p1_elo, p2_elo])
+    all_player_elo.loc[:, "elo_before"].fillna(1500, inplace=True)
+    all_player_elo.loc[:, "elo_after"].fillna(1500, inplace=True)
     return all_player_elo.set_index(["set_number", "player"])
 
 
@@ -300,7 +313,7 @@ def as_boolean_win_record(historical_record):
     ]
 
     backwards_mus = games.character_1 > games.character_2
-    games[backwards_mus] = games[backwards_mus].rename(
+    games.loc[backwards_mus] = games[backwards_mus].rename(
         columns={
             "player_1": "player_2",
             "player_2": "player_1",
@@ -360,7 +373,7 @@ def games(autodata=None):
         assert len(historical_elo) * 2 == len(player_elo)
 
         mean_elo_by_date = player_elo.groupby(["match_date", "player"])[
-            "elo_before", "elo_after"
+            ["elo_before", "elo_after"]
         ].mean()
 
         games = win_record.join(

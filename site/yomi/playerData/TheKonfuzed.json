@@ -238,23 +238,6 @@
     "win": 1
   },
   {
-    "character_o": "Menelker",
-    "character_p": "Menelker",
-    "elo_after_o": 1552.0,
-    "elo_after_p": 1518.981,
-    "elo_before_o": 1607.0,
-    "elo_before_p": 1463.464,
-    "match_date": 1442188800000,
-    "opponent": "mysticjuicer",
-    "player": "TheKonfuzed",
-    "player_o": "mysticjuicer",
-    "player_p": "< 30 games",
-    "tournament_name": "Lum's Lucky Lottery",
-    "version_o": "2",
-    "version_p": "2",
-    "win": -1
-  },
-  {
     "character_o": "Rook",
     "character_p": "Vendetta",
     "elo_after_o": 1552.0,
@@ -270,6 +253,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": -1
+  },
+  {
+    "character_o": "Menelker",
+    "character_p": "Menelker",
+    "elo_after_o": 1552.0,
+    "elo_after_p": 1518.981,
+    "elo_before_o": 1607.0,
+    "elo_before_p": 1463.464,
+    "match_date": 1442188800000,
+    "opponent": "mysticjuicer",
+    "player": "TheKonfuzed",
+    "player_o": "mysticjuicer",
+    "player_p": "< 30 games",
+    "tournament_name": "Lum's Lucky Lottery",
+    "version_o": "2",
+    "version_p": "2",
+    "win": 1
   },
   {
     "character_o": "Rook",
@@ -303,7 +303,7 @@
     "tournament_name": "Lum's Lucky Lottery",
     "version_o": "2",
     "version_p": "2",
-    "win": 1
+    "win": 0
   },
   {
     "character_o": "Rook",

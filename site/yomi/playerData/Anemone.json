@@ -68,23 +68,6 @@
     "win": 0
   },
   {
-    "character_o": "Persephone",
-    "character_p": "Persephone",
-    "elo_after_o": 1337.36,
-    "elo_after_p": 1407.0,
-    "elo_before_o": 1314.38,
-    "elo_before_p": 1462.0,
-    "match_date": 1448064000000,
-    "opponent": "Shax",
-    "player": "Anemone",
-    "player_o": "Shax",
-    "player_p": "< 30 games",
-    "tournament_name": "Triple Threat Throwdown",
-    "version_o": "2",
-    "version_p": "2",
-    "win": 0
-  },
-  {
     "character_o": "Valerie",
     "character_p": "Argagarg",
     "elo_after_o": 1337.36,
@@ -100,6 +83,23 @@
     "version_o": "2",
     "version_p": "2",
     "win": 1
+  },
+  {
+    "character_o": "Persephone",
+    "character_p": "Persephone",
+    "elo_after_o": 1337.36,
+    "elo_after_p": 1407.0,
+    "elo_before_o": 1314.38,
+    "elo_before_p": 1462.0,
+    "match_date": 1448064000000,
+    "opponent": "Shax",
+    "player": "Anemone",
+    "player_o": "Shax",
+    "player_p": "< 30 games",
+    "tournament_name": "Triple Threat Throwdown",
+    "version_o": "2",
+    "version_p": "2",
+    "win": -1
   },
   {
     "character_o": "Troq",

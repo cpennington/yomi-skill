@@ -1,5 +1,4 @@
--e git+https://github.com/edx/bootstrapped.git@unpin-dependencies#egg=bootstrapped
-Cython
+Cython>=0.29
 pandas
 numpy
 skills
@@ -11,10 +10,11 @@ ipython[notebook]
 sympy
 pip-tools
 plotly
-pystan
 arviz
 cached-property
 fastparquet
 bacon-replay-analyzer
 mako
 toposort
+cmdstanpy
+click_log
