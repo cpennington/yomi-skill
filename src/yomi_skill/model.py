@@ -380,7 +380,7 @@ class YomiModelChain:
         except:
             logger.info("Unable to load fit, resampling", exc_info=True)
             model = CmdStanModel(stan_file=self.model.model_filename)
-            os.makedirs(self.fit_filename)
+            os.makedirs(self.fit_filename, exist_ok=True)
             fit = model.sample(
                 data=self.model.input_data,
                 iter_warmup=self.warmup,

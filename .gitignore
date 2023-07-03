@@ -1,4 +1,3 @@
-/src/
 models
 images
 .ipynb_checkpoints
@@ -7,3 +6,4 @@ games/
 container/.ipynb_checkpoints
 __pycache__
 .vscode
+src/yomi_skill.egg-info/

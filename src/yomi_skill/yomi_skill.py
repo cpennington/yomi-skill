@@ -1,7 +1,8 @@
 #! /usr/bin/env python
 
-import yomi.historical_record
-from render import *
+from .yomi import historical_record
+from .render import *
+from .model import YomiModel
 import click
 import click_log
 import logging
@@ -9,8 +10,12 @@ import logging
 logger = logging.getLogger()
 click_log.basic_config(logger)
 
+@click.group()
+@click_log.simple_verbosity_option(logger)
+def cli():
+    pass
 
-@click.command()
+@cli.command()
 @click.option("--game", type=click.Choice(["yomi"]), default="yomi")
 @click.option("--dest")
 @click.option("--min-games", default=50, type=int)
@@ -18,13 +23,11 @@ click_log.basic_config(logger)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
 @click.option("--static-root", default=".")
-@click_log.simple_verbosity_option(logger)
 def render(game, dest, min_games, versions, autodata, static_root):
     if game == "yomi":
-        data_name, hist_games = yomi.historical_record.games(autodata=autodata)
+        data_name, hist_games = historical_record.games(autodata=autodata)
 
     fit_dir = f"fits/{data_name}"
-    from model import YomiModel
 
     display(hist_games)
 
@@ -62,4 +65,4 @@ def render(game, dest, min_games, versions, autodata, static_root):
 
 
 if __name__ == "__main__":
-    render()
+    cli()

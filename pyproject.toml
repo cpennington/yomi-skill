@@ -1,0 +1,47 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yomi_skill"
+authors = [
+    {name = "Calen Pennington", email = "calen.pennington@gmail.com"},
+]
+description = "Tools for analyzing player skill and matchup balance in two player cardgames"
+requires-python = ">=3.10"
+license = {text = "BSD-3-Clause"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dependencies = [
+    "Cython>=0.29",
+    "pandas",
+    "numpy",
+    "skills",
+    "plotnine",
+    "matplotlib",
+    "jupyter",
+    "jupyterlab",
+    "ipython[notebook]",
+    "sympy",
+    "pip-tools",
+    "plotly",
+    "arviz",
+    "cached-property",
+    "fastparquet",
+    "bacon-replay-analyzer",
+    "mako",
+    "toposort",
+    "cmdstanpy",
+    "click_log",
+    "scikit-learn",
+    "pygambit"
+]
+
+dynamic = ["version"]
+
+[tool.setuptools.dynamic]
+version = {file = ["VERSION"]}
+
+[project.scripts]
+yomi-skill = "yomi_skill.yomi_skill:cli"
