@@ -21,7 +21,7 @@ validate:
 		--dest=site/index.html \
 		--min-games=30 \
 		--same-data \
-		# --model $(MODEL) \
+		--model $(MODEL) \
 		--validate \
 		--warmup 500 \
 		--samples 1000
@@ -32,7 +32,7 @@ matchups:
 		--dest=site/index.html \
 		--min-games=30 \
 		--same-data \
-		# --model $(MODEL)
+		--model $(MODEL)
 
 all-matchups: matchups
 
@@ -42,7 +42,7 @@ new-matchups:
 		--dest=site/index.html \
 		--min-games=30 \
 		--new-data \
-		# --model $(MODEL) \
+		--model $(MODEL) \
 		--static-root=.
 
 all-new-matchups: new-matchups

@@ -2,7 +2,7 @@
 
 from .yomi import historical_record
 from .render import *
-from .model import YomiModel
+from .models.char_skill_elo_skill_deficit import CharSkillEloSkillDeficit
 import click
 import click_log
 import logging
@@ -10,10 +10,14 @@ import logging
 logger = logging.getLogger()
 click_log.basic_config(logger)
 
+MODELS = {"char_skill_elo_skill_deficit": CharSkillEloSkillDeficit}
+
+
 @click.group()
 @click_log.simple_verbosity_option(logger)
 def cli():
     pass
+
 
 @cli.command()
 @click.option("--game", type=click.Choice(["yomi"]), default="yomi")
@@ -23,7 +27,8 @@ def cli():
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
 @click.option("--static-root", default=".")
-def render(game, dest, min_games, versions, autodata, static_root):
+@click.option("--model", type=click.Choice(MODELS.keys()))
+def render(game, dest, min_games, versions, autodata, static_root, model):
     if game == "yomi":
         data_name, hist_games = historical_record.games(autodata=autodata)
 
@@ -31,32 +36,12 @@ def render(game, dest, min_games, versions, autodata, static_root):
 
     display(hist_games)
 
-    if versions:
-        model = YomiModel(
-            hist_games,
-            fit_dir,
-            "char_skill_elo_skill_deficit_versioned_hier.stan",
-            [
-                "mu_mean",
-                "mu_std",
-                "vmu",
-                "char_skill",
-                "elo_logit_scale",
-                # "log_lik",
-                # "win_hat",
-            ],
-            min_games,
-        )
-    else:
-        model = YomiModel(
-            hist_games,
-            fit_dir,
-            "char_skill_elo_skill_deficit.stan",
-            ["mu", "char_skill", "elo_logit_scale"
-            #  , "log_lik", "win_hat"
-             ],
-            min_games,
-        )
+    model = MODELS[model](
+        hist_games,
+        fit_dir,
+        ["mu", "char_skill", "elo_logit_scale"],
+        min_games,
+    )
 
     render = YomiRender(data_name, model, 1500, 2000)
 

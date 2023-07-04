@@ -43,5 +43,8 @@ dynamic = ["version"]
 [tool.setuptools.dynamic]
 version = {file = ["VERSION"]}
 
+[tool.setuptools.packages.find]
+where = ["src"]
+
 [project.scripts]
 yomi-skill = "yomi_skill.yomi_skill:cli"

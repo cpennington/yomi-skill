@@ -1,7 +1,6 @@
 import pandas
 import io
 import hashlib
-import pickle
 import logging
 import os
 from cmdstanpy import CmdStanModel, from_csv
@@ -10,14 +9,23 @@ import arviz
 import xarray
 from cached_property import cached_property
 import numpy
+from sklearn.model_selection import train_test_split
+
 logger = logging.getLogger(__name__)
 
 
 class YomiModel:
-    def __init__(self, games, data_dir, model_filename, pars, min_games=0, warmup=500, samples=1000):
+    def __init__(
+        self,
+        games,
+        data_dir,
+        pars,
+        min_games=0,
+        warmup=500,
+        samples=1000,
+    ):
         self.games = games
-        self.model_filename = model_filename
-        self.model_name, _ = os.path.splitext(self.model_filename)
+        self.model_name, _ = os.path.splitext(os.path.basename(self.model_filename))
         self.pars = pars
         self.data_dir = data_dir
         self.min_games = min_games
@@ -63,7 +71,9 @@ class YomiModel:
     def player_index(self):
         return dict(
             zip(
-                sorted(pandas.concat([self.games.player_1, self.games.player_2]).unique()),
+                sorted(
+                    pandas.concat([self.games.player_1, self.games.player_2]).unique()
+                ),
                 range(1, 10000),
             )
         )
@@ -240,10 +250,18 @@ class YomiModel:
             # "prev_tournament": self.player_tournament_dates.previous.to_numpy(int).apply(
             #     lambda x: x + 1
             # ),
-            "char1": self.games.character_1.apply(self.character_index.get).to_numpy(int),
-            "char2": self.games.character_2.apply(self.character_index.get).to_numpy(int),
-            "version1": self.games.version_1.apply(self.version_index.get).to_numpy(int),
-            "version2": self.games.version_2.apply(self.version_index.get).to_numpy(int),
+            "char1": self.games.character_1.apply(self.character_index.get).to_numpy(
+                int
+            ),
+            "char2": self.games.character_2.apply(self.character_index.get).to_numpy(
+                int
+            ),
+            "version1": self.games.version_1.apply(self.version_index.get).to_numpy(
+                int
+            ),
+            "version2": self.games.version_2.apply(self.version_index.get).to_numpy(
+                int
+            ),
             "player1": self.games.player_1.apply(self.player_index.get).to_numpy(int),
             "player2": self.games.player_2.apply(self.player_index.get).to_numpy(int),
             "elo_logit": elo_logit.to_numpy(),
@@ -252,12 +270,7 @@ class YomiModel:
             # Disable predictions
             "predict": 0,
         }
-
-    @cached_property
-    def data_hash(self):
-        return hashlib.md5(pickle.dumps(self.input_data)).hexdigest()
-
-
+    
     @cached_property
     def _file_base(self):
         path = [
@@ -276,17 +289,19 @@ class YomiModel:
     @property
     def fit(self):
         try:
-            fit = from_csv(self.fit_filename, 'sample')
+            fit = from_csv(self.fit_filename, "sample")
         except:
             logger.info("Unable to load fit, resampling", exc_info=True)
-            model = CmdStanModel(stan_file=self.model_filename)
+            model = CmdStanModel(
+                stan_file=self.model_filename,
+            )
             os.makedirs(self.fit_filename, exist_ok=True)
             fit = model.sample(
                 data=self.input_data,
                 iter_warmup=self.warmup,
                 iter_sampling=self.samples,
                 chains=4,
-                output_dir=self.fit_filename
+                output_dir=self.fit_filename,
             )
             logger.info("Wrote fit to %s", self.fit_filename)
 
@@ -307,9 +322,7 @@ class YomiModel:
                 ), f"No parameter {par} found in exported data"
         except (FileNotFoundError, AssertionError):
             logger.info("Dataframe loading failed", exc_info=True)
-            fit_results = self.fit.draws_pd(
-                vars=self.pars
-            )
+            fit_results = self.fit.draws_pd(vars=self.pars)
             logger.info("Loaded parameters into dataframe")
             os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
             fit_results.to_parquet(self.parquet_filename, compression="gzip")
@@ -358,7 +371,7 @@ class YomiModel:
             inf_data.to_netcdf(self.netcdf_filename)
 
         return inf_data
-    
+
     @property
     def summary_dataframe(self):
         path = [
