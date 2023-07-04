@@ -405,7 +405,7 @@ class YomiRender:
         return "\n".join(lines)
 
     def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
-        summary = self.model.summary_dataframe(self.warmup, self.min_samples)
+        summary = self.model.summary_dataframe
         mu_index = self.model.mu_index
 
         os.makedirs(f"site/{game}/playerData", exist_ok=True)

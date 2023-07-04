@@ -14,13 +14,15 @@ logger = logging.getLogger(__name__)
 
 
 class YomiModel:
-    def __init__(self, games, data_dir, model_filename, pars, min_games=0):
+    def __init__(self, games, data_dir, model_filename, pars, min_games=0, warmup=500, samples=1000):
         self.games = games
         self.model_filename = model_filename
         self.model_name, _ = os.path.splitext(self.model_filename)
         self.pars = pars
         self.data_dir = data_dir
         self.min_games = min_games
+        self.warmup = warmup
+        self.samples = samples
         self.games["player_1_orig"] = self.games.player_1
         self.games["player_2_orig"] = self.games.player_2
         if self.min_games > 0:
@@ -255,59 +257,132 @@ class YomiModel:
     def data_hash(self):
         return hashlib.md5(pickle.dumps(self.input_data)).hexdigest()
 
-    def _samples(self, warmup=1000, min_samples=1000):
-        chain_index = 0
-        samples_accrued = 0
-        while samples_accrued < min_samples:
-            next_chain = YomiModelChain(self, warmup, chain_index)
-            if next_chain.warmup == warmup:
-                yield next_chain
-                samples_accrued += next_chain.samples
-            chain_index += 1
 
-    def sample_dataframe(self, warmup=1000, min_samples=1000):
-        dataframe = None
-        for sample in self._samples(warmup=warmup, min_samples=min_samples):
-            if dataframe is None:
-                dataframe = sample.dataframe
-            else:
-                dataframe = pandas.concat([dataframe, sample.dataframe])
-        return dataframe
-
-    def summary_dataframe(self, warmup=1000, min_samples=1000):
+    @cached_property
+    def _file_base(self):
         path = [
             self.data_dir,
             f"{self.model_name}-{self.model_hash[:6]}",
-            f"warmup-{warmup}",
+            f"warmup-{self.warmup}",
         ]
         if self.min_games > 0:
             path.append(f"min-games-{self.min_games}")
-        path.append(f"summary-{min_samples}-samples.parquet")
+        return os.path.join(*path)
+
+    @cached_property
+    def fit_filename(self):
+        return f"{self._file_base}"
+
+    @property
+    def fit(self):
+        try:
+            fit = from_csv(self.fit_filename, 'sample')
+        except:
+            logger.info("Unable to load fit, resampling", exc_info=True)
+            model = CmdStanModel(stan_file=self.model_filename)
+            os.makedirs(self.fit_filename, exist_ok=True)
+            fit = model.sample(
+                data=self.input_data,
+                iter_warmup=self.warmup,
+                iter_sampling=self.samples,
+                chains=4,
+                output_dir=self.fit_filename
+            )
+            logger.info("Wrote fit to %s", self.fit_filename)
+
+        return fit
+
+    @cached_property
+    def parquet_filename(self):
+        return f"{self._file_base}.parquet"
+
+    @property
+    def sample_dataframe(self):
+        try:
+            logger.info(f"Loading parquet {self.parquet_filename}")
+            fit_results = pandas.read_parquet(self.parquet_filename)
+            for par in self.pars:
+                assert any(
+                    col.startswith(par) for col in fit_results.columns
+                ), f"No parameter {par} found in exported data"
+        except (FileNotFoundError, AssertionError):
+            logger.info("Dataframe loading failed", exc_info=True)
+            fit_results = self.fit.draws_pd(
+                vars=self.pars
+            )
+            logger.info("Loaded parameters into dataframe")
+            os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
+            fit_results.to_parquet(self.parquet_filename, compression="gzip")
+            logger.info("Wrote fit to parquet %s", self.parquet_filename)
+        return fit_results
+
+    @cached_property
+    def netcdf_filename(self):
+        return f"{self._file_base}.netcdf"
+
+    @property
+    def sample_inf_data(self):
+        try:
+            inf_data = arviz.data.InferenceData.from_netcdf(self.netcdf_filename)
+        except FileNotFoundError:
+            print("Converting to InferenceData")
+            inf_data = arviz.from_pystan(
+                posterior=self.fit,
+                posterior_predictive="win_hat",
+                observed_data="win",
+                log_likelihood="log_lik",
+                coords={
+                    # "player-tournament": [
+                    #     f"{player}-{tournament}"
+                    #     for ((player, tournament), _) in sorted(
+                    #         self.player_tournament_index.items(),
+                    #         key=lambda x: x[1],
+                    #     )
+                    # ],
+                    "matchup": [
+                        f"{c1}-{c2}"
+                        for ((c1, c2), _) in sorted(
+                            self.mu_index.items(), key=lambda x: x[1]
+                        )
+                    ]
+                },
+                dims={
+                    "skill": ["player-tournament"],
+                    "skill_adjust": ["player-tournament"],
+                    "mu": ["matchup"],
+                    "muv": ["matchup"],
+                },
+            )
+
+            os.makedirs(os.path.dirname(self.netcdf_filename), exist_ok=True)
+            inf_data.to_netcdf(self.netcdf_filename)
+
+        return inf_data
+    
+    @property
+    def summary_dataframe(self):
+        path = [
+            self.data_dir,
+            f"{self.model_name}-{self.model_hash[:6]}",
+            f"warmup-{self.warmup}",
+        ]
+        if self.min_games > 0:
+            path.append(f"min-games-{self.min_games}")
+        path.append(f"summary-{self.samples}-samples.parquet")
         parquet_filename = os.path.join(*path)
         try:
             logger.info(f"Loading parquet {parquet_filename}")
             summary_results = pandas.read_parquet(parquet_filename)
-            for par in self.model.pars:
+            for par in self.pars:
                 assert any(
                     col.startswith(par) for col in summary_results.columns
                 ), f"No parameter {par} found in exported data"
         except (FileNotFoundError, AssertionError):
             logger.info("Dataframe loading failed", exc_info=True)
-            summary_results = self.sample_dataframe(
-                warmup=warmup, min_samples=min_samples
-            ).agg(["mean", "std"])
+            summary_results = self.sample_dataframe.agg(["mean", "std"])
             os.makedirs(os.path.dirname(parquet_filename), exist_ok=True)
             summary_results.to_parquet(parquet_filename, compression="gzip")
         return summary_results
-
-    def sample_infdata(self, warmup=1000, min_samples=1000):
-        inf_data = None
-        for sample in self._samples(warmup=warmup, min_samples=min_samples):
-            if inf_data is None:
-                inf_data = sample.inf_data
-            else:
-                inf_data = combine_inf_data(inf_data, sample.inf_data)
-        return inf_data
 
 
 def combine_dataset(left, right):
@@ -348,113 +423,3 @@ def combine_inf_data(left, right):
             ),
         }
     )
-
-
-class YomiModelChain:
-    def __init__(self, model, warmup, index):
-        self.model = model
-        self.warmup = warmup
-        self.index = index
-        self.samples = 1000
-
-    @cached_property
-    def _file_base(self):
-        path = [
-            self.model.data_dir,
-            f"{self.model.model_name}-{self.model.model_hash[:6]}",
-            f"warmup-{self.warmup}",
-        ]
-        if self.model.min_games > 0:
-            path.append(f"min-games-{self.model.min_games}")
-        path.append(str(self.index))
-        return os.path.join(*path)
-
-    @cached_property
-    def fit_filename(self):
-        return f"{self._file_base}"
-
-    @property
-    def fit(self):
-        try:
-            fit = from_csv(self.fit_filename, 'sample')
-        except:
-            logger.info("Unable to load fit, resampling", exc_info=True)
-            model = CmdStanModel(stan_file=self.model.model_filename)
-            os.makedirs(self.fit_filename, exist_ok=True)
-            fit = model.sample(
-                data=self.model.input_data,
-                iter_warmup=self.warmup,
-                iter_sampling=self.samples,
-                chains=1,
-                output_dir=self.fit_filename
-            )
-            logger.info("Wrote fit to %s", self.fit_filename)
-
-        return fit
-
-    @cached_property
-    def parquet_filename(self):
-        return f"{self._file_base}.parquet"
-
-    @property
-    def dataframe(self):
-        try:
-            logger.info(f"Loading parquet {self.parquet_filename}")
-            fit_results = pandas.read_parquet(self.parquet_filename)
-            for par in self.model.pars:
-                assert any(
-                    col.startswith(par) for col in fit_results.columns
-                ), f"No parameter {par} found in exported data"
-        except (FileNotFoundError, AssertionError):
-            logger.info("Dataframe loading failed", exc_info=True)
-            fit_results = self.fit.draws_pd(
-                vars=self.model.pars
-            )
-            logger.info("Loaded parameters into dataframe")
-            os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
-            fit_results.to_parquet(self.parquet_filename, compression="gzip")
-            logger.info("Wrote fit to parquet %s", self.parquet_filename)
-        return fit_results
-
-    @cached_property
-    def netcdf_filename(self):
-        return f"{self._file_base}.netcdf"
-
-    @property
-    def inf_data(self):
-        try:
-            inf_data = arviz.data.InferenceData.from_netcdf(self.netcdf_filename)
-        except FileNotFoundError:
-            print("Converting to InferenceData")
-            inf_data = arviz.from_pystan(
-                posterior=self.fit,
-                posterior_predictive="win_hat",
-                observed_data="win",
-                log_likelihood="log_lik",
-                coords={
-                    # "player-tournament": [
-                    #     f"{player}-{tournament}"
-                    #     for ((player, tournament), _) in sorted(
-                    #         self.model.player_tournament_index.items(),
-                    #         key=lambda x: x[1],
-                    #     )
-                    # ],
-                    "matchup": [
-                        f"{c1}-{c2}"
-                        for ((c1, c2), _) in sorted(
-                            self.model.mu_index.items(), key=lambda x: x[1]
-                        )
-                    ]
-                },
-                dims={
-                    "skill": ["player-tournament"],
-                    "skill_adjust": ["player-tournament"],
-                    "mu": ["matchup"],
-                    "muv": ["matchup"],
-                },
-            )
-
-            os.makedirs(os.path.dirname(self.netcdf_filename), exist_ok=True)
-            inf_data.to_netcdf(self.netcdf_filename)
-
-        return inf_data

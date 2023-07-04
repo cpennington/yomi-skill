@@ -7,3 +7,4 @@ container/.ipynb_checkpoints
 __pycache__
 .vscode
 src/yomi_skill.egg-info/
+build
