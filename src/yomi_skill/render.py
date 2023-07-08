@@ -1,6 +1,6 @@
 from IPython.core.display import display
 from plotnine import *
-from cached_property import cached_property
+from functools import cached_property
 import os
 from colorsys import hsv_to_rgb
 import matplotlib.colors
@@ -10,6 +10,7 @@ from collections import defaultdict
 import pandas
 import shutil
 from mako.lookup import TemplateLookup
+from .model import YomiModel
 
 
 def extract_index(col_name):
@@ -19,7 +20,7 @@ def extract_index(col_name):
 
 
 class YomiRender:
-    def __init__(self, data_name, model):
+    def __init__(self, data_name, model: YomiModel):
         self.model = model
         self.data_name = data_name
 
@@ -41,10 +42,6 @@ class YomiRender:
             for ((player, tournament), ix) in self.model.player_tournament_index.items()
         }
 
-        tournament_category = pandas.api.types.CategoricalDtype(
-            self.model.tournament_index.keys(), ordered=True
-        )
-
         player_tournament_skill = (
             results[[col for col in results.columns if col.startswith("skill[")]]
             .unstack()
@@ -53,10 +50,10 @@ class YomiRender:
         )
         player_tournament_skill["player"] = player_tournament_skill.level_0.apply(
             lambda x: reverse_player_tournament_index[int(x[6:-1])][0]
-        ).astype(self.player_category)
+        ).astype("category")
         player_tournament_skill["tournament"] = player_tournament_skill.level_0.apply(
             lambda x: reverse_player_tournament_index[int(x[6:-1])][1]
-        ).astype(tournament_category)
+        ).astype("category")
 
         del player_tournament_skill["level_0"]
         player_tournament_skill = player_tournament_skill.rename(
@@ -82,10 +79,6 @@ class YomiRender:
             for ((player, tournament), ix) in self.model.player_tournament_index.items()
         }
 
-        tournament_category = pandas.api.types.CategoricalDtype(
-            self.model.tournament_index.keys(), ordered=True
-        )
-
         player_tournament_skill = (
             results[[col for col in results.columns if col.startswith("raw_skill[")]]
             .unstack()
@@ -94,10 +87,10 @@ class YomiRender:
         )
         player_tournament_skill["player"] = player_tournament_skill.level_0.apply(
             lambda x: reverse_player_tournament_index[extract_index(x)[1][0]][0]
-        ).astype(self.player_category)
+        ).astype("category")
         player_tournament_skill["tournament"] = player_tournament_skill.level_0.apply(
             lambda x: reverse_player_tournament_index[extract_index(x)[1][0]][1]
-        ).astype(tournament_category)
+        ).astype("category")
 
         del player_tournament_skill["level_0"]
         player_tournament_skill = player_tournament_skill.rename(
@@ -152,7 +145,7 @@ class YomiRender:
         player_chart.save(f"{self.base_folder}/{player}-raw-skill.png", verbose=False)
 
     def render_char_skill(self, player):
-        skill = self.player_char_skill
+        skill = self.model.player_char_skill
         char_skill = skill[skill.player == player]
         skill_summaries = char_skill.groupby("character").char_skill.agg(
             ["median", "std"]
@@ -202,7 +195,7 @@ class YomiRender:
         )
 
     def render_char_win_chance(self, player):
-        skill = self.player_char_skill
+        skill = self.model.player_char_skill
         char_skill = skill[skill.player == player]
         skill_summaries = char_skill.groupby("character").win_chance.agg(
             ["median", "std"]
@@ -265,7 +258,7 @@ class YomiRender:
 
     def render_matchup_chart(self):
         median_rates = pandas.to_numeric(
-            self.matchups.groupby(["c1", "c2"])
+            self.model.matchups.groupby(["c1", "c2"])
             .win_rate.median()
             .rename("median_win_rate")
         )
@@ -273,7 +266,7 @@ class YomiRender:
             lambda x: "white" if x > 6 or x < 4 else "black"
         )
 
-        matchups = self.matchups.join(median_rates, on=["c1", "c2"])
+        matchups = self.model.matchups.join(median_rates, on=["c1", "c2"])
 
         matchup_chart = (
             ggplot(matchups, aes(x="0", y="win_rate", fill="median_win_rate"))
@@ -295,7 +288,7 @@ class YomiRender:
 
     def balanced_matchups(self):
         median_win_rate = (
-            self.matchups[self.matchups.c1 != self.matchups.c2]
+            self.model.matchups[self.model.matchups.c1 != self.model.matchups.c2]
             .groupby(["c1", "c2"])
             .win_rate.median()
         )
@@ -329,9 +322,11 @@ class YomiRender:
         os.makedirs(f"site/{game}/playerData", exist_ok=True)
         orig_players = sorted(
             set(
-                pandas.concat(
-                    [self.model.games.player_1_orig, self.model.games.player_2_orig]
-                ).unique()
+                pandas.unique(
+                    pandas.concat(
+                        [self.model.games.player_1_orig, self.model.games.player_2_orig]
+                    )
+                )
             )
         )
         for player in orig_players:
@@ -480,7 +475,7 @@ class YomiRender:
         player_char_skill["player"] = (
             player_char_skill["index"]
             .apply(lambda x: reverse_player_index[int(x[11:-1].split(",")[1])])
-            .astype(self.player_category)
+            .astype("category")
         )
         player_char_skill["character"] = player_char_skill["index"].apply(
             lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]

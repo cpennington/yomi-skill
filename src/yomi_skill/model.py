@@ -10,10 +10,12 @@ import arviz
 import numpy
 import pandas
 import xarray
+from abc import ABC, abstractmethod
 from arviz.data import InferenceData
-from cached_property import cached_property
+from functools import cached_property
 from cmdstanpy import CmdStanModel, from_csv
 from sklearn.model_selection import train_test_split
+from typing import List
 
 logger = logging.getLogger(__name__)
 
@@ -24,10 +26,13 @@ def elo_logit(games):
     return numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
 
 
-class YomiModel:
+class YomiModel(ABC):
+    model_filename: str
+    required_input: List[str]
+
     def __init__(
         self,
-        games,
+        games: pandas.DataFrame,
         data_dir,
         pars,
         min_games=0,
@@ -71,6 +76,10 @@ class YomiModel:
             ] = self.min_games_player
             self.games["player_1"] = self.games.player_1.astype("category")
             self.games["player_2"] = self.games.player_2.astype("category")
+
+    @abstractmethod
+    def predict(self, games: pandas.DataFrame) -> List[float]:
+        pass
 
     @cached_property
     def model_hash(self):
@@ -304,7 +313,7 @@ class YomiModel:
         return f"{self._file_base}"
 
     @property
-    def fit(self):
+    def fit(self) -> arviz.InferenceData:
         try:
             fit = from_csv(self.fit_filename, "sample")
         except:
@@ -330,6 +339,7 @@ class YomiModel:
                 chains=4,
                 output_dir=self.fit_filename,
             )
+
             logger.info("Wrote fit to %s", self.fit_filename)
 
         return fit
@@ -432,16 +442,6 @@ class YomiModel:
         )
 
     @cached_property
-    def player_category(self):
-        return pandas.api.types.CategoricalDtype(self.player_index.keys(), ordered=True)
-
-    @cached_property
-    def character_category(self):
-        return pandas.api.types.CategoricalDtype(
-            self.character_index.keys(), ordered=True
-        )
-
-    @cached_property
     def player_char_skill(self) -> pandas.DataFrame:
         results = self.sample_dataframe
         reverse_player_index = {
@@ -459,10 +459,10 @@ class YomiModel:
         )
         player_char_skill["player"] = player_char_skill.level_0.apply(
             lambda x: reverse_player_index[int(x[11:-1].split(",")[1])]
-        ).astype(self.player_category)
+        ).astype("category")
         player_char_skill["character"] = player_char_skill.level_0.apply(
             lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
-        ).astype(self.character_category)
+        ).astype("category")
 
         del player_char_skill["level_0"]
         player_char_skill = player_char_skill.rename(columns={"level_1": "sample"})
@@ -515,43 +515,3 @@ class YomiModel:
             / (1 + matchups["win_rate"].rpow(math.e))
         )
         return matchups
-
-
-def combine_dataset(left, right):
-    if left is None and right is None:
-        return None
-
-    return xarray.concat([left, right], "draw")
-
-
-def combine_inf_data(left, right):
-    return InferenceData(
-        **{
-            "posterior": combine_dataset(
-                getattr(left, "posterior", None), getattr(right, "posterior", None)
-            ),
-            "sample_stats": combine_dataset(
-                getattr(left, "sample_stats", None),
-                getattr(right, "sample_stats", None),
-            ),
-            "posterior_predictive": combine_dataset(
-                getattr(left, "posterior_predictive", None),
-                getattr(right, "posterior_predictive", None),
-            ),
-            "prior": combine_dataset(
-                getattr(left, "prior", None), getattr(right, "prior", None)
-            ),
-            "sample_stats_prior": combine_dataset(
-                getattr(left, "sample_stats_prior", None),
-                getattr(right, "sample_stats_prior", None),
-            ),
-            "prior_predictive": combine_dataset(
-                getattr(left, "prior_predictive", None),
-                getattr(right, "prior_predictive", None),
-            ),
-            "observed_data": combine_dataset(
-                getattr(left, "observed_data", None),
-                getattr(right, "observed_data", None),
-            ),
-        }
-    )

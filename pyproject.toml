@@ -16,7 +16,6 @@ classifiers = [
 dependencies = [
     "arviz",
     "bacon-replay-analyzer",
-    "cached-property",
     "click_log",
     "cmdstanpy",
     "Cython>=0.29",
