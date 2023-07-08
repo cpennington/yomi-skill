@@ -19,26 +19,19 @@ def extract_index(col_name):
 
 
 class YomiRender:
-    def __init__(self, data_name, model, warmup=1000, min_samples=1000):
+    def __init__(self, data_name, model):
         self.model = model
-        self.warmup = warmup
-        self.min_samples = min_samples
-        self.base_folder = (
-            f"images/{data_name}/{self.model.model_name}-{self.model.model_hash[:6]}"
-        )
-        os.makedirs(self.base_folder, exist_ok=True)
+        self.data_name = data_name
+
+    @property
+    def base_folder(self):
+        base_folder = f"images/{self.data_name}/{self.model.model_name}-{self.model.model_hash[:6]}"
+        os.makedirs(base_folder, exist_ok=True)
+        return base_folder
 
     @property
     def results_df(self):
-        return self.model.sample_dataframe(
-            warmup=self.warmup, min_samples=self.min_samples
-        )
-
-    @cached_property
-    def player_category(self):
-        return pandas.api.types.CategoricalDtype(
-            self.model.player_index.keys(), ordered=True
-        )
+        return self.model.sample_dataframe
 
     @cached_property
     def player_tournament_skill(self):
@@ -121,44 +114,6 @@ class YomiRender:
             "tournament"
         ].cat.reorder_categories(tournament_list, ordered=True)
         return player_tournament_skill
-
-    @cached_property
-    def player_char_skill(self):
-        results = self.results_df
-        reverse_player_index = {
-            ix: player for (player, ix) in self.model.player_index.items()
-        }
-        reverse_character_index = {
-            ix: char for (char, ix) in self.model.character_index.items()
-        }
-
-        player_char_skill = (
-            results[[col for col in results.columns if col.startswith("char_skill[")]]
-            .unstack()
-            .rename("char_skill")
-            .reset_index()
-        )
-        player_char_skill["player"] = player_char_skill.level_0.apply(
-            lambda x: reverse_player_index[int(x[11:-1].split(",")[1])]
-        ).astype(self.player_category)
-        player_char_skill["character"] = player_char_skill.level_0.apply(
-            lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
-        ).astype(character_category)
-
-        del player_char_skill["level_0"]
-        player_char_skill = player_char_skill.rename(columns={"level_1": "sample"})
-
-        sample_max_skill = player_char_skill.groupby("sample").char_skill.max()
-        for sample in player_char_skill["sample"].unique():
-            player_char_skill.loc[
-                player_char_skill["sample"] == sample, "char_skill"
-            ] -= sample_max_skill[sample]
-
-        player_char_skill["win_chance"] = pandas.to_numeric(
-            (player_char_skill["char_skill"].rpow(math.e))
-            / (1 + player_char_skill["char_skill"].rpow(math.e))
-        )
-        return player_char_skill
 
     def render_player_skill(self, player):
         player_skill = self.player_tournament_skill[
@@ -307,43 +262,6 @@ class YomiRender:
     def render_raw_player_skills(self, *players):
         for player in players:
             self.render_raw_player_skill(player)
-
-    @cached_property
-    def matchups(self):
-        fit_results = self.results_df
-        mu_index = self.model.mu_index
-
-        matchups = (
-            fit_results[[col for col in fit_results.columns if col.startswith("mu[")]]
-            .rename(
-                columns={
-                    "mu[{}]".format(ix): "{}-{}".format(c1, c2)
-                    for ((c1, c2), ix) in mu_index.items()
-                }
-            )
-            .unstack()
-            .rename("win_rate")
-            .reset_index()
-        )
-        matchups["c1"] = matchups.level_0.apply(lambda x: x.split("-")[0])
-        matchups["c2"] = matchups.level_0.apply(lambda x: x.split("-")[1])
-        matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
-        del matchups["level_0"]
-        matchups = matchups.rename(columns={"level_1": "sample"})
-
-        flipped = matchups[matchups.c1 != matchups.c2].rename(
-            columns={"c1": "c2", "c2": "c1"}
-        )
-        flipped["win_rate"] = -flipped["win_rate"]
-
-        matchups = pandas.concat([matchups, flipped])
-
-        matchups["win_rate"] = pandas.to_numeric(
-            10
-            * (matchups["win_rate"].rpow(math.e))
-            / (1 + matchups["win_rate"].rpow(math.e))
-        )
-        return matchups
 
     def render_matchup_chart(self):
         median_rates = pandas.to_numeric(
@@ -635,8 +553,8 @@ class YomiRender:
                     character,
                 ]
                 player_data[player][character] = {
-                    "mean": round(player_summary["mean"], 2),
-                    "std": round(player_summary["std"], 2),
+                    "mean": round(player_summary["mean"], 3),
+                    "std": round(player_summary["std"], 3),
                     "played": int(player_character_counts[player].get(character, 0)),
                 }
         for player, elo in player_elo.items():
@@ -679,8 +597,8 @@ class YomiRender:
         if matchups is not None:
             for row in matchups.itertuples():
                 matchup_dict[row.c1][row.c2] = {
-                    "mean": round(row.mean, 2),
-                    "std": round(row.std, 2),
+                    "mean": round(row.mean, 3),
+                    "std": round(row.std, 3),
                     "counts": row.counts,
                 }
 
@@ -689,8 +607,8 @@ class YomiRender:
                 matchup_dict.setdefault(row.c1, {}).setdefault(row.c2, {}).setdefault(
                     "versions", {}
                 ).setdefault(row.v1, {})[row.v2] = {
-                    "mean": round(row.mean, 2),
-                    "std": round(row.std, 2),
+                    "mean": round(row.mean, 3),
+                    "std": round(row.std, 3),
                     "counts": row.counts,
                 }
 
@@ -706,8 +624,8 @@ class YomiRender:
         with open(f"site/{game}/eloScale.json", "w") as outfile:
             json.dump(
                 {
-                    "mean": round(summary.elo_logit_scale["mean"], 2),
-                    "std": round(summary.elo_logit_scale["std"], 2),
+                    "mean": round(summary.elo_logit_scale["mean"], 3),
+                    "std": round(summary.elo_logit_scale["std"], 3),
                 },
                 outfile,
                 indent=2,

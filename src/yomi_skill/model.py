@@ -1,17 +1,27 @@
-import pandas
-import io
 import hashlib
+import io
+import itertools
 import logging
+import math
 import os
-from cmdstanpy import CmdStanModel, from_csv
-from arviz.data import InferenceData
+import shutil
+
 import arviz
-import xarray
-from cached_property import cached_property
 import numpy
+import pandas
+import xarray
+from arviz.data import InferenceData
+from cached_property import cached_property
+from cmdstanpy import CmdStanModel, from_csv
 from sklearn.model_selection import train_test_split
 
 logger = logging.getLogger(__name__)
+
+
+def elo_logit(games):
+    elo_diff = games.elo_before_1 - games.elo_before_2
+    elo_pct_p1_win = 1 / (1 + (-elo_diff / 1135.77).rpow(10))
+    return numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
 
 
 class YomiModel:
@@ -23,6 +33,7 @@ class YomiModel:
         min_games=0,
         warmup=500,
         samples=1000,
+        training_fraction=0.9,
     ):
         self.games = games
         self.model_name, _ = os.path.splitext(os.path.basename(self.model_filename))
@@ -31,6 +42,7 @@ class YomiModel:
         self.min_games = min_games
         self.warmup = warmup
         self.samples = samples
+        self.training_fraction = training_fraction
         self.games["player_1_orig"] = self.games.player_1
         self.games["player_2_orig"] = self.games.player_2
         if self.min_games > 0:
@@ -57,6 +69,8 @@ class YomiModel:
             self.games.loc[
                 self.games.player_2.isin(not_enough_played), "player_2"
             ] = self.min_games_player
+            self.games["player_1"] = self.games.player_1.astype("category")
+            self.games["player_2"] = self.games.player_2.astype("category")
 
     @cached_property
     def model_hash(self):
@@ -182,36 +196,7 @@ class YomiModel:
         return dict(zip(ordered_tournaments, range(1, 1000)))
 
     @cached_property
-    def input_data(self):
-        # for player in self.player_tournament_dates.player.unique():
-        #     self.player_tournament_dates.loc[
-        #         self.player_tournament_dates.player == player, "previous"
-        #     ] = (
-        #         [-1]
-        #         + list(
-        #             self.player_tournament_dates.loc[
-        #                 self.player_tournament_dates.player == player
-        #             ].index.values
-        #         )[:-1]
-        #     )
-
-        # tournament_player = [
-        #     self.player_index[player]
-        #     for ((player, tournament), _) in sorted(
-        #         self.player_tournament_index.items(), key=lambda x: x[1]
-        #     )
-        # ]
-
-        elo_diff = self.games.elo_before_1 - self.games.elo_before_2
-        elo_pct_p1_win = 1 / (1 + (-elo_diff / 1135.77).rpow(10))
-        elo_logit = numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
-
-        elo_sum = self.games.elo_before_1 + self.games.elo_before_2
-        scaled_weights = 0.25 + 1.75 * (elo_sum - elo_sum.min()) / (
-            elo_sum.max() - elo_sum.min()
-        )
-        normalized_weights = scaled_weights / scaled_weights.sum() * len(self.games)
-
+    def constant_input(self):
         return {
             # "NPT": len(self.player_tournament_index),
             "NG": len(self.games),
@@ -219,6 +204,26 @@ class YomiModel:
             "NP": len(self.player_index),
             "NC": len(self.characters),
             "NMV": len(self.version_mu_index),
+            "mu_for_v": [
+                self.mu_index[(c1, c2)]
+                for ((c1, v1, c2, v2), vix) in sorted(
+                    self.version_mu_index.items(), key=lambda i: i[1]
+                )
+            ],
+            # Disable predictions
+            "predict": 0,
+        }
+
+    @cached_property
+    def game_input(self):
+        elo_sum = self.games.elo_before_1 + self.games.elo_before_2
+        scaled_weights = 0.25 + 1.75 * (elo_sum - elo_sum.min()) / (
+            elo_sum.max() - elo_sum.min()
+        )
+        normalized_weights = scaled_weights / scaled_weights.sum() * len(self.games)
+
+        return {
+            "games": self.games,
             # "tp": tournament_player,
             "win": self.games.win.to_numpy(int),
             # "pt1": self.games.apply(
@@ -238,12 +243,6 @@ class YomiModel:
                 ],
                 axis=1,
             ).to_numpy(int),
-            "mu_for_v": [
-                self.mu_index[(c1, c2)]
-                for ((c1, v1, c2, v2), vix) in sorted(
-                    self.version_mu_index.items(), key=lambda i: i[1]
-                )
-            ],
             "non_mirror": self.games.apply(
                 lambda r: float(r.character_1 != r.character_2), axis=1
             ).to_numpy(int),
@@ -264,19 +263,37 @@ class YomiModel:
             ),
             "player1": self.games.player_1.apply(self.player_index.get).to_numpy(int),
             "player2": self.games.player_2.apply(self.player_index.get).to_numpy(int),
-            "elo_logit": elo_logit.to_numpy(),
+            "elo_logit": elo_logit(self.games).to_numpy(),
             # Scale so that mininum elo sum gets 0.25 weight, max sum gets 2 weight
             "obs_weights": normalized_weights.to_numpy(),
-            # Disable predictions
-            "predict": 0,
         }
-    
+
+    @cached_property
+    def validation_input(self):
+        names, values = zip(*self.game_input.items())
+        split_values = train_test_split(*values, train_size=self.training_fraction)
+        test_values = split_values[0::2]
+        test_input = {f"{name}T": value for name, value in zip(names, test_values)}
+        validation_values = split_values[1::2]
+        validation_input = {
+            f"{name}V": value for name, value in zip(names, validation_values)
+        }
+
+        return {
+            **test_input,
+            **validation_input,
+            "NTG": len(test_input["gamesT"]),
+            "NVG": len(validation_input["gamesV"]),
+        }
+
     @cached_property
     def _file_base(self):
         path = [
             self.data_dir,
             f"{self.model_name}-{self.model_hash[:6]}",
             f"warmup-{self.warmup}",
+            f"samples-{self.samples}",
+            f"training-{self.training_fraction}",
         ]
         if self.min_games > 0:
             path.append(f"min-games-{self.min_games}")
@@ -295,9 +312,19 @@ class YomiModel:
             model = CmdStanModel(
                 stan_file=self.model_filename,
             )
+            shutil.rmtree(self.data_dir, ignore_errors=True)
             os.makedirs(self.fit_filename, exist_ok=True)
+            input_data = {
+                name: value
+                for name, value in itertools.chain(
+                    self.constant_input.items(),
+                    self.game_input.items(),
+                    self.validation_input.items(),
+                )
+                if name in self.required_input
+            }
             fit = model.sample(
-                data=self.input_data,
+                data=input_data,
                 iter_warmup=self.warmup,
                 iter_sampling=self.samples,
                 chains=4,
@@ -311,11 +338,12 @@ class YomiModel:
     def parquet_filename(self):
         return f"{self._file_base}.parquet"
 
-    @property
+    @cached_property
     def sample_dataframe(self):
         try:
             logger.info(f"Loading parquet {self.parquet_filename}")
             fit_results = pandas.read_parquet(self.parquet_filename)
+            logger.info(f"Loaded {self.parquet_filename}")
             for par in self.pars:
                 assert any(
                     col.startswith(par) for col in fit_results.columns
@@ -325,6 +353,11 @@ class YomiModel:
             fit_results = self.fit.draws_pd(vars=self.pars)
             logger.info("Loaded parameters into dataframe")
             os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
+            fcols = fit_results.select_dtypes("float").columns
+            fit_results[fcols] = fit_results[fcols].apply(
+                pandas.to_numeric, downcast="float"
+            )
+
             fit_results.to_parquet(self.parquet_filename, compression="gzip")
             logger.info("Wrote fit to parquet %s", self.parquet_filename)
         return fit_results
@@ -372,20 +405,13 @@ class YomiModel:
 
         return inf_data
 
-    @property
+    @cached_property
     def summary_dataframe(self):
-        path = [
-            self.data_dir,
-            f"{self.model_name}-{self.model_hash[:6]}",
-            f"warmup-{self.warmup}",
-        ]
-        if self.min_games > 0:
-            path.append(f"min-games-{self.min_games}")
-        path.append(f"summary-{self.samples}-samples.parquet")
-        parquet_filename = os.path.join(*path)
+        parquet_filename = f"{self._file_base}.summary.parquet"
         try:
             logger.info(f"Loading parquet {parquet_filename}")
             summary_results = pandas.read_parquet(parquet_filename)
+            logger.info(f"Loaded {parquet_filename}")
             for par in self.pars:
                 assert any(
                     col.startswith(par) for col in summary_results.columns
@@ -396,6 +422,99 @@ class YomiModel:
             os.makedirs(os.path.dirname(parquet_filename), exist_ok=True)
             summary_results.to_parquet(parquet_filename, compression="gzip")
         return summary_results
+
+    @property
+    def posterior_brier_score(self):
+        validation_games = self.validation_input["gamesV"]
+        p1_win_chance = self.predict(validation_games)
+        return (p1_win_chance - validation_games.win).pow(2).sum() / len(
+            validation_games
+        )
+
+    @cached_property
+    def player_category(self):
+        return pandas.api.types.CategoricalDtype(self.player_index.keys(), ordered=True)
+
+    @cached_property
+    def character_category(self):
+        return pandas.api.types.CategoricalDtype(
+            self.character_index.keys(), ordered=True
+        )
+
+    @cached_property
+    def player_char_skill(self) -> pandas.DataFrame:
+        results = self.sample_dataframe
+        reverse_player_index = {
+            ix: player for (player, ix) in self.player_index.items()
+        }
+        reverse_character_index = {
+            ix: char for (char, ix) in self.character_index.items()
+        }
+
+        player_char_skill = (
+            results[[col for col in results.columns if col.startswith("char_skill[")]]
+            .unstack()
+            .rename("char_skill")
+            .reset_index()
+        )
+        player_char_skill["player"] = player_char_skill.level_0.apply(
+            lambda x: reverse_player_index[int(x[11:-1].split(",")[1])]
+        ).astype(self.player_category)
+        player_char_skill["character"] = player_char_skill.level_0.apply(
+            lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
+        ).astype(self.character_category)
+
+        del player_char_skill["level_0"]
+        player_char_skill = player_char_skill.rename(columns={"level_1": "sample"})
+
+        sample_max_skill = player_char_skill.groupby("sample").char_skill.max()
+        for sample in player_char_skill["sample"].unique():
+            player_char_skill.loc[
+                player_char_skill["sample"] == sample, "char_skill"
+            ] -= sample_max_skill[sample]
+
+        player_char_skill["win_chance"] = pandas.to_numeric(
+            (player_char_skill["char_skill"].rpow(math.e))
+            / (1 + player_char_skill["char_skill"].rpow(math.e))
+        )
+        return player_char_skill
+
+    @cached_property
+    def matchups(self):
+        fit_results = self.sample_dataframe
+        mu_index = self.mu_index
+
+        matchups = (
+            fit_results[[col for col in fit_results.columns if col.startswith("mu[")]]
+            .rename(
+                columns={
+                    "mu[{}]".format(ix): "{}-{}".format(c1, c2)
+                    for ((c1, c2), ix) in mu_index.items()
+                }
+            )
+            .unstack()
+            .rename("win_rate")
+            .reset_index()
+        )
+        matchups["c1"] = matchups.level_0.apply(lambda x: x.split("-")[0])
+        matchups["c2"] = matchups.level_0.apply(lambda x: x.split("-")[1])
+        matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
+        del matchups["level_0"]
+        matchups = matchups.rename(columns={"level_1": "sample"})
+
+        flipped = matchups[matchups.c1 != matchups.c2].rename(
+            columns={"c1": "c2", "c2": "c1"}
+        )
+        flipped["win_rate"] = -flipped["win_rate"]
+
+        matchups = pandas.concat([matchups, flipped])
+
+        matchups["win_chance"] = pandas.to_numeric(
+            10
+            * (matchups["win_rate"].rpow(math.e))
+            / (1 + matchups["win_rate"].rpow(math.e))
+        )
+        return matchups
 
 
 def combine_dataset(left, right):

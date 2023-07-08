@@ -1,30 +1,43 @@
 data {
-    int<lower=0> NG; // Number of games
+    int<lower=0> NTG; // Number of training games
+    int<lower=0> NVG; // Number of validation games
     int<lower=0> NM; // Number of matchups
     int<lower=0> NP; // Number of players
     int<lower=0> NC; // Number of characters
-    int<lower=0, upper=1> predict;
+    
+    int<lower=0, upper=1> winT[NTG]; // Did player 1 win game
+    int<lower=1, upper=NM> mupT[NTG]; // Matchup in game
+    vector<lower=0, upper=1>[NTG] non_mirrorT; // Is this a mirror matchup: 0 = mirror
+    int<lower=1, upper=NC> char1T[NTG]; // Character 1 in game
+    int<lower=1, upper=NC> char2T[NTG]; // Character 2 in game
+    int<lower=1, upper=NP> player1T[NTG]; // Player 1 in game
+    int<lower=1, upper=NP> player2T[NTG]; // Player 2 in game
+    vector[NTG] elo_logitT; // Player 1 ELO-based logit win chance
 
-    int<lower=0, upper=1> win[NG]; // Did player 1 win game
-    int<lower=1, upper=NM> mup[NG]; // Matchup in game
-    vector<lower=0, upper=1>[NG] non_mirror; // Is this a mirror matchup: 0 = mirror
-    int<lower=1, upper=NC> char1[NG]; // Character 1 in game
-    int<lower=1, upper=NC> char2[NG]; // Character 2 in game
-    int<lower=1, upper=NP> player1[NG]; // Player 1 in game
-    int<lower=1, upper=NP> player2[NG]; // Player 2 in game
-    vector[NG] elo_logit; // Player 1 ELO-based logit win chance
+    int<lower=0, upper=1> winV[NVG]; // Did player 1 win game
+    int<lower=1, upper=NM> mupV[NVG]; // Matchup in game
+    vector<lower=0, upper=1>[NVG] non_mirrorV; // Is this a mirror matchup: 0 = mirror
+    int<lower=1, upper=NC> char1V[NVG]; // Character 1 in game
+    int<lower=1, upper=NC> char2V[NVG]; // Character 2 in game
+    int<lower=1, upper=NP> player1V[NVG]; // Player 1 in game
+    int<lower=1, upper=NP> player2V[NVG]; // Player 2 in game
+    vector[NVG] elo_logitV; // Player 1 ELO-based logit win chance
 }
-parameters {
+parameters { 
     vector[NM] mu; // Matchup value
     vector<upper=0>[NP] char_skill[NC]; // Player skill at character
     real elo_logit_scale; // elo_logit scale
 }
 transformed parameters {
-    vector[NG] win_chance_logit;
+    vector[NTG] win_chance_logit;
     // win_chance_logit = (char_skill[char1, player1] - char_skill[char2, player2]) + non_mirror .* mu[mup] + elo_logit_scale * elo_logit;
 
-    for (n in 1:NG) {
-        win_chance_logit[n] = (char_skill[char1[n], player1[n]] - char_skill[char2[n], player2[n]]) + non_mirror[n] * mu[mup[n]] + elo_logit_scale * elo_logit[n];
+    for (n in 1:NTG) {
+        win_chance_logit[n] = 
+            char_skill[char1T[n], player1T[n]] -
+            char_skill[char2T[n], player2T[n]] +
+            non_mirrorT[n] * mu[mupT[n]] +
+            elo_logit_scale * elo_logitT[n];
     }
 }
 model {
@@ -34,16 +47,19 @@ model {
     mu ~ normal(0, 0.5);
     elo_logit_scale ~ std_normal();
 
-    win ~ bernoulli_logit(win_chance_logit);
+    winT ~ bernoulli_logit(win_chance_logit);
 }
 generated quantities{
-    if (predict) {
-        vector[NG] log_lik;
-        vector[NG] win_hat;
-
-        for (n in 1:NG) {
-            log_lik[n] = bernoulli_logit_lpmf(win[n] | win_chance_logit[n]);
-            win_hat[n] = bernoulli_logit_rng(win_chance_logit[n]);
-        }
+    real brier_score = 0;
+    for (n in 1:NVG) {
+        brier_score = brier_score + square(
+            inv_logit(
+                char_skill[char1V[n], player1V[n]] -
+                char_skill[char2V[n], player2V[n]] +
+                non_mirrorV[n] * mu[mupV[n]] +
+                elo_logit_scale * elo_logitV[n]
+            ) - winV[n]
+        );
     }
+    brier_score = brier_score / NVG;
 }

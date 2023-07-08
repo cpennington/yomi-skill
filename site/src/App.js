@@ -14,18 +14,6 @@ class App extends Component {
             >
               Yomi Skill Chart
             </a>
-            <a
-              class="nav-link ${'active' if self.attr.game == 'bacon' and not has_versions else ''}"
-              href="/yomi-skill/bacon"
-            >
-              BattleCON Skill Chart
-            </a>
-            <a
-              class="nav-link ${'active' if self.attr.game == 'bacon' and has_versions else ''}"
-              href="/yomi-skill/bacon/versions"
-            >
-              BattleCON Skill Chart (by version)
-            </a>
           </nav>
           <div class="container">
             <div class="div-group row col-12 mt-2">

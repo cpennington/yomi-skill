@@ -389,14 +389,24 @@ def games(autodata=None):
             rsuffix="_2",
         )
         name = str(datetime.now().isoformat())
-        games.astype({"character_1": str, "character_2": str}).to_parquet(
-            f"{game_dir}/{name}.parquet", compression="gzip"
-        )
+
+        games["player_1"] = games.player_1.astype("category")
+        games["player_2"] = games.player_2.astype("category")
+        games["character_1"] = games.character_1.astype("category")
+        games["character_2"] = games.character_2.astype("category")
+        games["version_1"] = games.version_1.astype("category")
+        games["version_2"] = games.version_2.astype("category")
+        games["tournament_name"] = games.tournament_name.astype("category")
+        games["match_date"] = pandas.to_numeric(games.match_date, downcast="datetime")
+        games["win"] = pandas.to_numeric(games.win, downcast="unsigned")
+        games["elo_before_1"] = pandas.to_numeric(games.elo_before_1, downcast="float")
+        games["elo_before_2"] = pandas.to_numeric(games.elo_before_2, downcast="float")
+        games["elo_after_1"] = pandas.to_numeric(games.elo_after_1, downcast="float")
+        games["elo_after_2"] = pandas.to_numeric(games.elo_after_2, downcast="float")
+        games.to_parquet(f"{game_dir}/{name}.parquet", compression="gzip")
 
     games["version_1"] = "2"
     games["version_2"] = "2"
-
-    display(games[games.isna().any(axis=1)])
 
     games = normalize_types(games)
 
