@@ -23,6 +23,7 @@ def elo_logit(games):
 class YomiModel(ABC):
     model_filename: str
     required_input: List[str]
+    fit: arviz.InferenceData
 
     def __init__(
         self,
@@ -307,30 +308,6 @@ class YomiModel(ABC):
         return f"{self._file_base}.parquet"
 
     @cached_property
-    def sample_dataframe(self):
-        try:
-            logger.info(f"Loading parquet {self.parquet_filename}")
-            fit_results = pandas.read_parquet(self.parquet_filename)
-            logger.info(f"Loaded {self.parquet_filename}")
-            for par in self.pars:
-                assert any(
-                    col.startswith(par) for col in fit_results.columns
-                ), f"No parameter {par} found in exported data"
-        except (FileNotFoundError, AssertionError):
-            logger.info("Dataframe loading failed", exc_info=True)
-            fit_results = self.fit.draws_pd(vars=self.pars)
-            logger.info("Loaded parameters into dataframe")
-            os.makedirs(os.path.dirname(self.parquet_filename), exist_ok=True)
-            fcols = fit_results.select_dtypes("float").columns
-            fit_results[fcols] = fit_results[fcols].apply(
-                pandas.to_numeric, downcast="float"
-            )
-
-            fit_results.to_parquet(self.parquet_filename, compression="gzip")
-            logger.info("Wrote fit to parquet %s", self.parquet_filename)
-        return fit_results
-
-    @cached_property
     def netcdf_filename(self):
         return f"{self._file_base}.netcdf"
 
@@ -372,24 +349,6 @@ class YomiModel(ABC):
             inf_data.to_netcdf(self.netcdf_filename)
 
         return inf_data
-
-    @cached_property
-    def summary_dataframe(self):
-        parquet_filename = f"{self._file_base}.summary.parquet"
-        try:
-            logger.info(f"Loading parquet {parquet_filename}")
-            summary_results = pandas.read_parquet(parquet_filename)
-            logger.info(f"Loaded {parquet_filename}")
-            for par in self.pars:
-                assert any(
-                    col.startswith(par) for col in summary_results.columns
-                ), f"No parameter {par} found in exported data"
-        except (FileNotFoundError, AssertionError):
-            logger.info("Dataframe loading failed", exc_info=True)
-            summary_results = self.sample_dataframe.agg(["mean", "std"])
-            os.makedirs(os.path.dirname(parquet_filename), exist_ok=True)
-            summary_results.to_parquet(parquet_filename, compression="gzip")
-        return summary_results
 
     @property
     def posterior_brier_score(self):
