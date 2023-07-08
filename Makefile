@@ -18,7 +18,6 @@ lab:
 validate:
 	yomi-skill validate \
 		--game=yomi \
-		--dest=site/index.html \
 		--min-games=30 \
 		--same-data \
 		--model $(MODEL) \

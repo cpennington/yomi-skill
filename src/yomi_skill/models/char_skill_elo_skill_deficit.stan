@@ -50,16 +50,11 @@ model {
     winT ~ bernoulli_logit(win_chance_logit);
 }
 generated quantities{
-    real brier_score = 0;
-    for (n in 1:NVG) {
-        brier_score = brier_score + square(
-            inv_logit(
-                char_skill[char1V[n], player1V[n]] -
-                char_skill[char2V[n], player2V[n]] +
-                non_mirrorV[n] * mu[mupV[n]] +
-                elo_logit_scale * elo_logitV[n]
-            ) - winV[n]
-        );
+    vector[NTG] log_lik;
+    vector[NTG] win_hat;
+
+    for (n in 1:NTG) {
+        log_lik[n] = bernoulli_logit_lpmf(winT[n] | win_chance_logit[n]);
+        win_hat[n] = bernoulli_logit_rng(win_chance_logit[n]);
     }
-    brier_score = brier_score / NVG;
 }

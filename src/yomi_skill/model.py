@@ -91,29 +91,25 @@ class YomiModel(ABC):
         return model_hash
 
     @cached_property
+    def players(self):
+        unique_players = pandas.concat(
+            [self.games.player_1, self.games.player_2]
+        ).unique()
+        return sorted(unique_players)
+
+    @cached_property
     def player_index(self):
-        return dict(
-            zip(
-                sorted(
-                    pandas.concat([self.games.player_1, self.games.player_2]).unique()
-                ),
-                range(1, 10000),
-            )
-        )
+        return {player: index + 1 for index, player in enumerate(self.players)}
+
+    @cached_property
+    def mu_list(self):
+        return [
+            (c1, c2) for c1 in self.characters for c2 in self.characters if c1 <= c2
+        ]
 
     @cached_property
     def mu_index(self):
-        return dict(
-            zip(
-                (
-                    (c1, c2)
-                    for c1 in self.characters
-                    for c2 in self.characters
-                    if c1 <= c2
-                ),
-                range(1, 1000),
-            )
-        )
+        return {(c1, c2): index + 1 for index, (c1, c2) in enumerate(self.mu_list)}
 
     @cached_property
     def version_mu_index(self):
@@ -162,11 +158,11 @@ class YomiModel(ABC):
 
     @cached_property
     def character_index(self):
-        return dict(zip(self.characters, range(1, 100)))
+        return {char: index + 1 for index, char in enumerate(self.characters)}
 
     @cached_property
     def version_index(self):
-        return dict(zip(self.versions, range(1, 1000)))
+        return {version: index + 1 for index, version in enumerate(self.versions)}
 
     @cached_property
     def player_tournament_index(self):
@@ -312,35 +308,66 @@ class YomiModel(ABC):
     def fit_filename(self):
         return f"{self._file_base}"
 
-    @property
+    @cached_property
     def fit(self) -> arviz.InferenceData:
         try:
-            fit = from_csv(self.fit_filename, "sample")
+            logger.info(f"Loading fit file from {self.netcdf_filename}")
+            fit = arviz.InferenceData.from_netcdf(self.netcdf_filename)
+            logger.info(f"Loaded {self.netcdf_filename}")
         except:
-            logger.info("Unable to load fit, resampling", exc_info=True)
-            model = CmdStanModel(
-                stan_file=self.model_filename,
-            )
-            shutil.rmtree(self.data_dir, ignore_errors=True)
-            os.makedirs(self.fit_filename, exist_ok=True)
-            input_data = {
-                name: value
-                for name, value in itertools.chain(
-                    self.constant_input.items(),
-                    self.game_input.items(),
-                    self.validation_input.items(),
+            logger.warning(f"Unable to load {self.netcdf_filename}")
+            try:
+                logger.info(f"Loading fit file from {self.fit_filename}")
+                stan_fit = from_csv(self.fit_filename, "sample")
+                logger.info(f"Loaded {self.fit_filename}")
+            except:
+                logger.info("Unable to load fit, resampling", exc_info=True)
+                model = CmdStanModel(
+                    stan_file=self.model_filename,
                 )
-                if name in self.required_input
-            }
-            fit = model.sample(
-                data=input_data,
-                iter_warmup=self.warmup,
-                iter_sampling=self.samples,
-                chains=4,
-                output_dir=self.fit_filename,
-            )
+                shutil.rmtree(self.data_dir, ignore_errors=True)
+                os.makedirs(self.fit_filename, exist_ok=True)
+                input_data = {
+                    name: value
+                    for name, value in itertools.chain(
+                        self.constant_input.items(),
+                        self.game_input.items(),
+                        self.validation_input.items(),
+                    )
+                    if name in self.required_input
+                }
+                stan_fit = model.sample(
+                    data=input_data,
+                    iter_warmup=self.warmup,
+                    iter_sampling=self.samples,
+                    chains=4,
+                    output_dir=self.fit_filename,
+                )
 
-            logger.info("Wrote fit to %s", self.fit_filename)
+                logger.info("Wrote fit to %s", self.fit_filename)
+            fit = arviz.from_cmdstanpy(
+                posterior=stan_fit,
+                posterior_predictive="win_hat",
+                observed_data={"win": self.game_input["win"]},
+                log_likelihood="log_lik",
+                coords={
+                    "character": self.characters,
+                    "player": self.players,
+                    "matchup": [
+                        f"{c1}-{c2}"
+                        for ((c1, c2), _) in sorted(
+                            self.mu_index.items(), key=lambda x: x[1]
+                        )
+                    ],
+                },
+                dims={
+                    "char_skill": ["character", "player"],
+                    "mu": ["matchup"],
+                },
+            )
+            logger.info(f"Writing fit to {self.netcdf_filename}")
+            fit.to_netcdf(self.netcdf_filename)
+            logger.info(f"Wrote {self.netcdf_filename}")
 
         return fit
 
@@ -440,78 +467,3 @@ class YomiModel(ABC):
         return (p1_win_chance - validation_games.win).pow(2).sum() / len(
             validation_games
         )
-
-    @cached_property
-    def player_char_skill(self) -> pandas.DataFrame:
-        results = self.sample_dataframe
-        reverse_player_index = {
-            ix: player for (player, ix) in self.player_index.items()
-        }
-        reverse_character_index = {
-            ix: char for (char, ix) in self.character_index.items()
-        }
-
-        player_char_skill = (
-            results[[col for col in results.columns if col.startswith("char_skill[")]]
-            .unstack()
-            .rename("char_skill")
-            .reset_index()
-        )
-        player_char_skill["player"] = player_char_skill.level_0.apply(
-            lambda x: reverse_player_index[int(x[11:-1].split(",")[1])]
-        ).astype("category")
-        player_char_skill["character"] = player_char_skill.level_0.apply(
-            lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
-        ).astype("category")
-
-        del player_char_skill["level_0"]
-        player_char_skill = player_char_skill.rename(columns={"level_1": "sample"})
-
-        sample_max_skill = player_char_skill.groupby("sample").char_skill.max()
-        for sample in player_char_skill["sample"].unique():
-            player_char_skill.loc[
-                player_char_skill["sample"] == sample, "char_skill"
-            ] -= sample_max_skill[sample]
-
-        player_char_skill["win_chance"] = pandas.to_numeric(
-            (player_char_skill["char_skill"].rpow(math.e))
-            / (1 + player_char_skill["char_skill"].rpow(math.e))
-        )
-        return player_char_skill
-
-    @cached_property
-    def matchups(self):
-        fit_results = self.sample_dataframe
-        mu_index = self.mu_index
-
-        matchups = (
-            fit_results[[col for col in fit_results.columns if col.startswith("mu[")]]
-            .rename(
-                columns={
-                    "mu[{}]".format(ix): "{}-{}".format(c1, c2)
-                    for ((c1, c2), ix) in mu_index.items()
-                }
-            )
-            .unstack()
-            .rename("win_rate")
-            .reset_index()
-        )
-        matchups["c1"] = matchups.level_0.apply(lambda x: x.split("-")[0])
-        matchups["c2"] = matchups.level_0.apply(lambda x: x.split("-")[1])
-        matchups["win_rate"] = pandas.to_numeric(matchups["win_rate"])
-        del matchups["level_0"]
-        matchups = matchups.rename(columns={"level_1": "sample"})
-
-        flipped = matchups[matchups.c1 != matchups.c2].rename(
-            columns={"c1": "c2", "c2": "c1"}
-        )
-        flipped["win_rate"] = -flipped["win_rate"]
-
-        matchups = pandas.concat([matchups, flipped])
-
-        matchups["win_chance"] = pandas.to_numeric(
-            10
-            * (matchups["win_rate"].rpow(math.e))
-            / (1 + matchups["win_rate"].rpow(math.e))
-        )
-        return matchups

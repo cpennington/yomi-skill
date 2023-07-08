@@ -27,14 +27,19 @@ def cli():
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
 @click.option("--static-root", default=".")
-@click.option("--model", type=click.Choice(MODELS.keys()))
+@click.option("--model", type=click.Choice(list(MODELS.keys())))
 @click.option("--warmup", type=int)
 @click.option("--samples", type=int)
 def render(
     game, dest, min_games, versions, autodata, static_root, model, warmup, samples
 ):
+    data_name = None
+    hist_games = None
     if game == "yomi":
         data_name, hist_games = historical_record.games(autodata=autodata)
+
+    if hist_games is None:
+        raise Exception("No games loaded")
 
     fit_dir = f"fits/{data_name}"
 
@@ -56,20 +61,21 @@ def render(
 
 @cli.command()
 @click.option("--game", type=click.Choice(["yomi"]), default="yomi")
-@click.option("--dest")
 @click.option("--min-games", default=50, type=int)
 @click.option("--with-versions/--no-versions", "versions", default=False)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
-@click.option("--static-root", default=".")
-@click.option("--model", type=click.Choice(MODELS.keys()))
+@click.option("--model", type=click.Choice(list(MODELS.keys())))
 @click.option("--warmup", type=int)
 @click.option("--samples", type=int)
-def validate(
-    game, dest, min_games, versions, autodata, static_root, model, warmup, samples
-):
+def validate(game, min_games, versions, autodata, model, warmup, samples):
+    data_name = None
+    hist_games = None
     if game == "yomi":
         data_name, hist_games = historical_record.games(autodata=autodata)
+
+    if hist_games is None:
+        raise Exception("No games loaded")
 
     fit_dir = f"fits/{data_name}"
 
@@ -83,7 +89,6 @@ def validate(
         training_fraction=0.8,
     )
 
-    display(model.summary_dataframe["brier_score"])
     display(model.posterior_brier_score)
 
 

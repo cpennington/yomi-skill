@@ -316,7 +316,6 @@ class YomiRender:
         return "\n".join(lines)
 
     def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
-        summary = self.model.summary_dataframe
         mu_index = self.model.mu_index
 
         os.makedirs(f"site/{game}/playerData", exist_ok=True)
@@ -370,119 +369,40 @@ class YomiRender:
                     sort_keys=True,
                 )
 
-        if any(col.startswith("mu[") for col in summary.columns):
-            matchups = (
-                summary[[col for col in summary.columns if col.startswith("mu[")]]
-                .rename(
-                    columns={
-                        "mu[{}]".format(ix): "{}-{}".format(c1, c2)
-                        for ((c1, c2), ix) in mu_index.items()
-                    }
-                )
-                .transpose()
-                .reset_index()
-            )
-            matchups["c1"] = matchups["index"].apply(lambda x: x.split("-")[0])
-            matchups["c2"] = matchups["index"].apply(lambda x: x.split("-")[1])
-            del matchups["index"]
+        matchup_dict = defaultdict(dict)
 
-            matchups["counts"] = matchups.apply(
-                lambda r: len(
-                    self.model.games[
-                        (self.model.games.character_1 == r.c1)
-                        & (self.model.games.character_2 == r.c2)
+        mu_means = self.model.fit["posterior"].mu.mean(["chain", "draw"])
+        mu_std = self.model.fit["posterior"].mu.std(["chain", "draw"])
+
+        for c1, c2 in self.model.mu_list:
+            matchup_dict[c1][c2] = {
+                "mean": round(float(mu_means.loc[f"{c1}-{c2}"]), 3),
+                "std": round(float(mu_std.loc[f"{c1}-{c2}"]), 3),
+                "counts": len(
+                    self.model.games.loc[
+                        (self.model.games.character_1 == c1)
+                        & (self.model.games.character_2 == c2)
                     ]
                 ),
-                axis=1,
-            )
+            }
+            if c1 != c2:
+                matchup_dict[c2][c1] = {
+                    "mean": 1 - round(float(mu_means.loc[f"{c1}-{c2}"]), 3),
+                    "std": round(float(mu_std.loc[f"{c1}-{c2}"]), 3),
+                    "counts": len(
+                        self.model.games.loc[
+                            (self.model.games.character_1 == c2)
+                            & (self.model.games.character_2 == c1)
+                        ]
+                    ),
+                }
 
-            flipped = matchups[matchups.c1 != matchups.c2].rename(
-                columns={"c1": "c2", "c2": "c1"}
-            )
-            flipped["mean"] = -flipped["mean"]
-
-            matchups = pandas.concat([matchups, flipped]).sort_values(["c1", "c2"])
-        else:
-            matchups = None
-
-        if any(col.startswith("vmu[") for col in summary.columns):
-            version_mu_index = self.model.version_mu_index
-
-            versioned_matchups = (
-                summary[[col for col in summary.columns if col.startswith("vmu[")]]
-                .rename(
-                    columns={
-                        f"vmu[{ix}]": "-".join(cs)
-                        for (cs, ix) in version_mu_index.items()
-                    }
-                )
-                .transpose()
-                .reset_index()
-            )
-            display(self.model.input_data["NMV"])
-            display(len(version_mu_index))
-            display(versioned_matchups)
-            versioned_matchups["c1"] = versioned_matchups["index"].apply(
-                lambda x: x.split("-")[0]
-            )
-            versioned_matchups["v1"] = versioned_matchups["index"].apply(
-                lambda x: x.split("-")[1]
-            )
-            versioned_matchups["c2"] = versioned_matchups["index"].apply(
-                lambda x: x.split("-")[2]
-            )
-            versioned_matchups["v2"] = versioned_matchups["index"].apply(
-                lambda x: x.split("-")[3]
-            )
-            del versioned_matchups["index"]
-            display(versioned_matchups)
-            versioned_matchups["counts"] = versioned_matchups.apply(
-                lambda r: len(
-                    self.model.games[
-                        (self.model.games.character_1 == r.c1)
-                        & (self.model.games.version_1 == r.v1)
-                        & (self.model.games.character_2 == r.c2)
-                        & (self.model.games.version_2 == r.v2)
-                    ]
-                ),
-                axis=1,
-            )
-
-            vflipped = versioned_matchups[
-                versioned_matchups.c1 != versioned_matchups.c2
-            ].rename(columns={"c1": "c2", "v1": "v2", "c2": "c1", "v2": "v1"})
-            vflipped["mean"] = -vflipped["mean"]
-
-            versioned_matchups = pandas.concat(
-                [versioned_matchups, vflipped]
-            ).sort_values(["c1", "v1", "c2", "v2"])
-            display(versioned_matchups)
-        else:
-            versioned_matchups = None
-
-        reverse_player_index = {
-            ix: player for (player, ix) in self.model.player_index.items()
-        }
-        reverse_character_index = {
-            ix: char for (char, ix) in self.model.character_index.items()
-        }
-
-        player_char_skill = (
-            summary[[col for col in summary.columns if col.startswith("char_skill[")]]
-            .transpose()
-            .reset_index()
+        player_char_skill_mean = self.model.fit["posterior"].char_skill.mean(
+            ["chain", "draw"]
         )
-        player_char_skill["player"] = (
-            player_char_skill["index"]
-            .apply(lambda x: reverse_player_index[int(x[11:-1].split(",")[1])])
-            .astype("category")
+        player_char_skill_std = self.model.fit["posterior"].char_skill.std(
+            ["chain", "draw"]
         )
-        player_char_skill["character"] = player_char_skill["index"].apply(
-            lambda x: reverse_character_index[int(x[11:-1].split(",")[0])]
-        )
-        player_char_skill = player_char_skill.set_index(["player", "character"])
-
-        del player_char_skill["index"]
 
         elo_by_player = pandas.concat(
             [
@@ -503,11 +423,6 @@ class YomiRender:
             .groupby("player")
             .elo_before.last()
         ).dropna()
-
-        # if self.model.min_games > 0:
-        #     player_elo[self.model.min_games_player] = elo_by_player[
-        #         elo_by_player.player == self.model.min_games_player
-        #     ].elo_before.mean()
 
         player_game_counts = (
             pandas.concat(
@@ -541,15 +456,22 @@ class YomiRender:
         for player in orig_players:
             for character in self.model.characters:
                 play_counts = player_game_counts.loc[player]
-                player_summary = player_char_skill.loc[
+                model_player = (
                     player
                     if play_counts > self.model.min_games
-                    else self.model.min_games_player,
-                    character,
-                ]
+                    else self.model.min_games_player
+                )
+                mean = player_char_skill_mean.sel(
+                    player=model_player,
+                    character=character,
+                )
+                std = player_char_skill_std.sel(
+                    player=model_player,
+                    character=character,
+                )
                 player_data[player][character] = {
-                    "mean": round(player_summary["mean"], 3),
-                    "std": round(player_summary["std"], 3),
+                    "mean": round(float(mean), 3),
+                    "std": round(float(std), 3),
                     "played": int(player_character_counts[player].get(character, 0)),
                 }
         for player, elo in player_elo.items():
@@ -587,26 +509,6 @@ class YomiRender:
         else:
             characters = self.model.characters
 
-        matchup_dict = defaultdict(dict)
-
-        if matchups is not None:
-            for row in matchups.itertuples():
-                matchup_dict[row.c1][row.c2] = {
-                    "mean": round(row.mean, 3),
-                    "std": round(row.std, 3),
-                    "counts": row.counts,
-                }
-
-        if versioned_matchups is not None:
-            for row in versioned_matchups.itertuples():
-                matchup_dict.setdefault(row.c1, {}).setdefault(row.c2, {}).setdefault(
-                    "versions", {}
-                ).setdefault(row.v1, {})[row.v2] = {
-                    "mean": round(row.mean, 3),
-                    "std": round(row.std, 3),
-                    "counts": row.counts,
-                }
-
         with open(f"site/{game}/matchupData.json", "w") as outfile:
             json.dump(matchup_dict, outfile, indent=2, sort_keys=True)
 
@@ -619,8 +521,22 @@ class YomiRender:
         with open(f"site/{game}/eloScale.json", "w") as outfile:
             json.dump(
                 {
-                    "mean": round(summary.elo_logit_scale["mean"], 3),
-                    "std": round(summary.elo_logit_scale["std"], 3),
+                    "mean": round(
+                        float(
+                            self.model.fit["posterior"].elo_logit_scale.mean(
+                                ["chain", "draw"]
+                            )
+                        ),
+                        3,
+                    ),
+                    "std": round(
+                        float(
+                            self.model.fit["posterior"].elo_logit_scale.std(
+                                ["chain", "draw"]
+                            )
+                        ),
+                        3,
+                    ),
                 },
                 outfile,
                 indent=2,
@@ -630,7 +546,7 @@ class YomiRender:
         with open(outfile_name, "w") as outfile:
             outfile.write(
                 templates.get_template(f"{game}.html").render_unicode(
-                    has_versions=versioned_matchups is not None, static_root=static_root
+                    has_versions=False, static_root=static_root
                 )
             )
 

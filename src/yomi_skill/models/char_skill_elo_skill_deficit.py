@@ -33,27 +33,29 @@ class CharSkillEloSkillDeficit(YomiModel):
     ]
 
     def predict(self, games):
-        display(self.sample_dataframe.dtypes)
-        mean_skill = self.player_char_skill.groupby(
-            ["player", "character"]
-        ).char_skill.agg(["mean", "std"])
-        skill1 = games.apply(
-            lambda x: mean_skill.loc[x.player_1, x.character_1], axis=1
+        mean_skill = self.fit["posterior"].char_skill.mean(["chain", "draw"])
+        skill1 = games.aggregate(
+            lambda x: float(mean_skill.sel(character=x.character_1, player=x.player_1)),
+            axis=1,
         )
-        skill2 = games.apply(
-            lambda x: mean_skill.loc[x.player_2, x.character_2], axis=1
+        skill2 = games.aggregate(
+            lambda x: float(mean_skill.sel(character=x.character_2, player=x.player_2)),
+            axis=1,
         )
         non_mirror = (games.character_1 != games.character_2).astype(int)
-        matchup_value = self.matchups.groupby(["c1", "c2"]).win_rate.agg(
-            ["mean", "std"]
+        matchup_value = self.fit["posterior"].mu.mean(["chain", "draw"])
+        matchup = games.aggregate(
+            lambda x: float(
+                matchup_value.sel(matchup=f"{x.character_1}-{x.character_2}")
+            ),
+            axis=1,
         )
-        matchup = games.apply(
-            lambda x: matchup_value.loc[x.character_1, x.character_2], axis=1
+        elo_logit_scale = float(
+            self.fit["posterior"].elo_logit_scale.mean(["chain", "draw"])
         )
-        elo_logit_scale = self.summary_dataframe.elo_logit_scale
         return expit(
-            skill1["mean"]
-            - skill2["mean"]
-            + (non_mirror * matchup["mean"])
-            + (elo_logit_scale["mean"] * elo_logit(games))
+            skill1
+            - skill2
+            + (non_mirror * matchup)
+            + (elo_logit_scale * elo_logit(games))
         )
