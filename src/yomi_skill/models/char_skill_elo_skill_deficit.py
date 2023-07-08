@@ -1,10 +1,11 @@
-from ..model import YomiModel, elo_logit
+from ..model import elo_logit
+from .stan_model import StanModel
 import os
 from scipy.special import expit
 from IPython.core.display import display
 
 
-class CharSkillEloSkillDeficit(YomiModel):
+class CharSkillEloSkillDeficit(StanModel):
     model_filename = os.path.join(
         os.path.dirname(__file__), "char_skill_elo_skill_deficit.stan"
     )

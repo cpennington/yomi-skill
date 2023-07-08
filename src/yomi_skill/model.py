@@ -1,19 +1,13 @@
 import hashlib
 import io
-import itertools
 import logging
-import math
 import os
-import shutil
 
 import arviz
 import numpy
 import pandas
-import xarray
 from abc import ABC, abstractmethod
-from arviz.data import InferenceData
 from functools import cached_property
-from cmdstanpy import CmdStanModel, from_csv
 from sklearn.model_selection import train_test_split
 from typing import List
 
@@ -307,69 +301,6 @@ class YomiModel(ABC):
     @cached_property
     def fit_filename(self):
         return f"{self._file_base}"
-
-    @cached_property
-    def fit(self) -> arviz.InferenceData:
-        try:
-            logger.info(f"Loading fit file from {self.netcdf_filename}")
-            fit = arviz.InferenceData.from_netcdf(self.netcdf_filename)
-            logger.info(f"Loaded {self.netcdf_filename}")
-        except:
-            logger.warning(f"Unable to load {self.netcdf_filename}")
-            try:
-                logger.info(f"Loading fit file from {self.fit_filename}")
-                stan_fit = from_csv(self.fit_filename, "sample")
-                logger.info(f"Loaded {self.fit_filename}")
-            except:
-                logger.info("Unable to load fit, resampling", exc_info=True)
-                model = CmdStanModel(
-                    stan_file=self.model_filename,
-                )
-                shutil.rmtree(self.data_dir, ignore_errors=True)
-                os.makedirs(self.fit_filename, exist_ok=True)
-                input_data = {
-                    name: value
-                    for name, value in itertools.chain(
-                        self.constant_input.items(),
-                        self.game_input.items(),
-                        self.validation_input.items(),
-                    )
-                    if name in self.required_input
-                }
-                stan_fit = model.sample(
-                    data=input_data,
-                    iter_warmup=self.warmup,
-                    iter_sampling=self.samples,
-                    chains=4,
-                    output_dir=self.fit_filename,
-                )
-
-                logger.info("Wrote fit to %s", self.fit_filename)
-            fit = arviz.from_cmdstanpy(
-                posterior=stan_fit,
-                posterior_predictive="win_hat",
-                observed_data={"win": self.game_input["win"]},
-                log_likelihood="log_lik",
-                coords={
-                    "character": self.characters,
-                    "player": self.players,
-                    "matchup": [
-                        f"{c1}-{c2}"
-                        for ((c1, c2), _) in sorted(
-                            self.mu_index.items(), key=lambda x: x[1]
-                        )
-                    ],
-                },
-                dims={
-                    "char_skill": ["character", "player"],
-                    "mu": ["matchup"],
-                },
-            )
-            logger.info(f"Writing fit to {self.netcdf_filename}")
-            fit.to_netcdf(self.netcdf_filename)
-            logger.info(f"Wrote {self.netcdf_filename}")
-
-        return fit
 
     @cached_property
     def parquet_filename(self):
