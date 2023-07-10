@@ -1,13 +1,17 @@
-import pandas
-import re
-from .character import character_category
-import numpy as np
-import os
-from datetime import datetime
 import logging
-from IPython.core.display import display
-from ..games import normalize_types
+import os
+import re
 from collections import defaultdict
+from datetime import datetime
+
+import numpy as np
+import pandas
+from IPython.core.display import display
+from skelo.model.glicko2 import Glicko2Estimator
+from skelo.model.elo import EloEstimator
+
+from ..games import normalize_types
+from .character import character_category
 
 HISTORICAL_GSHEET = "https://docs.google.com/spreadsheets/u/1/d/1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U/export?format=csv&id=1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U&gid=1371955398"
 ELO_GSHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wMDB9AXwmC8N1UEcbbkNNbCcUdnhOmsFRyrXCU8huErk20zKeULEVdAidCijMUc678oOC1F7tgUI/pub?gid=1688184901&single=true&output=csv"
@@ -390,14 +394,29 @@ def games(autodata=None):
         )
         name = str(datetime.now().isoformat())
 
+        glicko_model = Glicko2Estimator(
+            key1_field="player_1",
+            key2_field="player_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+
+        elo_model = EloEstimator(
+            key1_field="player_1",
+            key2_field="player_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+
+        games["glicko_estimate"] = glicko_model.predict_proba(games).pr1
+        games["elo_estimate"] = elo_model.predict_proba(games).pr1
+        display(games)
+
         games["player_1"] = games.player_1.astype("category")
         games["player_2"] = games.player_2.astype("category")
         games["character_1"] = games.character_1.astype("category")
         games["character_2"] = games.character_2.astype("category")
-        games["version_1"] = games.version_1.astype("category")
-        games["version_2"] = games.version_2.astype("category")
         games["tournament_name"] = games.tournament_name.astype("category")
-        games["match_date"] = pandas.to_numeric(games.match_date, downcast="datetime")
         games["win"] = pandas.to_numeric(games.win, downcast="unsigned")
         games["elo_before_1"] = pandas.to_numeric(games.elo_before_1, downcast="float")
         games["elo_before_2"] = pandas.to_numeric(games.elo_before_2, downcast="float")

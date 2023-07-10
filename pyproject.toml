@@ -40,7 +40,8 @@ dependencies = [
     "pyarrow",
     "pymc",
     "jax[cuda11_cudnn82]",
-    "blackjax"
+    "blackjax",
+    "skelo"
 ]
 
 dynamic = ["version"]

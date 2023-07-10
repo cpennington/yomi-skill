@@ -1,14 +1,14 @@
 from ..model import elo_logit
 from .pymc_model import PyMCModel
 import os
-from scipy.special import expit
+from scipy.special import expit, logit
 from IPython.core.display import display
 from functools import cached_property
 import pymc as pm
 
 
-class CharSkillEloSkillDeficitPyMC(PyMCModel):
-    model_name = "char_skill_elo_skill_deficit_pymc"
+class CharSkillGlickoSkillDeficit(PyMCModel):
+    model_name = "char_skill_glicko_skill_deficit"
 
     @cached_property
     def model(self):
@@ -34,7 +34,7 @@ class CharSkillEloSkillDeficitPyMC(PyMCModel):
                 ]
                 + self.validation_input["non_mirrorT"]
                 * mu[self.validation_input["mupT"] - 1]
-                + elo_logit_scale * self.validation_input["elo_logitT"],
+                + elo_logit_scale * self.validation_input["skglicko_logitT"],
             )
             win_lik = pm.Bernoulli(
                 "win_lik",
@@ -68,5 +68,5 @@ class CharSkillEloSkillDeficitPyMC(PyMCModel):
             skill1
             - skill2
             + (non_mirror * matchup)
-            + (elo_logit_scale * elo_logit(games))
+            + (elo_logit_scale * logit(games.glicko_estimate))
         )

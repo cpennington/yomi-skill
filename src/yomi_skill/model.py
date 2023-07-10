@@ -7,6 +7,7 @@ import pandas
 from abc import ABC, abstractmethod
 from functools import cached_property
 from sklearn.model_selection import train_test_split
+from scipy.special import logit
 from typing import List
 
 logger = logging.getLogger(__name__)
@@ -252,6 +253,8 @@ class YomiModel(ABC):
             "player1": self.games.player_1.apply(self.player_index.get).to_numpy(int),
             "player2": self.games.player_2.apply(self.player_index.get).to_numpy(int),
             "elo_logit": elo_logit(self.games).to_numpy(),
+            "skelo_logit": logit(self.games.elo_estimate),
+            "skglicko_logit": logit(self.games.glicko_estimate),
             # Scale so that mininum elo sum gets 0.25 weight, max sum gets 2 weight
             "obs_weights": normalized_weights.to_numpy(),
         }
