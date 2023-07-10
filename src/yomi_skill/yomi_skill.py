@@ -1,16 +1,25 @@
 #! /usr/bin/env python
 
-from .yomi import historical_record
-from .render import *
-from .models.char_skill_elo_skill_deficit import CharSkillEloSkillDeficit
+import inspect
+import logging
+
+import arviz
 import click
 import click_log
-import logging
+
+from .model import YomiModel
+from .models import *
+from .render import *
+from .yomi import historical_record
 
 logger = logging.getLogger()
 click_log.basic_config(logger)
 
-MODELS = {"char_skill_elo_skill_deficit": CharSkillEloSkillDeficit}
+MODELS = {
+    model.model_name: model
+    for model_type in YomiModel.__subclasses__()
+    for model in model_type.__subclasses__()
+}
 
 
 @click.group()
@@ -22,7 +31,7 @@ def cli():
 @cli.command()
 @click.option("--game", type=click.Choice(["yomi"]), default="yomi")
 @click.option("--dest")
-@click.option("--min-games", default=50, type=int)
+@click.option("--min-games", default=0, type=int)
 @click.option("--with-versions/--no-versions", "versions", default=False)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
@@ -61,7 +70,7 @@ def render(
 
 @cli.command()
 @click.option("--game", type=click.Choice(["yomi"]), default="yomi")
-@click.option("--min-games", default=50, type=int)
+@click.option("--min-games", default=0, type=int)
 @click.option("--with-versions/--no-versions", "versions", default=False)
 @click.option("--new-data", "autodata", flag_value="new")
 @click.option("--same-data", "autodata", flag_value="same")
@@ -89,6 +98,9 @@ def validate(game, min_games, versions, autodata, model, warmup, samples):
         training_fraction=0.8,
     )
 
+    ess = arviz.ess(model.fit)
+    display(ess.max())
+    display(ess.min())
     display(model.posterior_brier_score)
 
 

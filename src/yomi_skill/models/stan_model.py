@@ -1,19 +1,38 @@
+import hashlib
+import io
 import itertools
 import logging
 import os
 import shutil
+from functools import cached_property
+from typing import List
 
 import arviz
-from functools import cached_property
 from cmdstanpy import CmdStanModel, from_csv
 
-from functools import cached_property
 from ..model import YomiModel
 
 logger = logging.getLogger(__name__)
 
 
 class StanModel(YomiModel):
+    model_filename: str
+    required_input: List[str]
+
+    @cached_property
+    def model_name(self):
+        model_name, _ = os.path.splitext(os.path.basename(self.model_filename))
+        return model_name
+
+    @cached_property
+    def model_hash(self):
+        with io.open(self.model_filename) as stan_code:
+            model_hash = hashlib.md5()
+            for chunk in stan_code:
+                model_hash.update(chunk.encode("utf-8"))
+            model_hash = model_hash.hexdigest()
+        return model_hash
+
     @cached_property
     def fit(self) -> arviz.InferenceData:
         try:

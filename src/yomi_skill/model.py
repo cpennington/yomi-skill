@@ -1,5 +1,3 @@
-import hashlib
-import io
 import logging
 import os
 
@@ -21,9 +19,9 @@ def elo_logit(games):
 
 
 class YomiModel(ABC):
-    model_filename: str
-    required_input: List[str]
     fit: arviz.InferenceData
+    model_name: str
+    model_hash: str
 
     def __init__(
         self,
@@ -36,7 +34,6 @@ class YomiModel(ABC):
         training_fraction=0.9,
     ):
         self.games = games
-        self.model_name, _ = os.path.splitext(os.path.basename(self.model_filename))
         self.pars = pars
         self.data_dir = data_dir
         self.min_games = min_games
@@ -75,15 +72,6 @@ class YomiModel(ABC):
     @abstractmethod
     def predict(self, games: pandas.DataFrame) -> List[float]:
         pass
-
-    @cached_property
-    def model_hash(self):
-        with io.open(self.model_filename) as stan_code:
-            model_hash = hashlib.md5()
-            for chunk in stan_code:
-                model_hash.update(chunk.encode("utf-8"))
-            model_hash = model_hash.hexdigest()
-        return model_hash
 
     @cached_property
     def players(self):
@@ -310,45 +298,6 @@ class YomiModel(ABC):
     @cached_property
     def netcdf_filename(self):
         return f"{self._file_base}.netcdf"
-
-    @property
-    def sample_inf_data(self):
-        try:
-            inf_data = arviz.data.InferenceData.from_netcdf(self.netcdf_filename)
-        except FileNotFoundError:
-            print("Converting to InferenceData")
-            inf_data = arviz.from_pystan(
-                posterior=self.fit,
-                posterior_predictive="win_hat",
-                observed_data="win",
-                log_likelihood="log_lik",
-                coords={
-                    # "player-tournament": [
-                    #     f"{player}-{tournament}"
-                    #     for ((player, tournament), _) in sorted(
-                    #         self.player_tournament_index.items(),
-                    #         key=lambda x: x[1],
-                    #     )
-                    # ],
-                    "matchup": [
-                        f"{c1}-{c2}"
-                        for ((c1, c2), _) in sorted(
-                            self.mu_index.items(), key=lambda x: x[1]
-                        )
-                    ]
-                },
-                dims={
-                    "skill": ["player-tournament"],
-                    "skill_adjust": ["player-tournament"],
-                    "mu": ["matchup"],
-                    "muv": ["matchup"],
-                },
-            )
-
-            os.makedirs(os.path.dirname(self.netcdf_filename), exist_ok=True)
-            inf_data.to_netcdf(self.netcdf_filename)
-
-        return inf_data
 
     @property
     def posterior_brier_score(self):

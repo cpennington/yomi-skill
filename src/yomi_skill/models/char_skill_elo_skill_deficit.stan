@@ -26,7 +26,7 @@ data {
 parameters { 
     vector[NM] mu; // Matchup value
     vector<upper=0>[NP] char_skill[NC]; // Player skill at character
-    real elo_logit_scale; // elo_logit scale
+    real<lower=0> elo_logit_scale; // elo_logit scale
 }
 transformed parameters {
     vector[NTG] win_chance_logit;

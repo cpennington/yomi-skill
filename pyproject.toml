@@ -38,6 +38,9 @@ dependencies = [
     "sympy",
     "toposort",
     "pyarrow",
+    "pymc",
+    "jax[cuda11_cudnn82]",
+    "blackjax"
 ]
 
 dynamic = ["version"]

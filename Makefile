@@ -18,21 +18,21 @@ lab:
 validate:
 	yomi-skill validate \
 		--game=yomi \
-		--min-games=30 \
 		--same-data \
-		--model $(MODEL) \
-		--warmup 500 \
-		--samples 1000
+		--min-games=30 \
+		--model=$(MODEL) \
+		--warmup=400 \
+		--samples=800
 
 matchups:
 	yomi-skill render \
 		--game=yomi \
 		--dest=site/index.html \
-		--min-games=30 \
 		--same-data \
-		--model $(MODEL) \
-		--warmup 500 \
-		--samples 1000
+		--min-games=30 \
+		--model=$(MODEL) \
+		--warmup=500 \
+		--samples=1000
 
 all-matchups: matchups
 
@@ -40,7 +40,6 @@ new-matchups:
 	yomi-skill render \
 		--game=yomi \
 		--dest=site/index.html \
-		--min-games=30 \
 		--new-data \
 		--model $(MODEL) \
 		--static-root=. \
