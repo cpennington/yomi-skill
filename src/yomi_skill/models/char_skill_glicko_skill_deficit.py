@@ -1,72 +1,79 @@
-from ..model import elo_logit
-from .pymc_model import PyMCModel
-import os
-from scipy.special import expit, logit
-from IPython.core.display import display
 from functools import cached_property
+
+import pandas
 import pymc as pm
+from scipy.special import expit, logit
+import xarray
+import numpy
+
+from .pymc_model import PyMCModel
 
 
 class CharSkillGlickoSkillDeficit(PyMCModel):
     model_name = "char_skill_glicko_skill_deficit"
 
     @cached_property
-    def model(self):
+    def model_(self):
         with pm.Model() as model:
             char_skill_deficit = pm.HalfNormal(
                 "char_skill_deficit",
                 sigma=1.0,
-                shape=(self.constant_input["NC"], self.constant_input["NP"]),
+                shape=(len(self.character_index_), len(self.player_index_)),
             )
             char_skill = pm.Deterministic("char_skill", char_skill_deficit * -1)
-            mu = pm.Normal("mu", 0.0, sigma=0.5, shape=(self.constant_input["NM"]))
-            elo_logit_scale = pm.HalfNormal("elo_logit_scale", sigma=1.0)
+            mu = pm.Normal("mu", 0.0, sigma=0.5, shape=(len(self.mu_index_),))
+            glicko_logit_scale = pm.HalfNormal("glicko_logit_scale", sigma=1.0)
 
             win_chance_logit = pm.Deterministic(
                 "win_chance_logit",
                 char_skill[
-                    self.validation_input["char1T"] - 1,
-                    self.validation_input["player1T"] - 1,
+                    self.data_.character_ix_1,
+                    self.data_.player_ix_1,
                 ]
                 - char_skill[
-                    self.validation_input["char2T"] - 1,
-                    self.validation_input["player2T"] - 1,
+                    self.data_.character_ix_2,
+                    self.data_.player_ix_2,
                 ]
-                + self.validation_input["non_mirrorT"]
-                * mu[self.validation_input["mupT"] - 1]
-                + elo_logit_scale * self.validation_input["skglicko_logitT"],
+                + self.data_.non_mirror.to_numpy(int) * mu[self.data_.mup.to_numpy(int)]
+                + glicko_logit_scale * self.data_.skglicko_logit,
             )
             win_lik = pm.Bernoulli(
                 "win_lik",
                 logit_p=win_chance_logit,
-                observed=self.validation_input["winT"],
+                observed=self.y_,
             )
         return model
 
-    def predict(self, games):
-        mean_skill = self.fit["posterior"].char_skill.mean(["chain", "draw"])
-        skill1 = games.aggregate(
+    def p1_win_chance(self, X: pandas.DataFrame) -> pandas.DataFrame:
+        mean_skill = self.fill_untrained_players(
+            self.inf_data_["posterior"].char_skill.mean(["chain", "draw"]), X
+        )
+        skill1 = X.aggregate(
             lambda x: float(mean_skill.sel(character=x.character_1, player=x.player_1)),
             axis=1,
         )
-        skill2 = games.aggregate(
+        skill2 = X.aggregate(
             lambda x: float(mean_skill.sel(character=x.character_2, player=x.player_2)),
             axis=1,
         )
-        non_mirror = (games.character_1 != games.character_2).astype(int)
-        matchup_value = self.fit["posterior"].mu.mean(["chain", "draw"])
-        matchup = games.aggregate(
+        non_mirror = (X.character_1 != X.character_2).astype(int)
+        matchup_value = self.inf_data_["posterior"].mu.mean(["chain", "draw"])
+        matchup = X.aggregate(
             lambda x: float(
                 matchup_value.sel(matchup=f"{x.character_1}-{x.character_2}")
             ),
             axis=1,
         )
-        elo_logit_scale = float(
-            self.fit["posterior"].elo_logit_scale.mean(["chain", "draw"])
+        glicko_logit_scale = float(
+            self.inf_data_["posterior"].glicko_logit_scale.mean(["chain", "draw"])
         )
-        return expit(
+        prob_p1_win = expit(
             skill1
             - skill2
             + (non_mirror * matchup)
-            + (elo_logit_scale * logit(games.glicko_estimate))
+            + (glicko_logit_scale * logit(X.glicko_estimate))
+        )
+
+        return pandas.DataFrame(
+            {1: prob_p1_win, 0: 1 - prob_p1_win}, columns=self.classes_
         )

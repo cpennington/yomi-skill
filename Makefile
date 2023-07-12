@@ -21,8 +21,8 @@ validate:
 		--same-data \
 		--min-games=30 \
 		--model=$(MODEL) \
-		--warmup=400 \
-		--samples=800
+		--warmup=500 \
+		--samples=1000
 
 matchups:
 	yomi-skill render \

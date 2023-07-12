@@ -1,14 +1,15 @@
 import logging
 import os
+from abc import ABC, abstractmethod
+from functools import cached_property
+from typing import List
 
 import arviz
 import numpy
 import pandas
-from abc import ABC, abstractmethod
-from functools import cached_property
-from sklearn.model_selection import train_test_split
+import xarray
 from scipy.special import logit
-from typing import List
+from sklearn.base import BaseEstimator, ClassifierMixin
 
 logger = logging.getLogger(__name__)
 
@@ -19,33 +20,31 @@ def elo_logit(games):
     return numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
 
 
-class YomiModel(ABC):
-    fit: arviz.InferenceData
+class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     model_name: str
     model_hash: str
+    data_: pandas.DataFrame
+    inf_data_: arviz.InferenceData
 
     def __init__(
         self,
-        games: pandas.DataFrame,
         data_dir,
-        pars,
         min_games=0,
         warmup=500,
         samples=1000,
-        training_fraction=0.9,
     ):
-        self.games = games
-        self.pars = pars
         self.data_dir = data_dir
         self.min_games = min_games
         self.warmup = warmup
         self.samples = samples
-        self.training_fraction = training_fraction
-        self.games["player_1_orig"] = self.games.player_1
-        self.games["player_2_orig"] = self.games.player_2
+
+    def _prep_data(self, games: pandas.DataFrame):
+        self.data_ = games.copy()
+        self.data_["player_1_orig"] = self.data_.player_1
+        self.data_["player_2_orig"] = self.data_.player_2
         if self.min_games > 0:
             games_played = (
-                pandas.concat([self.games.player_1, self.games.player_2])
+                pandas.concat([self.data_.player_1, self.data_.player_2])
                 .rename("player")
                 .to_frame()
                 .groupby("player")
@@ -57,51 +56,103 @@ class YomiModel(ABC):
                 games_played["count"] < self.min_games
             ].player
 
-            self.games = self.games.astype({"player_1": str, "player_2": str})
+            self.data_ = self.data_.astype({"player_1": str, "player_2": str})
 
-            self.min_games_player = f"< {self.min_games} games"
+            self.min_games_player_ = f"< {self.min_games} games"
 
-            self.games.loc[
-                self.games.player_1.isin(not_enough_played), "player_1"
-            ] = self.min_games_player
-            self.games.loc[
-                self.games.player_2.isin(not_enough_played), "player_2"
-            ] = self.min_games_player
-            self.games["player_1"] = self.games.player_1.astype("category")
-            self.games["player_2"] = self.games.player_2.astype("category")
+            self.data_.loc[
+                self.data_.player_1.isin(not_enough_played), "player_1"
+            ] = self.min_games_player_
+            self.data_.loc[
+                self.data_.player_2.isin(not_enough_played), "player_2"
+            ] = self.min_games_player_
+        else:
+            self.min_games_player_ = None
+        self.data_["player_1"] = self.data_.player_1.astype("category")
+        self.data_["player_2"] = self.data_.player_2.astype("category")
+        self.data_["mup"] = self.data_.apply(
+            lambda r: self.mu_index_[(r.character_1, r.character_2)], axis=1
+        )
+        self.data_["vmup"] = self.data_.apply(
+            lambda r: self.version_mu_index_[
+                (r.character_1, r.version_1, r.character_2, r.version_2)
+            ],
+            axis=1,
+        )
+        self.data_["non_mirror"] = self.data_.apply(
+            lambda r: int(r.character_1 != r.character_2), axis=1
+        )
+        self.data_["elo_logit"] = elo_logit(self.data_)
+        self.data_["skelo_logit"] = logit(self.data_.elo_estimate)
+        self.data_["skglicko_logit"] = logit(self.data_.glicko_estimate)
+        self.data_["skglicko_pc_logit"] = logit(self.data_.pc_glicko_estimate)
+
+        self.data_["character_ix_1"] = self.data_.character_1.apply(
+            self.character_index_.get
+        )
+        self.data_["character_ix_2"] = self.data_.character_2.apply(
+            self.character_index_.get
+        )
+        self.data_["version_ix_1"] = self.data_.version_1.apply(self.version_index_.get)
+        self.data_["version_ix_2"] = self.data_.version_2.apply(self.version_index_.get)
+        self.data_["player_ix_1"] = self.data_.player_1.apply(self.player_index_.get)
+        self.data_["player_ix_2"] = self.data_.player_2.apply(self.player_index_.get)
+
+    def clear_all_cached_properties(self):
+        class_attrs = dir(self.__class__)
+        for attr in class_attrs:
+            if isinstance(getattr(self.__class__, attr), cached_property) and hasattr(
+                self, attr
+            ):
+                delattr(self, attr)
 
     @abstractmethod
-    def predict(self, games: pandas.DataFrame) -> List[float]:
+    def fit(self, X: pandas.DataFrame, y):
+        self.clear_all_cached_properties()
+        self.data_hash_ = hash(X.values.tobytes())
+        self._prep_data(X)
+        self.classes_, y = numpy.unique(y, return_inverse=True)
+        self.y_ = y
+
+    @abstractmethod
+    def p1_win_chance(self, X: pandas.DataFrame) -> pandas.DataFrame:
         pass
 
+    def predict_proba(self, X):
+        prob_a = self.p1_win_chance(X).to_numpy()
+        return prob_a
+
+    def predict(self, X):
+        return self.p1_win_chance(X)[1] > 0.5
+
     @cached_property
-    def players(self):
+    def players_(self):
         unique_players = pandas.concat(
-            [self.games.player_1, self.games.player_2]
+            [self.data_.player_1, self.data_.player_2]
         ).unique()
         return sorted(unique_players)
 
     @cached_property
-    def player_index(self):
-        return {player: index + 1 for index, player in enumerate(self.players)}
+    def player_index_(self):
+        return {player: index for index, player in enumerate(self.players_)}
 
     @cached_property
-    def mu_list(self):
+    def mu_list_(self):
         return [
-            (c1, c2) for c1 in self.characters for c2 in self.characters if c1 <= c2
+            (c1, c2) for c1 in self.characters_ for c2 in self.characters_ if c1 <= c2
         ]
 
     @cached_property
-    def mu_index(self):
-        return {(c1, c2): index + 1 for index, (c1, c2) in enumerate(self.mu_list)}
+    def mu_index_(self):
+        return {(c1, c2): index for index, (c1, c2) in enumerate(self.mu_list_)}
 
     @cached_property
-    def version_mu_index(self):
+    def version_mu_index_(self):
         return dict(
             zip(
                 (
                     (row.character_1, row.version_1, row.character_2, row.version_2)
-                    for row in self.games[
+                    for row in self.data_[
                         ["character_1", "version_1", "character_2", "version_2"]
                     ]
                     .drop_duplicates()
@@ -112,26 +163,26 @@ class YomiModel(ABC):
         )
 
     @cached_property
-    def characters(self):
+    def characters_(self):
         return sorted(
-            pandas.concat([self.games.character_1, self.games.character_2]).unique()
+            pandas.concat([self.data_.character_1, self.data_.character_2]).unique()
         )
 
     @cached_property
-    def versions(self):
+    def versions_(self):
         return sorted(
-            pandas.concat([self.games.version_1, self.games.version_2]).unique()
+            pandas.concat([self.data_.version_1, self.data_.version_2]).unique()
         )
 
     @cached_property
-    def character_versions(self):
+    def character_versions_(self):
         return sorted(
             pandas.concat(
                 [
-                    self.games[["character_1", "version_1"]].rename(
+                    self.data_[["character_1", "version_1"]].rename(
                         columns={"character_1": "character", "version_1": "version"}
                     ),
-                    self.games[["character_2", "version_2"]].rename(
+                    self.data_[["character_2", "version_2"]].rename(
                         columns={"character_2": "character", "version_2": "version"}
                     ),
                 ]
@@ -141,27 +192,27 @@ class YomiModel(ABC):
         )
 
     @cached_property
-    def character_index(self):
-        return {char: index + 1 for index, char in enumerate(self.characters)}
+    def character_index_(self):
+        return {char: index for index, char in enumerate(self.characters_)}
 
     @cached_property
-    def version_index(self):
-        return {version: index + 1 for index, version in enumerate(self.versions)}
+    def version_index_(self):
+        return {version: index for index, version in enumerate(self.versions_)}
 
     @cached_property
-    def player_tournament_index(self):
+    def player_tournament_index_(self):
         return dict(
-            self.player_tournament_dates.apply(
-                lambda r: ((r.player, r.tournament_name), r.name + 1), axis=1
+            self.player_tournament_dates_.apply(
+                lambda r: ((r.player, r.tournament_name), r.name), axis=1
             ).values
         )
 
     @cached_property
-    def player_tournament_dates(self):
-        p1_games = self.games[["player_1", "tournament_name", "match_date"]].rename(
+    def player_tournament_dates_(self):
+        p1_games = self.data_[["player_1", "tournament_name", "match_date"]].rename(
             columns={"player_1": "player"}
         )
-        p2_games = self.games[["player_2", "tournament_name", "match_date"]].rename(
+        p2_games = self.data_[["player_2", "tournament_name", "match_date"]].rename(
             columns={"player_2": "player"}
         )
         return (
@@ -174,9 +225,9 @@ class YomiModel(ABC):
         )
 
     @cached_property
-    def tournament_index(self):
+    def tournament_index_(self):
         ordered_tournaments = (
-            self.games.groupby("tournament_name")
+            self.data_.groupby("tournament_name")
             .match_date.quantile(0.5)
             .reset_index()
             .sort_values("match_date")
@@ -184,128 +235,58 @@ class YomiModel(ABC):
         )
         return dict(zip(ordered_tournaments, range(1, 1000)))
 
-    @cached_property
-    def constant_input(self):
-        return {
-            # "NPT": len(self.player_tournament_index),
-            "NG": len(self.games),
-            "NM": len(self.mu_index),
-            "NP": len(self.player_index),
-            "NC": len(self.characters),
-            "NMV": len(self.version_mu_index),
-            "mu_for_v": [
-                self.mu_index[(c1, c2)]
-                for ((c1, v1, c2, v2), vix) in sorted(
-                    self.version_mu_index.items(), key=lambda i: i[1]
-                )
-            ],
-            # Disable predictions
-            "predict": 0,
-        }
-
-    @cached_property
-    def game_input(self):
-        elo_sum = self.games.elo_before_1 + self.games.elo_before_2
-        scaled_weights = 0.25 + 1.75 * (elo_sum - elo_sum.min()) / (
-            elo_sum.max() - elo_sum.min()
-        )
-        normalized_weights = scaled_weights / scaled_weights.sum() * len(self.games)
-
-        return {
-            "games": self.games,
-            # "tp": tournament_player,
-            "win": self.games.win.to_numpy(int),
-            # "pt1": self.games.apply(
-            #     lambda r: self.player_tournament_index[(r.player_1, r.tournament_name)],
-            #     axis=1,
-            # ),
-            # "pt2": self.games.apply(
-            #     lambda r: self.player_tournament_index[(r.player_2, r.tournament_name)],
-            #     axis=1,
-            # ),
-            "mup": self.games.apply(
-                lambda r: self.mu_index[(r.character_1, r.character_2)], axis=1
-            ).to_numpy(int),
-            "vmup": self.games.apply(
-                lambda r: self.version_mu_index[
-                    (r.character_1, r.version_1, r.character_2, r.version_2)
-                ],
-                axis=1,
-            ).to_numpy(int),
-            "non_mirror": self.games.apply(
-                lambda r: float(r.character_1 != r.character_2), axis=1
-            ).to_numpy(int),
-            # "prev_tournament": self.player_tournament_dates.previous.to_numpy(int).apply(
-            #     lambda x: x + 1
-            # ),
-            "char1": self.games.character_1.apply(self.character_index.get).to_numpy(
-                int
-            ),
-            "char2": self.games.character_2.apply(self.character_index.get).to_numpy(
-                int
-            ),
-            "version1": self.games.version_1.apply(self.version_index.get).to_numpy(
-                int
-            ),
-            "version2": self.games.version_2.apply(self.version_index.get).to_numpy(
-                int
-            ),
-            "player1": self.games.player_1.apply(self.player_index.get).to_numpy(int),
-            "player2": self.games.player_2.apply(self.player_index.get).to_numpy(int),
-            "elo_logit": elo_logit(self.games).to_numpy(),
-            "skelo_logit": logit(self.games.elo_estimate),
-            "skglicko_logit": logit(self.games.glicko_estimate),
-            # Scale so that mininum elo sum gets 0.25 weight, max sum gets 2 weight
-            "obs_weights": normalized_weights.to_numpy(),
-        }
-
-    @cached_property
-    def validation_input(self):
-        names, values = zip(*self.game_input.items())
-        split_values = train_test_split(*values, train_size=self.training_fraction)
-        test_values = split_values[0::2]
-        test_input = {f"{name}T": value for name, value in zip(names, test_values)}
-        validation_values = split_values[1::2]
-        validation_input = {
-            f"{name}V": value for name, value in zip(names, validation_values)
-        }
-
-        return {
-            **test_input,
-            **validation_input,
-            "NTG": len(test_input["gamesT"]),
-            "NVG": len(validation_input["gamesV"]),
-        }
-
-    @cached_property
-    def _file_base(self):
+    def cachepath_(
+        self,
+        *,
+        subdirs: List[str] | None = None,
+        extension: str | None = None,
+        fold: int | None = None,
+    ):
         path = [
             self.data_dir,
             f"{self.model_name}-{self.model_hash[:6]}",
             f"warmup-{self.warmup}",
             f"samples-{self.samples}",
-            f"training-{self.training_fraction}",
+            f"data-{self.data_hash_}",
         ]
         if self.min_games > 0:
             path.append(f"min-games-{self.min_games}")
+        if subdirs:
+            path.extend(subdirs)
+        if extension:
+            path[-1] = f"{path[-1]}.{extension}"
+
         return os.path.join(*path)
 
-    @cached_property
-    def fit_filename(self):
-        return f"{self._file_base}"
+    def fit_filename_(self):
+        return self.cachepath_()
 
-    @cached_property
-    def parquet_filename(self):
-        return f"{self._file_base}.parquet"
+    def parquet_filename_(self):
+        return self.cachepath_(extension="parquet")
 
-    @cached_property
-    def netcdf_filename(self):
-        return f"{self._file_base}.netcdf"
+    def netcdf_filename_(self):
+        return self.cachepath_(extension="netcdf")
 
-    @property
-    def posterior_brier_score(self):
-        validation_games = self.validation_input["gamesV"]
-        p1_win_chance = self.predict(validation_games)
-        return (p1_win_chance - validation_games.win).pow(2).sum() / len(
-            validation_games
+    def fill_untrained_players(self, mean_skill, X):
+        untrained_players = (set(X.player_1) | set(X.player_2)) - set(
+            mean_skill.coords["player"].values
         )
+        if self.min_games_player_:
+            untrained_data = numpy.array(
+                [mean_skill.sel(player=self.min_games_player_).values]
+                * len(untrained_players)
+            )
+        else:
+            untrained_data = numpy.full(
+                (len(mean_skill.coords["character"]), len(untrained_players)),
+                mean_skill.median(),
+            )
+        untrained_skill = xarray.DataArray(
+            untrained_data,
+            {
+                "player": sorted(untrained_players),
+                "character": mean_skill.coords["character"],
+            },
+            ["player", "character"],
+        )
+        return xarray.concat([mean_skill, untrained_skill], "player")

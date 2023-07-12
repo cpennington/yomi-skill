@@ -11,7 +11,7 @@ from skelo.model.glicko2 import Glicko2Estimator
 from skelo.model.elo import EloEstimator
 
 from ..games import normalize_types
-from .character import character_category
+from .character import character_category, Character
 
 HISTORICAL_GSHEET = "https://docs.google.com/spreadsheets/u/1/d/1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U/export?format=csv&id=1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U&gid=1371955398"
 ELO_GSHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wMDB9AXwmC8N1UEcbbkNNbCcUdnhOmsFRyrXCU8huErk20zKeULEVdAidCijMUc678oOC1F7tgUI/pub?gid=1688184901&single=true&output=csv"
@@ -23,9 +23,10 @@ def fetch_name_map(url=HISTORICAL_GSHEET):
         re.sub("\W+", "_", col.lower()).strip("_") for col in historical_record.columns
     ]
 
+    known_chars = [char.value for char in Character]
     historical_record = historical_record[
-        ~historical_record.character_1.isin(["Squall", "Kefka", "Ultimicia"])
-        & ~historical_record.character_2.isin(["Squall", "Kefka", "Ultimicia"])
+        historical_record.character_1.apply(lambda v: v.lower()).isin(known_chars)
+        & historical_record.character_2.apply(lambda v: v.lower()).isin(known_chars)
     ].dropna(subset=["tournament_name"])
 
     names = pandas.DataFrame(
@@ -46,9 +47,11 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
         re.sub("\W+", "_", col.lower()).strip("_") for col in historical_record.columns
     ]
 
+    known_chars = [char.value for char in Character]
+
     historical_record = historical_record[
-        ~historical_record.character_1.isin(["Squall", "Kefka", "Ultimicia"])
-        & ~historical_record.character_2.isin(["Squall", "Kefka", "Ultimicia"])
+        historical_record.character_1.apply(lambda v: v.lower()).isin(known_chars)
+        & historical_record.character_2.apply(lambda v: v.lower()).isin(known_chars)
     ].dropna(subset=["tournament_name"])
 
     historical_record["match_date"] = pandas.to_datetime(
@@ -173,6 +176,12 @@ def fetch_historical_elo(url=ELO_GSHEET):
     )
     historical_elo.set_win_1 = historical_elo.set_win_1.fillna(0)
     historical_elo.set_win_2 = historical_elo.set_win_2.fillna(0)
+
+    historical_elo = historical_elo[
+        historical_elo.player_1.apply(lambda v: v.lower()).isin(name_map.index)
+        & historical_elo.player_2.apply(lambda v: v.lower()).isin(name_map.index)
+    ]
+
     historical_elo.player_1 = historical_elo.player_1.apply(
         lambda n: name_map.loc[n.lower()]
     )
@@ -393,23 +402,39 @@ def games(autodata=None):
             rsuffix="_2",
         )
         name = str(datetime.now().isoformat())
+        games["player_character_1"] = games.apply(
+            lambda r: f"{r.player_1}-{r.character_1}", axis=1
+        ).astype("category")
+        games["player_character_2"] = games.apply(
+            lambda r: f"{r.player_2}-{r.character_2}", axis=1
+        ).astype("category")
 
-        glicko_model = Glicko2Estimator(
+        player_glicko_model = Glicko2Estimator(
             key1_field="player_1",
             key2_field="player_2",
             timestamp_field="match_date",
             initial_time=games.match_date.min(),
         ).fit(games, games.win)
 
-        elo_model = EloEstimator(
+        player_elo_model = EloEstimator(
             key1_field="player_1",
             key2_field="player_2",
             timestamp_field="match_date",
             initial_time=games.match_date.min(),
         ).fit(games, games.win)
 
-        games["glicko_estimate"] = glicko_model.predict_proba(games).pr1
-        games["elo_estimate"] = elo_model.predict_proba(games).pr1
+        player_character_glicko_model = Glicko2Estimator(
+            key1_field="player_character_1",
+            key2_field="player_character_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+
+        games["glicko_estimate"] = player_glicko_model.predict_proba(games).pr1
+        games["pc_glicko_estimate"] = player_character_glicko_model.predict_proba(
+            games
+        ).pr1
+        games["elo_estimate"] = player_elo_model.predict_proba(games).pr1
         display(games)
 
         games["player_1"] = games.player_1.astype("category")
