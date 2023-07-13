@@ -22,7 +22,8 @@ class CharSkillEloSkillDeficitPyMC(PyMCModel):
             char_skill = pm.Deterministic("char_skill", char_skill_deficit * -1)
             mu = pm.Normal("mu", 0.0, sigma=0.5, shape=(len(self.mu_index_),))
             elo_logit_scale = pm.HalfNormal("elo_logit_scale", sigma=1.0)
-
+            print(self.data_.character_ix_1.dtype)
+            print(self.data_.player_ix_1.dtype)
             win_chance_logit = pm.Deterministic(
                 "win_chance_logit",
                 char_skill[

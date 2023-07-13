@@ -88,8 +88,8 @@ class StanModel(YomiModel):
             model_hash = model_hash.hexdigest()
         return model_hash
 
-    def fit(self, X, y=None) -> "StanModel":
-        super().fit(X, y)
+    def fit(self, X, y=None, sample_weights=None) -> "StanModel":
+        super().fit(X, y, sample_weights)
         netcdf_file = self.netcdf_filename_()
         fit_file = self.fit_filename_()
         try:

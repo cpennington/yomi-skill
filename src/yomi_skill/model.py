@@ -89,14 +89,18 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
 
         self.data_["character_ix_1"] = self.data_.character_1.apply(
             self.character_index_.get
-        )
+        ).astype(int)
         self.data_["character_ix_2"] = self.data_.character_2.apply(
             self.character_index_.get
-        )
+        ).astype(int)
         self.data_["version_ix_1"] = self.data_.version_1.apply(self.version_index_.get)
         self.data_["version_ix_2"] = self.data_.version_2.apply(self.version_index_.get)
-        self.data_["player_ix_1"] = self.data_.player_1.apply(self.player_index_.get)
-        self.data_["player_ix_2"] = self.data_.player_2.apply(self.player_index_.get)
+        self.data_["player_ix_1"] = self.data_.player_1.apply(
+            self.player_index_.get
+        ).astype("int")
+        self.data_["player_ix_2"] = self.data_.player_2.apply(
+            self.player_index_.get
+        ).astype("int")
 
     def clear_all_cached_properties(self):
         class_attrs = dir(self.__class__)
@@ -107,12 +111,17 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
                 delattr(self, attr)
 
     @abstractmethod
-    def fit(self, X: pandas.DataFrame, y):
+    def fit(self, X: pandas.DataFrame, y, sample_weights=None) -> "YomiModel":
         self.clear_all_cached_properties()
+        if sample_weights is not None:
+            self.sample_weights_ = sample_weights
+        else:
+            self.sample_weights_ = numpy.ones(len(X))
         self.data_hash_ = hash(X.values.tobytes())
         self._prep_data(X)
         self.classes_, y = numpy.unique(y, return_inverse=True)
         self.y_ = y
+        return self
 
     @abstractmethod
     def p1_win_chance(self, X: pandas.DataFrame) -> pandas.DataFrame:
@@ -271,6 +280,9 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
         untrained_players = (set(X.player_1) | set(X.player_2)) - set(
             mean_skill.coords["player"].values
         )
+        if not untrained_players:
+            return mean_skill
+
         if self.min_games_player_:
             untrained_data = numpy.array(
                 [mean_skill.sel(player=self.min_games_player_).values]
@@ -278,7 +290,7 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
             )
         else:
             untrained_data = numpy.full(
-                (len(mean_skill.coords["character"]), len(untrained_players)),
+                (len(untrained_players), len(mean_skill.coords["character"])),
                 mean_skill.median(),
             )
         untrained_skill = xarray.DataArray(

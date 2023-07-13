@@ -1,6 +1,7 @@
 from functools import cached_property
 import pandas
 import pymc as pm
+import pymc.math as pmmath
 from scipy.special import expit
 
 from ..model import elo_logit
@@ -23,6 +24,9 @@ class EloOnly(PyMCModel):
                 "win_lik",
                 logit_p=win_chance_logit,
                 observed=self.y_,
+            )
+            pm.Potential(
+                "weighted", pmmath.prod(pmmath.stack([self.sample_weights_, win_lik]))
             )
         return model
 

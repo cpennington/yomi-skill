@@ -66,16 +66,13 @@ def render(
     fit_dir = f"fits/{data_name}"
 
     model = MODELS[model](
-        hist_games,
         fit_dir,
-        ["mu", "char_skill", "elo_logit_scale"],
         min_games,
         warmup=warmup,
         samples=samples,
-        training_fraction=0.99999,
-    )
+    ).fit(hist_games, hist_games.win)
 
-    render = YomiRender(data_name, model)
+    render = YomiRender(data_name, model.inf_data_)
 
     filename = render.render_matchup_comparator(game, dest, static_root=static_root)
     print(filename)
