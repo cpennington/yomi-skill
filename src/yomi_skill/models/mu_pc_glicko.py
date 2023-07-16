@@ -2,6 +2,7 @@ from functools import cached_property
 
 import pandas
 import pymc as pm
+import pymc.math as pmmath
 from scipy.special import expit, logit
 import xarray
 import numpy
@@ -11,23 +12,25 @@ from .pymc_model import PyMCModel
 
 class MUPCGlicko(PyMCModel):
     model_name = "mu_pc_glicko"
+    weight_key = "pc_elo"
 
     @cached_property
     def model_(self):
         with pm.Model() as model:
             mu = pm.Normal("mu", 0.0, sigma=0.5, shape=(len(self.mu_index_),))
             glicko_logit_scale = pm.HalfNormal("glicko_logit_scale", sigma=1.0)
-
-            win_chance_logit = pm.Deterministic(
-                "win_chance_logit",
-                self.data_.non_mirror.to_numpy(int) * mu[self.data_.mup.to_numpy(int)]
-                + glicko_logit_scale * self.data_.skglicko_pc_logit,
-            )
             win_lik = pm.Bernoulli(
                 "win_lik",
-                logit_p=win_chance_logit,
+                logit_p=self.data_.non_mirror.to_numpy(int)
+                * mu[self.data_.mup.to_numpy(int)]
+                + glicko_logit_scale * logit(self.data_.pc_glicko_estimate),
                 observed=self.y_,
             )
+            if self.sample_weight_ is not None:
+                pm.Potential(
+                    "weighted",
+                    pmmath.prod(pmmath.stack([self.sample_weight_, win_lik])),
+                )
         return model
 
     def p1_win_chance(self, X: pandas.DataFrame) -> pandas.DataFrame:

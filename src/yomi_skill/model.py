@@ -10,14 +10,38 @@ import pandas
 import xarray
 from scipy.special import logit
 from sklearn.base import BaseEstimator, ClassifierMixin
+from sklearn.preprocessing import scale
 
 logger = logging.getLogger(__name__)
 
 
-def elo_logit(games):
-    elo_diff = games.elo_before_1 - games.elo_before_2
-    elo_pct_p1_win = 1 / (1 + (-elo_diff / 1135.77).rpow(10))
-    return numpy.log(elo_pct_p1_win / (1 - elo_pct_p1_win))
+def min_max_scale(series):
+    return (series - series.min()) / (series.max() - series.min())
+
+
+def z_score_scale(series):
+    return (series - series.mean()) / series.std()
+
+
+def weight_by(games, key):
+    # elo_threshold = pandas.concat([hist_games.elo_1, hist_games.elo_2]).quantile(0.9)
+    # hist_games["has_high_skill"] = (hist_games.elo_1 > elo_threshold) | (
+    #     hist_games.elo_2 > elo_threshold
+    # )
+    # hist_games["has_low_skill"] = (hist_games.elo_1 <= elo_threshold) | (
+    #     hist_games.elo_2 <= elo_threshold
+    # )
+    scaled_key_1 = games[f"scaled_{key}_1"] = z_score_scale(games[f"{key}_1"])
+    scaled_key_2 = games[f"scaled_{key}_2"] = z_score_scale(games[f"{key}_2"])
+    max_key = pandas.concat([scaled_key_1, scaled_key_2]).max()
+    diff = games[f"{key}_diff_norm"] = z_score_scale(
+        -(scaled_key_1 - scaled_key_2).abs()
+    )
+    max_1 = games[f"{key}_max_norm_1"] = z_score_scale(((scaled_key_1 - max_key)))
+    max_2 = games[f"{key}_max_norm_2"] = z_score_scale(((scaled_key_2 - max_key)))
+    weight = min_max_scale(diff + max_1 + max_2)
+    games[f"{key}_weight"] = len(games) / weight.sum() * weight
+    return games
 
 
 class YomiModel(ABC, BaseEstimator, ClassifierMixin):
@@ -25,6 +49,7 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     model_hash: str
     data_: pandas.DataFrame
     inf_data_: arviz.InferenceData
+    weight_key: str
 
     def __init__(
         self,
@@ -73,19 +98,9 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
         self.data_["mup"] = self.data_.apply(
             lambda r: self.mu_index_[(r.character_1, r.character_2)], axis=1
         )
-        self.data_["vmup"] = self.data_.apply(
-            lambda r: self.version_mu_index_[
-                (r.character_1, r.version_1, r.character_2, r.version_2)
-            ],
-            axis=1,
-        )
         self.data_["non_mirror"] = self.data_.apply(
             lambda r: int(r.character_1 != r.character_2), axis=1
         )
-        self.data_["elo_logit"] = elo_logit(self.data_)
-        self.data_["skelo_logit"] = logit(self.data_.elo_estimate)
-        self.data_["skglicko_logit"] = logit(self.data_.glicko_estimate)
-        self.data_["skglicko_pc_logit"] = logit(self.data_.pc_glicko_estimate)
 
         self.data_["character_ix_1"] = self.data_.character_1.apply(
             self.character_index_.get
@@ -93,8 +108,6 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
         self.data_["character_ix_2"] = self.data_.character_2.apply(
             self.character_index_.get
         ).astype(int)
-        self.data_["version_ix_1"] = self.data_.version_1.apply(self.version_index_.get)
-        self.data_["version_ix_2"] = self.data_.version_2.apply(self.version_index_.get)
         self.data_["player_ix_1"] = self.data_.player_1.apply(
             self.player_index_.get
         ).astype("int")
@@ -105,18 +118,16 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     def clear_all_cached_properties(self):
         class_attrs = dir(self.__class__)
         for attr in class_attrs:
-            if isinstance(getattr(self.__class__, attr), cached_property) and hasattr(
-                self, attr
+            if (
+                isinstance(getattr(self.__class__, attr), cached_property)
+                and attr in self.__dict__
             ):
                 delattr(self, attr)
 
     @abstractmethod
-    def fit(self, X: pandas.DataFrame, y, sample_weights=None) -> "YomiModel":
+    def fit(self, X: pandas.DataFrame, y, sample_weight=None) -> "YomiModel":
         self.clear_all_cached_properties()
-        if sample_weights is not None:
-            self.sample_weights_ = sample_weights
-        else:
-            self.sample_weights_ = numpy.ones(len(X))
+        self.sample_weight_ = sample_weight
         self.data_hash_ = hash(X.values.tobytes())
         self._prep_data(X)
         self.classes_, y = numpy.unique(y, return_inverse=True)
@@ -156,93 +167,14 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
         return {(c1, c2): index for index, (c1, c2) in enumerate(self.mu_list_)}
 
     @cached_property
-    def version_mu_index_(self):
-        return dict(
-            zip(
-                (
-                    (row.character_1, row.version_1, row.character_2, row.version_2)
-                    for row in self.data_[
-                        ["character_1", "version_1", "character_2", "version_2"]
-                    ]
-                    .drop_duplicates()
-                    .itertuples()
-                ),
-                range(1, 1000),
-            )
-        )
-
-    @cached_property
     def characters_(self):
         return sorted(
             pandas.concat([self.data_.character_1, self.data_.character_2]).unique()
         )
 
     @cached_property
-    def versions_(self):
-        return sorted(
-            pandas.concat([self.data_.version_1, self.data_.version_2]).unique()
-        )
-
-    @cached_property
-    def character_versions_(self):
-        return sorted(
-            pandas.concat(
-                [
-                    self.data_[["character_1", "version_1"]].rename(
-                        columns={"character_1": "character", "version_1": "version"}
-                    ),
-                    self.data_[["character_2", "version_2"]].rename(
-                        columns={"character_2": "character", "version_2": "version"}
-                    ),
-                ]
-            )
-            .drop_duplicates()
-            .itertuples(index=False)
-        )
-
-    @cached_property
     def character_index_(self):
         return {char: index for index, char in enumerate(self.characters_)}
-
-    @cached_property
-    def version_index_(self):
-        return {version: index for index, version in enumerate(self.versions_)}
-
-    @cached_property
-    def player_tournament_index_(self):
-        return dict(
-            self.player_tournament_dates_.apply(
-                lambda r: ((r.player, r.tournament_name), r.name), axis=1
-            ).values
-        )
-
-    @cached_property
-    def player_tournament_dates_(self):
-        p1_games = self.data_[["player_1", "tournament_name", "match_date"]].rename(
-            columns={"player_1": "player"}
-        )
-        p2_games = self.data_[["player_2", "tournament_name", "match_date"]].rename(
-            columns={"player_2": "player"}
-        )
-        return (
-            pandas.concat([p1_games, p2_games])
-            .groupby(["player", "tournament_name"])
-            .match_date.quantile(0.5)
-            .reset_index()
-            .sort_values(["match_date", "player"])
-            .reset_index(drop=True)
-        )
-
-    @cached_property
-    def tournament_index_(self):
-        ordered_tournaments = (
-            self.data_.groupby("tournament_name")
-            .match_date.quantile(0.5)
-            .reset_index()
-            .sort_values("match_date")
-            .tournament_name
-        )
-        return dict(zip(ordered_tournaments, range(1, 1000)))
 
     def cachepath_(
         self,

@@ -41,7 +41,8 @@ dependencies = [
     "pymc",
     "jax[cuda11_cudnn82]",
     "blackjax",
-    "skelo"
+    "skelo",
+    "model-diagnostics"
 ]
 
 dynamic = ["version"]

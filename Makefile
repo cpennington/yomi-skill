@@ -17,8 +17,6 @@ lab:
 
 validate:
 	yomi-skill validate \
-		--game=yomi \
-		--same-data \
 		--min-games=30 \
 		--model=$(MODEL) \
 		--warmup=500 \
@@ -26,7 +24,6 @@ validate:
 
 matchups:
 	yomi-skill render \
-		--game=yomi \
 		--dest=site/index.html \
 		--same-data \
 		--min-games=30 \
@@ -38,7 +35,6 @@ all-matchups: matchups
 
 new-matchups:
 	yomi-skill render \
-		--game=yomi \
 		--dest=site/index.html \
 		--new-data \
 		--model $(MODEL) \

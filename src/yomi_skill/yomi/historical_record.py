@@ -4,17 +4,70 @@ import re
 from collections import defaultdict
 from datetime import datetime
 
+import sqlite3
 import numpy as np
 import pandas
-from IPython.core.display import display
 from skelo.model.glicko2 import Glicko2Estimator
 from skelo.model.elo import EloEstimator
 
-from ..games import normalize_types
 from .character import character_category, Character
 
 HISTORICAL_GSHEET = "https://docs.google.com/spreadsheets/u/1/d/1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U/export?format=csv&id=1HcdISgCl3s4RpWkJa8m-G1JjfKzd8qf2WY2Xcw32D7U&gid=1371955398"
 ELO_GSHEET = "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5wMDB9AXwmC8N1UEcbbkNNbCcUdnhOmsFRyrXCU8huErk20zKeULEVdAidCijMUc678oOC1F7tgUI/pub?gid=1688184901&single=true&output=csv"
+
+
+def normalize_players(games: pandas.DataFrame):
+    all_players = (
+        pandas.concat([games.player_1, games.player_2]).rename("player").to_frame()
+    )
+    all_players["normalized"] = all_players.player.apply(
+        lambda v: re.sub(r"[^a-z0-9]", "", v.lower())
+    )
+
+    player_map = all_players.groupby("normalized").player.agg(
+        lambda x: pandas.Series.mode(x)[0]
+    )
+
+    all_players["standardized"] = all_players.normalized.apply(lambda p: player_map[p])
+    all_players = all_players.drop_duplicates().set_index(["player"])
+
+    games.player_1 = games.player_1.apply(lambda p: all_players.standardized[p])
+    games.player_2 = games.player_2.apply(lambda p: all_players.standardized[p])
+
+    player_category = pandas.api.types.CategoricalDtype(
+        sorted(pandas.concat([games.player_1, games.player_2]).unique()),
+        ordered=True,
+    )
+    return games.astype({"player_1": player_category, "player_2": player_category})
+
+
+def order_by_character(games):
+    backwards_mus = games.character_1 > games.character_2
+    games.loc[backwards_mus] = games[backwards_mus].rename(
+        columns={
+            "player_1": "player_2",
+            "player_2": "player_1",
+            "character_1": "character_2",
+            "character_2": "character_1",
+        }
+    )
+    games.loc[backwards_mus, ["win"]] = 1 - games[backwards_mus].win
+
+    mirror_mus_to_flip = list(
+        games[games.character_1 == games.character_2].iloc[::2].index.values
+    )
+    games.iloc[mirror_mus_to_flip] = games.iloc[mirror_mus_to_flip].rename(
+        columns={
+            "player_1": "player_2",
+            "player_2": "player_1",
+            "character_1": "character_2",
+            "character_2": "character_1",
+        }
+    )
+    games.iloc[mirror_mus_to_flip, games.columns.get_loc("win")] = (
+        1 - games.iloc[mirror_mus_to_flip].win
+    )
+    return games
 
 
 def fetch_name_map(url=HISTORICAL_GSHEET):
@@ -27,7 +80,7 @@ def fetch_name_map(url=HISTORICAL_GSHEET):
     historical_record = historical_record[
         historical_record.character_1.apply(lambda v: v.lower()).isin(known_chars)
         & historical_record.character_2.apply(lambda v: v.lower()).isin(known_chars)
-    ].dropna(subset=["tournament_name"])
+    ]
 
     names = pandas.DataFrame(
         {
@@ -52,92 +105,28 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
     historical_record = historical_record[
         historical_record.character_1.apply(lambda v: v.lower()).isin(known_chars)
         & historical_record.character_2.apply(lambda v: v.lower()).isin(known_chars)
-    ].dropna(subset=["tournament_name"])
+    ]
 
-    historical_record["match_date"] = pandas.to_datetime(
-        historical_record.match_date, infer_datetime_format=True
-    )
+    historical_record["match_date"] = pandas.to_datetime(historical_record.match_date)
     historical_record.set_win_1 = historical_record.set_win_1.fillna(0)
     historical_record.set_win_2 = historical_record.set_win_2.fillna(0)
     historical_record.wins_1 = historical_record.wins_1.fillna(0)
     historical_record.wins_2 = historical_record.wins_2.fillna(0)
 
-    all_chars = (
-        pandas.concat([historical_record.character_1, historical_record.character_2])
-        .rename("character")
-        .to_frame()
-    )
-    all_chars["normalized"] = all_chars.character.apply(lambda v: v.lower())
-
-    char_map = all_chars.groupby("normalized").character.agg(
-        lambda x: pandas.Series.mode(x)[0]
-    )
-
-    all_chars["standardized"] = all_chars.normalized.apply(lambda c: char_map[c])
-    all_chars = all_chars.drop_duplicates().set_index(["character"])
-
     historical_record.character_1 = historical_record.character_1.apply(
-        lambda c: all_chars.standardized[c]
-    )
+        lambda c: c.lower()
+    ).astype(character_category)
     historical_record.character_2 = historical_record.character_2.apply(
-        lambda c: all_chars.standardized[c]
-    )
+        lambda c: c.lower()
+    ).astype(character_category)
 
-    character_category = pandas.api.types.CategoricalDtype(
-        sorted(
-            pandas.concat(
-                [historical_record.character_1, historical_record.character_2]
-            ).unique()
-        ),
-        ordered=True,
-    )
-
-    all_players = (
-        pandas.concat([historical_record.player_1, historical_record.player_2])
-        .rename("player")
-        .to_frame()
-    )
-    all_players["normalized"] = all_players.player.apply(
-        lambda v: re.sub(r"[^a-z0-9]", "", v.lower())
-    )
-
-    player_map = all_players.groupby("normalized").player.agg(
-        lambda x: pandas.Series.mode(x)[0]
-    )
-
-    all_players["standardized"] = all_players.normalized.apply(lambda p: player_map[p])
-    all_players = all_players.drop_duplicates().set_index(["player"])
-
-    historical_record.player_1 = historical_record.player_1.apply(
-        lambda p: all_players.standardized[p]
-    )
-    historical_record.player_2 = historical_record.player_2.apply(
-        lambda p: all_players.standardized[p]
-    )
-
-    player_category = pandas.api.types.CategoricalDtype(
-        sorted(
-            pandas.concat(
-                [historical_record.player_1, historical_record.player_2]
-            ).unique()
-        ),
-        ordered=True,
-    )
-
-    tournament_category = pandas.api.types.CategoricalDtype(
-        sorted(historical_record.tournament_name.unique()), ordered=True
-    )
+    historical_record = normalize_players(historical_record)
 
     historical_record = historical_record.astype(
         {
-            "tournament_name": tournament_category,
             "set_win_1": "int8",
-            "player_1": player_category,
-            "character_1": character_category,
             "wins_1": "int8",
             "wins_2": "int8",
-            "character_2": character_category,
-            "player_2": player_category,
             "set_win_2": "int8",
         }
     )
@@ -224,58 +213,6 @@ def fetch_historical_elo(url=ELO_GSHEET):
     return historical_elo
 
 
-INITIAL_ELO = 1500
-LOW_K = 40
-HIGH_K = 80
-K_CUTOFF = 15
-MIN_GAMES = 0
-DENOM = 1135.77
-
-
-def compute_elo(historical_records, low_k=LOW_K, high_k=HIGH_K, k_cutoff=K_CUTOFF):
-    historical_records = historical_records.sort_values(["match_date"]).reset_index(
-        drop=True
-    )
-    current_elo = defaultdict(lambda: INITIAL_ELO)
-    play_counts = defaultdict(int)
-
-    elo_records = []
-
-    for row in historical_records.itertuples():
-        rating1 = current_elo[row.player_1]
-        rating2 = current_elo[row.player_2]
-        q1 = pow(10, rating1 / DENOM)
-        q2 = pow(10, rating2 / DENOM)
-        expected1 = q1 / (q1 + q2)
-        expected2 = q2 / (q1 + q2)
-        gamesPlayed = 1
-        wins1 = row.set_win_1
-        wins2 = row.set_win_2
-        played1 = play_counts[row.player_1]
-        played2 = play_counts[row.player_2]
-        k1 = high_k if played1 < k_cutoff else low_k
-        k2 = high_k if played2 < k_cutoff else low_k
-        newRating1 = rating1 + k1 * (wins1 - expected1 * gamesPlayed)
-        newRating2 = rating2 + k2 * (wins2 - expected2 * gamesPlayed)
-
-        elo_records.extend(
-            {
-                "elo_before_1": rating1,
-                "elo_before_2": rating2,
-                "games_played_1": play_counts[row.player_1],
-                "games_played_2": play_counts[row.player_2],
-            }
-        )
-
-        play_counts[row.player_1] += 1
-        play_counts[row.player_2] += 1
-
-        current_elo[row.player_1] = newRating1
-        current_elo[row.player_2] = newRating2
-
-    return historical_records.join(pandas.DataFrame.from_records(elo_records))
-
-
 def as_player_elo(historical_elo):
     p1_elo = historical_elo[
         ["set_number", "event", "match_date", "elo_1_before", "elo_1_after", "player_1"]
@@ -315,7 +252,6 @@ def as_boolean_win_record(historical_record):
 
     games = pandas.concat([p1_wins, p2_wins]).reset_index(drop=True)[
         [
-            "tournament_name",
             "match_date",
             "player_1",
             "character_1",
@@ -325,133 +261,138 @@ def as_boolean_win_record(historical_record):
         ]
     ]
 
-    backwards_mus = games.character_1 > games.character_2
-    games.loc[backwards_mus] = games[backwards_mus].rename(
-        columns={
-            "player_1": "player_2",
-            "player_2": "player_1",
-            "character_1": "character_2",
-            "character_2": "character_1",
-        }
-    )
-    games.loc[backwards_mus, ["win"]] = 1 - games[backwards_mus].win
-
-    mirror_mus_to_flip = list(
-        games[games.character_1 == games.character_2].iloc[::2].index.values
-    )
-    games.iloc[mirror_mus_to_flip] = games.iloc[mirror_mus_to_flip].rename(
-        columns={
-            "player_1": "player_2",
-            "player_2": "player_1",
-            "character_1": "character_2",
-            "character_2": "character_1",
-        }
-    )
-    games.iloc[mirror_mus_to_flip, games.columns.get_loc("win")] = (
-        1 - games.iloc[mirror_mus_to_flip].win
-    )
-
     games = games.astype({"win": "int8"})
-    return games.sort_values(["match_date", "tournament_name"])
+    return games.sort_values(["match_date"])
 
 
-def games(autodata=None):
+def latest_tournament_games() -> pandas.DataFrame:
+    game_dir = "games/yomi"
+    name = str(datetime.now().isoformat())
+    historical_record = fetch_historical_record()
+    historical_record = as_boolean_win_record(historical_record)
+    historical_record.to_parquet(f"{game_dir}/{name}.parquet", compression="gzip")
+    return historical_record
+
+
+def cached_tournament_games() -> pandas.DataFrame:
     game_dir = "games/yomi"
     cached = sorted(os.listdir(game_dir))
-    if autodata == "same":
-        pick = len(cached) - 1
-    elif autodata == "new":
-        pick = None
-    else:
-        print("\n".join("{}: {}".format(*choice) for choice in enumerate(cached)))
-        pick = input("Load game data:")
+    pick = len(cached) - 1
+    picked = cached[int(pick)]
+    name, _ = os.path.splitext(picked)
+    return pandas.read_parquet(f"{game_dir}/{picked}")
 
-    games = None
-    if pick:
-        picked = cached[int(pick)]
-        name, _ = os.path.splitext(picked)
-        try:
-            games = pandas.read_parquet(f"{game_dir}/{picked}")
-        except:
-            logging.exception("Can't load %s as parquet", picked)
 
-    if games is None:
-        historical_record = fetch_historical_record()
-        win_record = as_boolean_win_record(historical_record)
-        assert historical_record.wins_1.sum() + historical_record.wins_2.sum() == len(
-            win_record
+def parse_game_results(result):
+    if result.endswith("dc"):
+        return None
+    return {"0": None, "1": 1, "2": 0}[result[0]]
+
+
+def sirlin_db() -> pandas.DataFrame:
+    con = sqlite3.connect("yomi_results_ranked_2013-06-15_to_2015-09-07.sqlite")
+    df = pandas.read_sql_query("SELECT * from yomi_results", con)
+    char_map = {
+        0: Character.Grave.value,
+        1: Character.Jaina.value,
+        2: Character.Midori.value,
+        3: Character.Setsuki.value,
+        4: Character.Rook.value,
+        5: Character.DeGrey.value,
+        6: Character.Valerie.value,
+        7: Character.Geiger.value,
+        8: Character.Lum.value,
+        9: Character.Argagarg.value,
+        10: Character.Quince.value,
+        11: Character.Onimaru.value,
+        12: Character.Troq.value,
+        13: Character.BBB.value,
+        14: Character.Menelker.value,
+        15: Character.Persephone.value,
+        16: Character.Gloria.value,
+        17: Character.Gwen.value,
+        18: Character.Vendetta.value,
+        19: Character.Zane.value,
+    }
+    return (
+        normalize_players(
+            pandas.DataFrame(
+                {
+                    "player_1": df.p1name,
+                    "player_2": df.p2name,
+                    "character_1": df.p1char.astype("int")
+                    .map(char_map)
+                    .astype(character_category),
+                    "character_2": df.p1char.astype("int")
+                    .map(char_map)
+                    .astype(character_category),
+                    "win": df.result.map(parse_game_results),
+                    "match_date": pandas.to_datetime(df.start_time),
+                }
+            )
         )
-        historical_elo = fetch_historical_elo()
-        player_elo = as_player_elo(historical_elo)
-        assert len(historical_elo) * 2 == len(player_elo)
+        .dropna()
+        .astype({"win": "int8"})
+    )
 
-        mean_elo_by_date = player_elo.groupby(["match_date", "player"])[
-            ["elo_before", "elo_after"]
-        ].mean()
 
-        games = win_record.join(
-            mean_elo_by_date.rename(
-                columns={"elo_before": "elo_before_1", "elo_after": "elo_after_1"}
-            ),
-            on=["match_date", "player_1"],
-        ).join(
-            mean_elo_by_date.rename(
-                columns={"elo_before": "elo_before_2", "elo_after": "elo_after_2"}
-            ),
-            on=["match_date", "player_2"],
-            rsuffix="_2",
-        )
-        name = str(datetime.now().isoformat())
-        games["player_character_1"] = games.apply(
-            lambda r: f"{r.player_1}-{r.character_1}", axis=1
-        ).astype("category")
-        games["player_character_2"] = games.apply(
-            lambda r: f"{r.player_2}-{r.character_2}", axis=1
-        ).astype("category")
+def augment_dataset(games):
+    games = order_by_character(games)
+    games = normalize_players(games)
+    games.dropna(inplace=True)
+    print("Constructing PC category")
+    games["player_character_1"] = games.apply(
+        lambda r: f"{r.player_1}-{r.character_1}", axis=1
+    ).astype("category")
+    games["player_character_2"] = games.apply(
+        lambda r: f"{r.player_2}-{r.character_2}", axis=1
+    ).astype("category")
 
-        player_glicko_model = Glicko2Estimator(
-            key1_field="player_1",
-            key2_field="player_2",
-            timestamp_field="match_date",
-            initial_time=games.match_date.min(),
-        ).fit(games, games.win)
+    print("Estimating player glicko")
+    player_glicko_model = Glicko2Estimator(
+        key1_field="player_1",
+        key2_field="player_2",
+        timestamp_field="match_date",
+        initial_time=games.match_date.min(),
+    ).fit(games, games.win)
+    # player_glicko_ratings = player_glicko_model.transform(games, output_type="rating")
 
-        player_elo_model = EloEstimator(
-            key1_field="player_1",
-            key2_field="player_2",
-            timestamp_field="match_date",
-            initial_time=games.match_date.min(),
-        ).fit(games, games.win)
+    print("Estimating player Elo")
+    player_elo_model = EloEstimator(
+        key1_field="player_1",
+        key2_field="player_2",
+        timestamp_field="match_date",
+        initial_time=games.match_date.min(),
+    ).fit(games, games.win)
+    player_elo_ratings = player_elo_model.transform(games, output_type="rating")
 
-        player_character_glicko_model = Glicko2Estimator(
-            key1_field="player_character_1",
-            key2_field="player_character_2",
-            timestamp_field="match_date",
-            initial_time=games.match_date.min(),
-        ).fit(games, games.win)
+    print("Estimating player-character glick")
+    player_character_glicko_model = Glicko2Estimator(
+        key1_field="player_character_1",
+        key2_field="player_character_2",
+        timestamp_field="match_date",
+        initial_time=games.match_date.min(),
+    ).fit(games, games.win)
+    # pc_glicko_ratings = player_character_glicko_model.transform(
+    #     games, output_type="rating"
+    # )
 
-        games["glicko_estimate"] = player_glicko_model.predict_proba(games).pr1
-        games["pc_glicko_estimate"] = player_character_glicko_model.predict_proba(
-            games
-        ).pr1
-        games["elo_estimate"] = player_elo_model.predict_proba(games).pr1
-        display(games)
+    print("Estimating player-character Elo")
+    player_character_elo_model = EloEstimator(
+        key1_field="player_character_1",
+        key2_field="player_character_2",
+        timestamp_field="match_date",
+        initial_time=games.match_date.min(),
+    ).fit(games, games.win)
+    pc_elo_ratings = player_character_elo_model.transform(games, output_type="rating")
 
-        games["player_1"] = games.player_1.astype("category")
-        games["player_2"] = games.player_2.astype("category")
-        games["character_1"] = games.character_1.astype("category")
-        games["character_2"] = games.character_2.astype("category")
-        games["tournament_name"] = games.tournament_name.astype("category")
-        games["win"] = pandas.to_numeric(games.win, downcast="unsigned")
-        games["elo_before_1"] = pandas.to_numeric(games.elo_before_1, downcast="float")
-        games["elo_before_2"] = pandas.to_numeric(games.elo_before_2, downcast="float")
-        games["elo_after_1"] = pandas.to_numeric(games.elo_after_1, downcast="float")
-        games["elo_after_2"] = pandas.to_numeric(games.elo_after_2, downcast="float")
-        games.to_parquet(f"{game_dir}/{name}.parquet", compression="gzip")
-
-    games["version_1"] = "2"
-    games["version_2"] = "2"
-
-    games = normalize_types(games)
-
-    return os.path.join("yomi", name), games.dropna()
+    games["elo_1"] = player_elo_ratings.r1
+    games["elo_2"] = player_elo_ratings.r2
+    games["pc_elo_1"] = pc_elo_ratings.r1
+    games["pc_elo_2"] = pc_elo_ratings.r2
+    games["glicko_estimate"] = player_glicko_model.predict_proba(games).pr1
+    games["pc_glicko_estimate"] = player_character_glicko_model.predict_proba(games).pr1
+    games["elo_estimate"] = player_elo_model.predict_proba(games).pr1
+    games["pc_elo_estimate"] = player_elo_model.predict_proba(games).pr1
+    games.sort_values("match_date", inplace=True)
+    return games

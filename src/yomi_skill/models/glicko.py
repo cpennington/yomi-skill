@@ -1,29 +1,30 @@
 from functools import cached_property
 import pandas
 import pymc as pm
+import pymc.math as pmmath
 from scipy.special import expit, logit
 
-from ..model import elo_logit
 from .pymc_model import PyMCModel
 
 
-class GlickoOnly(PyMCModel):
-    model_name = "glicko_only"
+class Glicko(PyMCModel):
+    model_name = "glicko"
+    weight_key = "elo"
 
     @cached_property
     def model_(self):
         with pm.Model() as model:
             glicko_logit_scale = pm.HalfNormal("glicko_logit_scale", sigma=1.0)
-
-            win_chance_logit = pm.Deterministic(
-                "win_chance_logit",
-                glicko_logit_scale * self.data_.skglicko_logit,
-            )
             win_lik = pm.Bernoulli(
                 "win_lik",
-                logit_p=win_chance_logit,
+                logit_p=glicko_logit_scale * logit(self.data_.glicko_estimate),
                 observed=self.y_,
             )
+            if self.sample_weight_ is not None:
+                pm.Potential(
+                    "weighted",
+                    pmmath.prod(pmmath.stack([self.sample_weight_, win_lik])),
+                )
         return model
 
     def p1_win_chance(self, X: pandas.DataFrame):

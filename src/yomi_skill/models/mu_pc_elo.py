@@ -3,26 +3,27 @@ from functools import cached_property
 import pandas
 import pymc as pm
 import pymc.math as pmmath
-from scipy.special import expit
+from scipy.special import expit, logit
+import xarray
+import numpy
 
 from .pymc_model import PyMCModel
 
 
-class MUOnly(PyMCModel):
-    model_name = "mu"
-    weight_key = "elo"
+class MUPCElo(PyMCModel):
+    model_name = "mu_pc_elo"
+    weight_key = "pc_elo"
 
     @cached_property
     def model_(self):
         with pm.Model() as model:
             mu = pm.Normal("mu", 0.0, sigma=0.5, shape=(len(self.mu_index_),))
-            win_chance_logit = pm.Deterministic(
-                "win_chance_logit",
-                +self.data_.non_mirror.to_numpy(int) * mu[self.data_.mup.to_numpy(int)],
-            )
+            elo_logit_scale = pm.HalfNormal("elo_logit_scale", sigma=1.0)
             win_lik = pm.Bernoulli(
                 "win_lik",
-                logit_p=win_chance_logit,
+                logit_p=self.data_.non_mirror.to_numpy(int)
+                * mu[self.data_.mup.to_numpy(int)]
+                + elo_logit_scale * logit(self.data_.pc_elo_estimate),
                 observed=self.y_,
             )
             if self.sample_weight_ is not None:
@@ -41,7 +42,12 @@ class MUOnly(PyMCModel):
             ),
             axis=1,
         )
-        prob_p1_win = expit((non_mirror * matchup))
+        elo_logit_scale = float(
+            self.inf_data_["posterior"].elo_logit_scale.mean(["chain", "draw"])
+        )
+        prob_p1_win = expit(
+            (non_mirror * matchup) + (elo_logit_scale * logit(X.pc_elo_estimate))
+        )
 
         return pandas.DataFrame(
             {1: prob_p1_win, 0: 1 - prob_p1_win}, columns=self.classes_

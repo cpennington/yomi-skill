@@ -52,4 +52,6 @@ class Character(Enum):
 for char in Character:
     locals()[char.name] = char
 
-character_category = pandas.api.types.CategoricalDtype(list(Character), ordered=True)
+character_category = pandas.api.types.CategoricalDtype(
+    [char.value for char in Character], ordered=True
+)

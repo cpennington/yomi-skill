@@ -14,13 +14,14 @@ print(jax.devices())
 
 import inspect
 import logging
+import tempfile
 
 import arviz
 import click
 import click_log
 from sklearn.model_selection import cross_validate
 
-from .model import YomiModel
+from .model import YomiModel, weight_by
 from .models import *
 from .render import *
 from .yomi import historical_record
@@ -79,36 +80,37 @@ def render(
 
 
 @cli.command()
-@click.option("--game", type=click.Choice(["yomi"]), default="yomi")
 @click.option("--min-games", default=0, type=int)
-@click.option("--with-versions/--no-versions", "versions", default=False)
-@click.option("--new-data", "autodata", flag_value="new")
-@click.option("--same-data", "autodata", flag_value="same")
 @click.option("--model", type=click.Choice(list(MODELS.keys())))
 @click.option("--warmup", type=int)
 @click.option("--samples", type=int)
-def validate(game, min_games, versions, autodata, model, warmup, samples):
-    data_name = None
-    hist_games = None
-    if game == "yomi":
-        data_name, hist_games = historical_record.games(autodata=autodata)
-
-    if hist_games is None:
-        raise Exception("No games loaded")
-
-    fit_dir = f"fits/{data_name}"
-
+def validate(min_games, model, warmup, samples):
+    tournament_games = historical_record.latest_tournament_games()
+    sirlin_games = historical_record.sirlin_db()
+    games = pandas.concat([tournament_games, sirlin_games]).reset_index(drop=True)
+    hist_games = historical_record.augment_dataset(games)
+  
     model = MODELS[model](
-        fit_dir,
+        tempfile.mkdtemp(),
         min_games,
         warmup=warmup,
         samples=samples,
     )
+    hist_games = weight_by(hist_games, model.weight_key)
+    display(hist_games.sort_values("weight"))
 
-    # model.fit(hist_games, hist_games.win)
-    # ess = arviz.ess(model.inf_data_)
-    # display(ess.max())
-    # display(ess.min())
+    model.fit(hist_games, hist_games.win)
+    display(arviz.summary(model.inf_data_))
+
+    display(
+        pandas.concat(
+            [
+                hist_games,
+                pandas.DataFrame(model.predict_proba(hist_games)),
+            ]
+        )
+    )
+
     scores = cross_validate(
         model,
         hist_games,
@@ -121,6 +123,9 @@ def validate(game, min_games, versions, autodata, model, warmup, samples):
             "precision",
             "recall",
             "f1",
+        ),
+        fit_params=dict(
+            sample_weight=hist_games.weight,
         ),
     )
     display(pandas.DataFrame(scores).describe())

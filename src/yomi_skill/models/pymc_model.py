@@ -24,14 +24,14 @@ class PyMCModel(YomiModel):
         with open(inspect.getfile(self.__class__), "rb") as source:
             return hashlib.md5(source.read()).hexdigest()[:6]
 
-    def fit(self, X, y=None, sample_weights=None) -> "PyMCModel":
-        super().fit(X, y, sample_weights)
+    def fit(self, X, y=None, sample_weight=None) -> "PyMCModel":
+        super().fit(X, y, sample_weight)
         with self.model_:
             self.inf_data_ = pymc.sampling_jax.sample_blackjax_nuts(
                 tune=self.warmup,
                 draws=self.samples,
                 chains=4,
-                # postprocessing_chunks=10,
+                postprocessing_chunks=1000,
                 # var_names=["mu", "char_skill", "elo_logit_scale"],
                 idata_kwargs=dict(
                     coords={
