@@ -270,6 +270,7 @@ def latest_tournament_games() -> pandas.DataFrame:
     name = str(datetime.now().isoformat())
     historical_record = fetch_historical_record()
     historical_record = as_boolean_win_record(historical_record)
+    historical_record["public"] = True
     historical_record.to_parquet(f"{game_dir}/{name}.parquet", compression="gzip")
     return historical_record
 
@@ -323,11 +324,12 @@ def sirlin_db() -> pandas.DataFrame:
                     "character_1": df.p1char.astype("int")
                     .map(char_map)
                     .astype(character_category),
-                    "character_2": df.p1char.astype("int")
+                    "character_2": df.p2char.astype("int")
                     .map(char_map)
                     .astype(character_category),
                     "win": df.result.map(parse_game_results),
                     "match_date": pandas.to_datetime(df.start_time),
+                    "public": False,
                 }
             )
         )
@@ -336,7 +338,7 @@ def sirlin_db() -> pandas.DataFrame:
     )
 
 
-def augment_dataset(games):
+def augment_dataset(games, optional_features=[]):
     games = order_by_character(games)
     games = normalize_players(games)
     games.dropna(inplace=True)
@@ -348,51 +350,64 @@ def augment_dataset(games):
         lambda r: f"{r.player_2}-{r.character_2}", axis=1
     ).astype("category")
 
-    print("Estimating player glicko")
-    player_glicko_model = Glicko2Estimator(
-        key1_field="player_1",
-        key2_field="player_2",
-        timestamp_field="match_date",
-        initial_time=games.match_date.min(),
-    ).fit(games, games.win)
-    # player_glicko_ratings = player_glicko_model.transform(games, output_type="rating")
+    if "glicko_estimate" in optional_features:
+        print("Estimating player glicko")
+        player_glicko_model = Glicko2Estimator(
+            key1_field="player_1",
+            key2_field="player_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+        # player_glicko_ratings = player_glicko_model.transform(games, output_type="rating")
+        games["glicko_estimate"] = player_glicko_model.predict_proba(games).pr1
 
-    print("Estimating player Elo")
-    player_elo_model = EloEstimator(
-        key1_field="player_1",
-        key2_field="player_2",
-        timestamp_field="match_date",
-        initial_time=games.match_date.min(),
-    ).fit(games, games.win)
-    player_elo_ratings = player_elo_model.transform(games, output_type="rating")
+    if (
+        "elo_estimate" in optional_features
+        or "elo_1" in optional_features
+        or "elo_2" in optional_features
+    ):
+        print("Estimating player Elo")
+        player_elo_model = EloEstimator(
+            key1_field="player_1",
+            key2_field="player_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+        player_elo_ratings = player_elo_model.transform(games, output_type="rating")
+        games["elo_estimate"] = player_elo_model.predict_proba(games).pr1
+        games["elo_1"] = player_elo_ratings.r1
+        games["elo_2"] = player_elo_ratings.r2
 
-    print("Estimating player-character glick")
-    player_character_glicko_model = Glicko2Estimator(
-        key1_field="player_character_1",
-        key2_field="player_character_2",
-        timestamp_field="match_date",
-        initial_time=games.match_date.min(),
-    ).fit(games, games.win)
-    # pc_glicko_ratings = player_character_glicko_model.transform(
-    #     games, output_type="rating"
-    # )
+    if "pc_glicko_estimate" in optional_features:
+        print("Estimating player-character glicko")
+        player_character_glicko_model = Glicko2Estimator(
+            key1_field="player_character_1",
+            key2_field="player_character_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+        games["pc_glicko_estimate"] = player_character_glicko_model.predict_proba(
+            games
+        ).pr1
 
-    print("Estimating player-character Elo")
-    player_character_elo_model = EloEstimator(
-        key1_field="player_character_1",
-        key2_field="player_character_2",
-        timestamp_field="match_date",
-        initial_time=games.match_date.min(),
-    ).fit(games, games.win)
-    pc_elo_ratings = player_character_elo_model.transform(games, output_type="rating")
+    if (
+        "pc_elo_estimate" in optional_features
+        or "pc_elo_1" in optional_features
+        or "pc_elo_2" in optional_features
+    ):
+        print("Estimating player-character Elo")
+        player_character_elo_model = EloEstimator(
+            key1_field="player_character_1",
+            key2_field="player_character_2",
+            timestamp_field="match_date",
+            initial_time=games.match_date.min(),
+        ).fit(games, games.win)
+        pc_elo_ratings = player_character_elo_model.transform(
+            games, output_type="rating"
+        )
+        games["pc_elo_1"] = pc_elo_ratings.r1
+        games["pc_elo_2"] = pc_elo_ratings.r2
+        games["pc_elo_estimate"] = player_character_elo_model.predict_proba(games).pr1
 
-    games["elo_1"] = player_elo_ratings.r1
-    games["elo_2"] = player_elo_ratings.r2
-    games["pc_elo_1"] = pc_elo_ratings.r1
-    games["pc_elo_2"] = pc_elo_ratings.r2
-    games["glicko_estimate"] = player_glicko_model.predict_proba(games).pr1
-    games["pc_glicko_estimate"] = player_character_glicko_model.predict_proba(games).pr1
-    games["elo_estimate"] = player_elo_model.predict_proba(games).pr1
-    games["pc_elo_estimate"] = player_elo_model.predict_proba(games).pr1
     games.sort_values("match_date", inplace=True)
     return games

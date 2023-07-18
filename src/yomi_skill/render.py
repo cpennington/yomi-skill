@@ -20,17 +20,10 @@ def extract_index(col_name):
 
 
 class YomiRender:
-    def __init__(self, data_name, model: YomiModel):
+    def __init__(self, model: YomiModel):
         self.model = model
-        self.data_name = data_name
 
-    @property
-    def base_folder(self):
-        base_folder = f"images/{self.data_name}/{self.model.model_name}-{self.model.model_hash[:6]}"
-        os.makedirs(base_folder, exist_ok=True)
-        return base_folder
-
-    def render_matchup_comparator(self, game="yomi", dest=None, static_root="."):
+    def render_matchup_comparator(self, game, dest, static_root="."):
         os.makedirs(f"site/{game}/playerData", exist_ok=True)
         orig_players = sorted(
             set(
@@ -256,14 +249,11 @@ class YomiRender:
                 sort_keys=True,
             )
 
-        with open(outfile_name, "w") as outfile:
+        with open(dest, "w") as outfile:
             outfile.write(
                 templates.get_template(f"{game}.html").render_unicode(
                     has_versions=False, static_root=static_root
                 )
             )
-
-        if dest is not None:
-            shutil.copyfile(outfile_name, dest)
 
         return outfile_name

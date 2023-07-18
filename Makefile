@@ -1,9 +1,4 @@
-.PHONY: build
-
-MODEL ?= char_skill_elo_skill_deficit
-
-build:
-	docker build container -t jupyter
+MODEL ?= mu_pc_elo
 
 upgrade:
 	docker run -it  \
@@ -17,7 +12,6 @@ lab:
 
 validate:
 	yomi-skill validate \
-		--min-games=30 \
 		--model=$(MODEL) \
 		--warmup=500 \
 		--samples=1000
@@ -25,8 +19,6 @@ validate:
 matchups:
 	yomi-skill render \
 		--dest=site/index.html \
-		--same-data \
-		--min-games=30 \
 		--model=$(MODEL) \
 		--warmup=500 \
 		--samples=1000
@@ -36,9 +28,7 @@ all-matchups: matchups
 new-matchups:
 	yomi-skill render \
 		--dest=site/index.html \
-		--new-data \
 		--model $(MODEL) \
-		--static-root=. \
 		--warmup 500 \
 		--samples 1000
 

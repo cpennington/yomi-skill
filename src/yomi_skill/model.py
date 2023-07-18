@@ -10,7 +10,7 @@ import pandas
 import xarray
 from scipy.special import logit
 from sklearn.base import BaseEstimator, ClassifierMixin
-from sklearn.preprocessing import scale
+from sklearn.preprocessing import scale, FunctionTransformer
 
 logger = logging.getLogger(__name__)
 
@@ -44,6 +44,50 @@ def weight_by(games, key):
     return games
 
 
+def _transform_min_games(X, min_games=0):
+    result = pandas.DataFrame(
+        {
+            "player_1_orig": X.player_1,
+            "player_2_orig": X.player_2,
+            "player_1": X.player_1,
+            "player_2": X.player_2,
+            "min_games_player_1": False,
+            "min_games_player_2": False,
+        }
+    )
+
+    if min_games > 0:
+        games_played = (
+            pandas.concat([X.player_1, X.player_2])
+            .rename("player")
+            .to_frame()
+            .groupby("player")
+            .size()
+            .rename("count")
+            .reset_index()
+        )
+        not_enough_played = games_played[games_played["count"] < min_games].player
+
+        result = X.astype({"player_1": str, "player_2": str})
+
+        min_games_player_ = f"< {min_games} games"
+
+        result.loc[result.player_1.isin(not_enough_played), "min_games_player_1"] = True
+        result.loc[
+            result.player_1.isin(not_enough_played), "player_1"
+        ] = min_games_player_
+
+        result.loc[result.player_2.isin(not_enough_played), "min_games_player_2"] = True
+        result.loc[
+            result.player_2.isin(not_enough_played), "player_2"
+        ] = min_games_player_
+
+    return result
+
+
+min_games_transformer = FunctionTransformer(_transform_min_games)
+
+
 class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     model_name: str
     model_hash: str
@@ -53,12 +97,10 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
 
     def __init__(
         self,
-        data_dir,
         min_games=0,
         warmup=500,
         samples=1000,
     ):
-        self.data_dir = data_dir
         self.min_games = min_games
         self.warmup = warmup
         self.samples = samples
@@ -175,38 +217,6 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     @cached_property
     def character_index_(self):
         return {char: index for index, char in enumerate(self.characters_)}
-
-    def cachepath_(
-        self,
-        *,
-        subdirs: List[str] | None = None,
-        extension: str | None = None,
-        fold: int | None = None,
-    ):
-        path = [
-            self.data_dir,
-            f"{self.model_name}-{self.model_hash[:6]}",
-            f"warmup-{self.warmup}",
-            f"samples-{self.samples}",
-            f"data-{self.data_hash_}",
-        ]
-        if self.min_games > 0:
-            path.append(f"min-games-{self.min_games}")
-        if subdirs:
-            path.extend(subdirs)
-        if extension:
-            path[-1] = f"{path[-1]}.{extension}"
-
-        return os.path.join(*path)
-
-    def fit_filename_(self):
-        return self.cachepath_()
-
-    def parquet_filename_(self):
-        return self.cachepath_(extension="parquet")
-
-    def netcdf_filename_(self):
-        return self.cachepath_(extension="netcdf")
 
     def fill_untrained_players(self, mean_skill, X):
         untrained_players = (set(X.player_1) | set(X.player_2)) - set(

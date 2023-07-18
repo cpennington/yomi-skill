@@ -32,8 +32,9 @@ class PyMCModel(YomiModel):
                 draws=self.samples,
                 chains=4,
                 postprocessing_chunks=1000,
-                # var_names=["mu", "char_skill", "elo_logit_scale"],
+                # var_names=["mu", "char_skill", "elo_logit_scale"],=True,
                 idata_kwargs=dict(
+                    # log_likelihood=True,
                     coords={
                         "character": self.characters_,
                         "player": self.players_,
