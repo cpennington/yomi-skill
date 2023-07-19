@@ -27,8 +27,8 @@ class MUPCEloC(PyMCModel):
             elo_logit_scale = pm.HalfNormal("elo_logit_scale", sigma=1.0)
             win_lik = pm.Bernoulli(
                 "win_lik",
-                logit_p=self.data_.non_mirror.to_numpy(int)
-                * mu[self.data_.mup.to_numpy(int)]
+                logit_p=self.data_.matchup__non_mirror.to_numpy(int)
+                * mu[self.data_.matchup__mup.cat.codes]
                 + elo_logit_scale
                 * (
                     logit(self.data_.pc_elo_estimate) - self.pc_elo_estimate_logit_mean_

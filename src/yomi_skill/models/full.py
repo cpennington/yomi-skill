@@ -1,15 +1,16 @@
 from functools import cached_property
 
+import numpy
 import pandas
 import pymc as pm
 import pymc.math as pmmath
-from scipy.special import expit, logit
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from skelo.model.elo import EloEstimator
 import xarray
-import numpy
+from scipy.special import expit, logit
+from skelo.model.elo import EloEstimator
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
 
+from ..model import matchup_transformer, min_games_transformer
 from .pymc_model import PyMCModel
 
 
@@ -47,37 +48,46 @@ class Full(PyMCModel):
                                     "match_date",
                                 ],
                             ),
+                            (
+                                "min_games",
+                                min_games_transformer,
+                                ["player_1", "player_2"],
+                            ),
+                            (
+                                "matchup",
+                                matchup_transformer,
+                                ["character_1", "character_2"],
+                            ),
                         ],
                         remainder="passthrough",
                     ),
                 ),
-                ("full", cls()),
+                ("model", cls()),
             ],
             memory=memory,
             verbose=verbose,
         ).set_params(**params)
 
-    def fit(self, X, y=None, sample_weight=None) -> "MUPCEloC":
-        display(X)
-        super().fit(X, y, sample_weight)
-        return self
-
     @cached_property
     def model_(self):
         with pm.Model() as model:
-            mu = pm.Normal("mu", 0.0, sigma=0.5, shape=(len(self.mu_index_),))
+            mu = pm.Normal(
+                "mu",
+                0.0,
+                sigma=0.5,
+                shape=(len(self.data_.matchup__mup.dtype.categories),),
+            )
             pc_elo_sum_intercept = pm.HalfNormal("pc_elo_sum_intercept", sigma=1.0)
             scaled_pc_elo_sum = pc_elo_sum_intercept
-            pc_elo_estimate_logit = scaled_pc_elo_sum * logit(
-                self.data_.pc_elo_estimate
-            )
+            pc_elo_estimate_logit = scaled_pc_elo_sum * logit(self.data_.pc_elo__prob)
 
             elo_sum_intercept = pm.HalfNormal("elo_sum_intercept", sigma=1.0)
             scaled_elo_sum = elo_sum_intercept
-            elo_estimate_logit = scaled_elo_sum * logit(self.data_.elo_estimate)
+            elo_estimate_logit = scaled_elo_sum * logit(self.data_.elo__prob)
 
             mu_logit = (
-                self.data_.non_mirror.to_numpy(int) * mu[self.data_.mup.to_numpy(int)]
+                self.data_.matchup__non_mirror.to_numpy(int)
+                * mu[self.data_.matchup__mup.cat.codes]
             )
             win_lik = pm.Bernoulli(
                 "win_lik",
@@ -94,21 +104,18 @@ class Full(PyMCModel):
     def p1_win_chance(self, X: pandas.DataFrame) -> pandas.DataFrame:
         posterior = self.inf_data_["posterior"].mean(["chain", "draw"])
 
-        non_mirror = (X.character_1 != X.character_2).astype(int)
         matchup_value = posterior.mu
         matchup = X.aggregate(
-            lambda x: float(
-                matchup_value.sel(matchup=f"{x.character_1}-{x.character_2}")
-            ),
+            lambda x: float(matchup_value.sel(matchup=x.matchup__mup)),
             axis=1,
         )
 
         scaled_pc_elo_sum = float(posterior.pc_elo_sum_intercept)
-        pc_elo_estimate_logit = scaled_pc_elo_sum * logit(X.pc_elo_estimate)
+        pc_elo_estimate_logit = scaled_pc_elo_sum * logit(X.pc_elo__prob)
         scaled_elo_sum = float(posterior.elo_sum_intercept)
-        elo_estimate_logit = scaled_elo_sum * logit(X.elo_estimate)
+        elo_estimate_logit = scaled_elo_sum * logit(X.elo__prob)
 
-        mu_logit = non_mirror * matchup
+        mu_logit = X.matchup__non_mirror * matchup
 
         prob_p1_win = expit(mu_logit + pc_elo_estimate_logit + elo_estimate_logit)
 

@@ -36,17 +36,9 @@ class PyMCModel(YomiModel):
                 idata_kwargs=dict(
                     # log_likelihood=True,
                     coords={
-                        "character": self.characters_,
-                        "player": self.players_,
-                        "matchup": [
-                            f"{c1}-{c2}"
-                            for ((c1, c2), _) in sorted(
-                                self.mu_index_.items(), key=lambda x: x[1]
-                            )
-                        ],
+                        "matchup": X.matchup__mup.dtype.categories.values,
                     },
                     dims={
-                        "char_skill": ["character", "player"],
                         "mu": ["matchup"],
                     },
                 ),
