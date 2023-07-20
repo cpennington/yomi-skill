@@ -29,6 +29,10 @@ from .yomi import historical_record
 logger = logging.getLogger()
 click_log.basic_config(logger)
 
+from sklearn import set_config
+
+set_config(transform_output="pandas")
+
 MODELS = {
     model.model_name: model
     for model_type in YomiModel.__subclasses__()
@@ -47,7 +51,7 @@ def cli():
 @click.option("--dest")
 @click.option("--min-games", default=0, type=int)
 @click.option("--static-root", default=".")
-@click.option("--model", type=click.Choice(list(MODELS.keys())), default="mu_pc_elo")
+@click.option("--model", type=click.Choice(list(MODELS.keys())), default="full")
 @click.option("--warmup", type=int)
 @click.option("--samples", type=int)
 def render(game, dest, min_games, static_root, model, warmup, samples):
@@ -56,14 +60,19 @@ def render(game, dest, min_games, static_root, model, warmup, samples):
     games = pandas.concat([tournament_games, sirlin_games]).reset_index(drop=True)
     hist_games = historical_record.augment_dataset(games)
 
-    model = MODELS[model](
-        tempfile.mkdtemp(),
-        min_games,
-        warmup=warmup,
-        samples=samples,
-    ).fit(hist_games, hist_games.win)
+    pipeline = (
+        MODELS[model]
+        .pipeline(
+            transform__elo__initial_time=games.match_date.min(),
+            transform__pc_elo__initial_time=games.match_date.min(),
+            model__min_games=min_games,
+            model__warmup=warmup,
+            model__samples=samples,
+        )
+        .fit(hist_games, hist_games.win)
+    )
 
-    render = YomiRender(model.inf_data_)
+    render = YomiRender(pipeline["model"].inf_data_)
 
     filename = render.render_matchup_comparator(game, dest, static_root=static_root)
     print(filename)
@@ -71,7 +80,7 @@ def render(game, dest, min_games, static_root, model, warmup, samples):
 
 @cli.command()
 @click.option("--min-games", default=0, type=int)
-@click.option("--model", type=click.Choice(list(MODELS.keys())), default="mu_pc_elo")
+@click.option("--model", type=click.Choice(list(MODELS.keys())), default="full")
 @click.option("--warmup", type=int)
 @click.option("--samples", type=int)
 def validate(min_games, model, warmup, samples):

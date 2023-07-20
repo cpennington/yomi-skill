@@ -50,7 +50,7 @@ class MUPCElo(PyMCModel):
                                 ["character_1", "character_2"],
                             ),
                         ],
-                        remainder="passthrough",
+                        remainder="drop",
                     ),
                 ),
                 ("model", cls()),

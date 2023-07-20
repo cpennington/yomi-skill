@@ -1,6 +1,6 @@
 import logging
 import os
-from abc import ABC, abstractmethod
+from abc import ABC, abstractmethod, abstractclassmethod
 from functools import cached_property
 from typing import List
 
@@ -11,6 +11,7 @@ import xarray
 from scipy.special import logit
 from sklearn.base import BaseEstimator, ClassifierMixin
 from sklearn.preprocessing import scale, FunctionTransformer
+from sklearn.pipeline import Pipeline
 
 logger = logging.getLogger(__name__)
 
@@ -107,6 +108,12 @@ def _transform_matchup(X):
 
 matchup_transformer = FunctionTransformer(_transform_matchup)
 
+render_transformer = FunctionTransformer(
+    lambda X: pandas.DataFrame(
+        {"match_date": X.match_date, "win": X.win, "public": X.public}
+    )
+)
+
 
 class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     model_name: str
@@ -133,6 +140,10 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
                 and attr in self.__dict__
             ):
                 delattr(self, attr)
+
+    @abstractclassmethod
+    def pipeline(cls, **kwargs) -> Pipeline:
+        ...
 
     @abstractmethod
     def fit(self, X: pandas.DataFrame, y, sample_weight=None) -> "YomiModel":

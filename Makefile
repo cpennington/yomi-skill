@@ -1,5 +1,3 @@
-MODEL ?= mu_pc_elo
-
 upgrade:
 	docker run -it  \
 		--mount="type=bind,src=$(PWD),dst=/code" \
@@ -12,14 +10,12 @@ lab:
 
 validate:
 	yomi-skill validate \
-		--model=$(MODEL) \
 		--warmup=500 \
 		--samples=1000
 
 matchups:
 	yomi-skill render \
 		--dest=site/index.html \
-		--model=$(MODEL) \
 		--warmup=500 \
 		--samples=1000
 
@@ -28,7 +24,6 @@ all-matchups: matchups
 new-matchups:
 	yomi-skill render \
 		--dest=site/index.html \
-		--model $(MODEL) \
 		--warmup 500 \
 		--samples 1000
 

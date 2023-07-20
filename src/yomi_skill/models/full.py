@@ -10,7 +10,7 @@ from skelo.model.elo import EloEstimator
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
 
-from ..model import matchup_transformer, min_games_transformer
+from ..model import matchup_transformer, min_games_transformer, render_transformer
 from .pymc_model import PyMCModel
 
 
@@ -58,8 +58,13 @@ class Full(PyMCModel):
                                 matchup_transformer,
                                 ["character_1", "character_2"],
                             ),
+                            (
+                                "render",
+                                render_transformer,
+                                ["match_date", "win", "public"],
+                            ),
                         ],
-                        remainder="passthrough",
+                        remainder="drop",
                     ),
                 ),
                 ("model", cls()),
@@ -77,13 +82,11 @@ class Full(PyMCModel):
                 sigma=0.5,
                 shape=(len(self.data_.matchup__mup.dtype.categories),),
             )
-            pc_elo_sum_intercept = pm.HalfNormal("pc_elo_sum_intercept", sigma=1.0)
-            scaled_pc_elo_sum = pc_elo_sum_intercept
-            pc_elo_estimate_logit = scaled_pc_elo_sum * logit(self.data_.pc_elo__prob)
+            pc_elo_scale = pm.HalfNormal("pc_elo_scale", sigma=1.0)
+            pc_elo_estimate_logit = pc_elo_scale * logit(self.data_.pc_elo__prob)
 
-            elo_sum_intercept = pm.HalfNormal("elo_sum_intercept", sigma=1.0)
-            scaled_elo_sum = elo_sum_intercept
-            elo_estimate_logit = scaled_elo_sum * logit(self.data_.elo__prob)
+            elo_scale = pm.HalfNormal("elo_scale", sigma=1.0)
+            elo_estimate_logit = elo_scale * logit(self.data_.elo__prob)
 
             mu_logit = (
                 self.data_.matchup__non_mirror.to_numpy(int)
@@ -110,10 +113,8 @@ class Full(PyMCModel):
             axis=1,
         )
 
-        scaled_pc_elo_sum = float(posterior.pc_elo_sum_intercept)
-        pc_elo_estimate_logit = scaled_pc_elo_sum * logit(X.pc_elo__prob)
-        scaled_elo_sum = float(posterior.elo_sum_intercept)
-        elo_estimate_logit = scaled_elo_sum * logit(X.elo__prob)
+        pc_elo_estimate_logit = float(posterior.pc_elo_scale) * logit(X.pc_elo__prob)
+        elo_estimate_logit = float(posterior.elo_scale) * logit(X.elo__prob)
 
         mu_logit = X.matchup__non_mirror * matchup
 
