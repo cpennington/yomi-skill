@@ -1,0 +1,36 @@
+---
+import loading from '../assets/loading.svg'
+
+import GamePage from "../components/GamePage.svelte";
+
+import matchupData from '../data/yomi/matchupData.json';
+import characters from '../data/yomi/characters.json';
+import scales from '../data/yomi/scales.json';
+import playerSkill from '../data/yomi/playerSkill.json';
+import players from "../data/yomi/players.json";
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+  <title>
+    Yomi Matchup Chart
+    </title>
+  </head>
+
+  <body>
+    <nav class="nav nav-tabs">
+      <a
+        class="nav-link active"
+        href="/yomi-skill"
+        >Yomi Skill Chart</a
+      >
+    </nav>
+    <GamePage game={"yomi"} {matchupData} {characters} {scales} {playerSkill} {players} client:load></GamePage>
+  </body>
+</html>

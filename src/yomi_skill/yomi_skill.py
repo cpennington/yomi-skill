@@ -68,11 +68,14 @@ def render(game, dest, min_games, static_root, model, warmup, samples):
             model__min_games=min_games,
             model__warmup=warmup,
             model__samples=samples,
+            transform__elo__default_k=16,
+            transform__pc_elo__default_k=1,
+            transform__elo__rating_factor=1135.77,  # 200-point rating difference corresponds to 60% win chance
         )
         .fit(hist_games, hist_games.win)
     )
 
-    render = YomiRender(pipeline["model"].inf_data_)
+    render = YomiRender(pipeline["model"])
 
     filename = render.render_matchup_comparator(game, dest, static_root=static_root)
     print(filename)

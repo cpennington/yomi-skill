@@ -1,0 +1,86 @@
+{
+  "char": {
+    "argagarg": {
+      "elo": 1500.0,
+      "played": 97
+    },
+    "bbb": {
+      "elo": 1500.0,
+      "played": 84
+    },
+    "degrey": {
+      "elo": 1500.0,
+      "played": 66
+    },
+    "geiger": {
+      "elo": 1500.0,
+      "played": 157
+    },
+    "gloria": {
+      "elo": 1500.0,
+      "played": 107
+    },
+    "grave": {
+      "elo": 1500.0,
+      "played": 268
+    },
+    "gwen": {
+      "elo": 1500.0,
+      "played": 265
+    },
+    "jaina": {
+      "elo": 1500.0,
+      "played": 29
+    },
+    "lum": {
+      "elo": 1500.0,
+      "played": 50
+    },
+    "menelker": {
+      "elo": 1500.0,
+      "played": 290
+    },
+    "midori": {
+      "elo": 1500.0,
+      "played": 25
+    },
+    "onimaru": {
+      "elo": 1500.0,
+      "played": 147
+    },
+    "persephone": {
+      "elo": 1500.0,
+      "played": 110
+    },
+    "quince": {
+      "elo": 1500.0,
+      "played": 71
+    },
+    "rook": {
+      "elo": 1500.0,
+      "played": 108
+    },
+    "setsuki": {
+      "elo": 1500.0,
+      "played": 78
+    },
+    "troq": {
+      "elo": 1500.0,
+      "played": 123
+    },
+    "valerie": {
+      "elo": 1500.0,
+      "played": 221
+    },
+    "vendetta": {
+      "elo": 1500.0,
+      "played": 218
+    },
+    "zane": {
+      "elo": 1500.0,
+      "played": 107
+    }
+  },
+  "elo": 1634.0,
+  "gamesPlayed": 2621
+}

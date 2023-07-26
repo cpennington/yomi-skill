@@ -91,7 +91,12 @@ min_games_transformer = FunctionTransformer(_transform_min_games)
 
 def _transform_matchup(X):
     characters = X.character_1.dtype.categories.values
-    mu_list = [f"{c1}-{c2}" for c1 in characters for c2 in characters if c1 <= c2]
+    mu_list = [
+        f"{c1}-{c2}"
+        for (o1, c1) in enumerate(characters)
+        for (o2, c2) in enumerate(characters)
+        if o1 <= o2
+    ]
     return pandas.DataFrame(
         {
             "mup": X.apply(lambda r: f"{r.character_1}-{r.character_2}", axis=1).astype(
