@@ -827,7 +827,6 @@
             }
         }
 
-        console.log({ pSkill, oppSkill });
         const eloDiff = pSkill.elo - oppSkill.elo;
         const pcEloDiff = pSkill.char[c1].elo - oppSkill.char[c2].elo;
 
@@ -878,11 +877,11 @@
         }
     }
 
-    function computeDatum(
+    function computeData(
         c1: string,
         c2: string,
         muData: MUStats,
-        x: number,
+        xs: number[],
         player?: string,
         pSkill?: PlayerSkill,
         opponent?: string,
@@ -891,7 +890,7 @@
     ) {
         const muDist = gaussian(muData.mean, muData.std * muData.std);
 
-        let dist;
+        let dist: gaussian;
         if (playerDist && c1 != c2) {
             dist = playerDist.add(muDist);
         } else if (c1 != c2) {
@@ -900,36 +899,41 @@
             dist = playerDist;
         }
 
-        const upper = dist
-            ? dist.cdf(logOdds(Math.min(x + increment / 2, 1)))
-            : 0;
-        const lower = dist
-            ? dist.cdf(logOdds(Math.max(x - increment / 2, 0)))
-            : 0;
+        const credLower = dist ? invLogOdds(dist.ppf(0.05)) : 0;
+        const credUpper = dist ? invLogOdds(dist.ppf(0.95)) : 1;
 
-        let datum: Record<string, any> = {
-            c1: c1,
-            c2: c2,
-            mu: formatMU(x),
-            winChance: x,
-            credLower: dist ? invLogOdds(dist.ppf(0.05)) : 0,
-            credUpper: dist ? invLogOdds(dist.ppf(0.95)) : 1,
-            pdf: dist ? dist.pdf(logOdds(x)) : 0,
-            p: upper - lower,
-            type: player ? "match" : "global",
-            count: muData.count,
-        };
+        let pCount: number;
+        let oCount: number;
         if (pSkill) {
-            datum.pCount = pSkill.char[c1].gamesPlayed;
+            pCount = pSkill.char[c1].gamesPlayed;
             if (oSkill) {
-                datum.oCount = oSkill.char[c2].gamesPlayed;
+                oCount = oSkill.char[c2].gamesPlayed;
             }
-            datum.player = player;
         }
-        if (opponent) {
-            datum.opponent = opponent;
-        }
-        return datum;
+        return xs.map((winChance) => {
+            const upper = dist
+                ? dist.cdf(logOdds(Math.min(winChance + increment / 2, 1)))
+                : 0;
+            const lower = dist
+                ? dist.cdf(logOdds(Math.max(winChance - increment / 2, 0)))
+                : 0;
+            return {
+                c1,
+                c2,
+                mu: formatMU(winChance),
+                winChance,
+                credLower,
+                credUpper,
+                pdf: dist ? dist.pdf(logOdds(winChance)) : 0,
+                p: upper - lower,
+                type: player ? "match" : "global",
+                count: muData.count,
+                pCount,
+                oCount,
+                player,
+                opponent,
+            };
+        });
     }
 
     function muPDF(
@@ -946,35 +950,32 @@
     ) {
         const mu = matchupData[c1][c2] || {};
 
-        let data = xs.flatMap(function (x) {
-            let playerDist: gaussian;
-            if (pSkill && player) {
-                playerDist = getPlayerSkillDist(
-                    scales,
-                    againstElo,
-                    playerSkill,
-                    c1,
-                    c2,
-                    player,
-                    pSkill,
-                    opponent,
-                    oSkill
-                );
-                console.log({ player, playerDist });
-            }
-            return computeDatum(
+        let playerDist: gaussian;
+        if (pSkill && player) {
+            playerDist = getPlayerSkillDist(
+                scales,
+                againstElo,
+                playerSkill,
                 c1,
                 c2,
-                mu,
-                x,
                 player,
                 pSkill,
                 opponent,
-                oSkill,
-                playerDist
+                oSkill
             );
-        });
-        return data;
+            console.log({ player, playerDist });
+        }
+        return computeData(
+            c1,
+            c2,
+            mu,
+            xs,
+            player,
+            pSkill,
+            opponent,
+            oSkill,
+            playerDist
+        );
     }
 
     async function renderMUs(

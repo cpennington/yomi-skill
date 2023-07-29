@@ -47,14 +47,12 @@ def cli():
 
 
 @cli.command()
-@click.option("--game", type=click.Choice(["yomi"]), default="yomi")
-@click.option("--dest")
 @click.option("--min-games", default=0, type=int)
-@click.option("--static-root", default=".")
+@click.option("--dest")
 @click.option("--model", type=click.Choice(list(MODELS.keys())), default="full")
 @click.option("--warmup", type=int)
 @click.option("--samples", type=int)
-def render(game, dest, min_games, static_root, model, warmup, samples):
+def render(dest, min_games, model, warmup, samples):
     tournament_games = historical_record.latest_tournament_games()
     sirlin_games = historical_record.sirlin_db()
     games = pandas.concat([tournament_games, sirlin_games]).reset_index(drop=True)
@@ -70,14 +68,14 @@ def render(game, dest, min_games, static_root, model, warmup, samples):
             model__samples=samples,
             transform__elo__default_k=16,
             transform__pc_elo__default_k=1,
-            transform__elo__rating_factor=1135.77,  # 200-point rating difference corresponds to 60% win chance
+            # transform__elo__rating_factor=1135.77,  # 200-point rating difference corresponds to 60% win chance
         )
         .fit(hist_games, hist_games.win)
     )
 
-    render = YomiRender(pipeline["model"])
+    render = YomiRender(pipeline)
 
-    filename = render.render_matchup_comparator(game, dest, static_root=static_root)
+    filename = render.render_matchup_comparator(dest)
     print(filename)
 
 
