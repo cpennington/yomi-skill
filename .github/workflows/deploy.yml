@@ -34,6 +34,7 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+      NODE_OPTIONS: "--max_old_space_size=4096"
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
