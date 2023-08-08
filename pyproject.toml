@@ -18,7 +18,7 @@ dependencies = [
     "bacon-replay-analyzer",
     "click_log",
     "cmdstanpy",
-    "Cython>=0.29",
+    "Cython>=3",
     "fastparquet",
     "ipython[notebook]",
     "jupyter",

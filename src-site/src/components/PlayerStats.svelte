@@ -1,41 +1,62 @@
-<script>
-    //   if (player) {
-    //     document.getElementById("p1-name").textContent = player;
-    //     document.getElementById("p1-elo").textContent = Math.round(
-    //       playerSkill[player].elo
-    //     );
-    //     document.getElementById("p1-games").textContent =
-    //       playerSkill[player].gamesPlayed;
-    //   }
-    //   if (opponent) {
-    //     againstCfg.display = "none";
-    //     document.getElementById("p2-name").textContent = opponent;
-    //     document.getElementById("p2-elo").textContent = Math.round(
-    //       playerSkill[opponent].elo
-    //     );
-    //     document.getElementById("p2-games").textContent =
-    //       playerSkill[opponent].gamesPlayed;
-    //   }
+<script lang="ts">
+    let pSkill: Promise<PlayerSkill> | null;
+    let oSkill: Promise<PlayerSkill> | null;
+
+    export let player: string;
+    export let opponent: string;
+
+    $: pSkill = player
+        ? import(`../data/yomi/player/${player}/skill.json`)
+        : null;
+    $: oSkill = opponent
+        ? import(`../data/yomi/player/${opponent}/skill.json`)
+        : null;
+
+    $: console.log({ player, opponent, pSkill, oSkill });
 </script>
 
-<table id="player-stats" class="table table-hover table-sm mt-2">
-    <thead>
+<table id="player-stats" class="table-auto">
+    <thead class="border-b-2">
         <tr>
-            <th>Player</th>
-            <th>Elo</th>
-            <th>Games recorded</th>
+            <th class="text-left">Player</th>
+            <th class="text-left">Rating</th>
+            <th class="text-left">Games recorded</th>
         </tr>
     </thead>
-    <tbody>
-        <tr id="p1-stats">
-            <td id="p1-name" />
-            <td id="p1-elo" />
-            <td id="p1-games" />
-        </tr>
-        <tr id="p2-stats">
-            <td id="p2-name" />
-            <td id="p2-elo" />
-            <td id="p2-games" />
-        </tr>
+    <tbody class="divide-y">
+        {#if pSkill}
+            {#await pSkill then skill}
+                <tr id="p1-stats">
+                    <td class="text-left">{player}</td>
+                    <td class="text-left">
+                        {#if "elo" in skill && skill.elo}
+                            {Math.round(skill.elo)}
+                        {/if}
+                        {#if "glickoR" in skill && skill.glickoR}
+                            {Math.round(skill.glickoR)} +/- {Math.round(
+                                skill.glickoRD
+                            )}
+                        {/if}
+                    </td><td class="text-left">{skill.gamesPlayed}</td>
+                </tr>
+            {/await}
+        {/if}
+        {#if oSkill}
+            {#await oSkill then skill}
+                <tr id="p2-stats" class="border-b-1">
+                    <td class="text-left">{opponent}</td>
+                    <td class="text-left">
+                        {#if "elo" in skill && skill.elo}
+                            {Math.round(skill.elo)}
+                        {/if}
+                        {#if "glickoR" in skill && skill.glickoR}
+                            {Math.round(skill.glickoR)} +/- {Math.round(
+                                skill.glickoRD
+                            )}
+                        {/if}
+                    </td><td class="text-left">{skill.gamesPlayed}</td>
+                </tr>
+            {/await}
+        {/if}
     </tbody>
 </table>

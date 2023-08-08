@@ -1,29 +1,5 @@
 <script context="module" lang="ts">
     const increment = 0.05;
-    type PlayerSkill = {
-        char: Record<string, { elo: number; gamesPlayed: number }>;
-        elo: number;
-        gamesPlayed: number;
-    };
-    type AggregatePlayerSkill = {
-        char_elo_q: { string: { qs: number[]; std: number } };
-        elo: { qs: number[]; std: number };
-    };
-    type Scales = {
-        eloScaleMean: number;
-        eloScaleStd: number;
-        eloFactor: number;
-        pcEloScaleMean: number;
-        pcEloScaleStd: number;
-        pcEloFactor: number;
-    };
-    type MUStats = {
-        count: number;
-        mean: number;
-        std: number;
-    };
-    type MatchupData = Record<string, Record<string, MUStats>>;
-
     let xs: number[] = [];
     for (let x = 0; x <= 1; x += increment) {
         xs.push(x);
@@ -82,7 +58,6 @@
             Math.abs(0.5 - minCredLower),
             Math.abs(0.5 - maxCredUpper)
         );
-        console.log({ xs, credIntervalExtreme, minCredLower, maxCredUpper });
         const credIntervalDomain = xs
             .filter(function (x) {
                 return (
@@ -226,6 +201,11 @@
                   y: pdf,
                   detail: statsType,
                   tooltip: [
+                      {
+                          field: "mu_name",
+                          type: "nominal",
+                          title: "Matchup",
+                      },
                       statsType,
                       credInterval,
                       overallWinChance,
@@ -786,10 +766,11 @@
         return vlMUs;
     }
 
-    function getPlayerSkillDist(
-        scales: Scales,
-        againstElo: "self" | number,
-        playerSkill: AggregatePlayerSkill,
+    function getPlayerSkillDistGlicko(
+        scales: GlickoScales,
+        againstRating: "self" | number,
+        againstCharRating: "self" | number,
+        aggregateSkill: AggregatePlayerSkill,
         c1: string,
         c2: string,
         player: string,
@@ -797,6 +778,108 @@
         opponent?: string,
         oSkill?: PlayerSkill
     ): gaussian {
+        if (!("glicko" in aggregateSkill.globalSkill)) {
+            throw Error("No glicko ratings in aggregateSkill");
+        }
+        if (!("glickoR" in pSkill)) {
+            throw Error("No glicko ratings in pSkill");
+        }
+        if (oSkill && !("glickoR" in oSkill)) {
+            throw Error("No glicko ratings in oSkill");
+        }
+
+        let oppSkill: GlickoPlayerSkill;
+        if (oSkill) {
+            oppSkill = oSkill;
+        } else {
+            if (againstRating === "self") {
+                oppSkill = pSkill;
+            } else {
+                oppSkill = {
+                    glickoR:
+                        aggregateSkill.globalSkill.glicko.r.qs[againstRating],
+                    glickoRD:
+                        aggregateSkill.globalSkill.glicko.rd.qs[againstRating],
+                    glickoV:
+                        aggregateSkill.globalSkill.glicko.v.qs[againstRating],
+                    gamesPlayed: -1, // TODO: Add games played quantiles to rendering
+                    char: Object.fromEntries(
+                        Object.entries(aggregateSkill.characters).map(
+                            ([char, skill]) => [
+                                char,
+                                {
+                                    glickoR: skill.glicko.r.qs[againstRating],
+                                    glickoRD: skill.glicko.rd.qs[againstRating],
+                                    glickoV: skill.glicko.v.qs[againstRating],
+                                    gamesPlayed: -1, // TODO: Add games played quantiles to rendering
+                                },
+                            ]
+                        )
+                    ),
+                };
+            }
+        }
+
+        const scale = 173.7178;
+
+        function rating_to_mu(rating: number) {
+            return (rating - 1500) / scale;
+        }
+
+        function rd_to_phi(rd: number) {
+            return rd / scale;
+        }
+
+        const glickoRDiffDist = gaussian(
+            rating_to_mu(pSkill.glickoR),
+            Math.pow(rd_to_phi(pSkill.glickoRD), 2)
+        ).sub(
+            gaussian(
+                rating_to_mu(oppSkill.glickoR),
+                Math.pow(rd_to_phi(oppSkill.glickoRD), 2)
+            )
+        );
+        const pcGlickoRDiffDist = gaussian(
+            rating_to_mu(pSkill.char[c1].glickoR),
+            Math.pow(rd_to_phi(pSkill.char[c1].glickoRD), 2)
+        ).sub(
+            gaussian(
+                rating_to_mu(oppSkill.char[c2].glickoR),
+                Math.pow(rd_to_phi(oppSkill.char[c2].glickoRD), 2)
+            )
+        );
+        const aggregateSkillDist = glickoRDiffDist.mul(
+            scales.glickoScaleMean || 1 - scales.playerGlobalScaleMean
+        );
+        const charSkillDist = pcGlickoRDiffDist.mul(
+            scales.pcGlickoScaleMean || scales.playerGlobalScaleMean
+        );
+        const totalSkillDist = aggregateSkillDist.add(charSkillDist);
+
+        return totalSkillDist;
+    }
+
+    function getPlayerSkillDistElo(
+        scales: EloScales,
+        againstRating: "self" | number,
+        againstCharRating: "self" | number,
+        aggregateSkill: AggregatePlayerSkill,
+        c1: string,
+        c2: string,
+        player: string,
+        pSkill: PlayerSkill,
+        opponent?: string,
+        oSkill?: PlayerSkill
+    ): gaussian {
+        if (!("elo" in aggregateSkill)) {
+            throw Error("No elo ratings in aggregateSkill");
+        }
+        if (!("elo" in pSkill)) {
+            throw Error("No elo ratings in pSkill");
+        }
+        if (oSkill && !("elo" in oSkill)) {
+            throw Error("No elo ratings in oSkill");
+        }
         const eloScaleDist = gaussian(
             scales.eloScaleMean,
             scales.eloScaleStd * scales.eloScaleStd
@@ -810,16 +893,16 @@
         if (oSkill) {
             oppSkill = oSkill;
         } else {
-            if (againstElo === "self") {
+            if (againstRating === "self") {
                 oppSkill = pSkill;
             } else {
                 oppSkill = {
-                    elo: playerSkill.elo.qs[againstElo],
+                    elo: aggregateSkill.globalSkill.elo.qs[againstRating],
                     char: Object.fromEntries(
-                        Object.entries(playerSkill.char_elo_q).map(
-                            ([char, data]) => [
+                        Object.entries(aggregateSkill.character).map(
+                            ([char, skill]) => [
                                 char,
-                                { elo: data.qs[againstElo as number] },
+                                { elo: skill.elo.qs[againstRating as number] },
                             ]
                         )
                     ),
@@ -830,32 +913,14 @@
         const eloDiff = pSkill.elo - oppSkill.elo;
         const pcEloDiff = pSkill.char[c1].elo - oppSkill.char[c2].elo;
 
-        // 1135.77 means that 200 points rating difference gets a 60% win rate
-        // see http://www.mtgeloproject.net/faq.php
         const eloPctPlayerWin =
-            1 / (1 + Math.pow(10, -eloDiff / scales.elo_factor));
+            1 / (1 + Math.pow(10, -eloDiff / scales.eloFactor));
         const eloLogit = Math.log(eloPctPlayerWin / (1 - eloPctPlayerWin));
         const pcEloPctPlayerWin =
-            1 / (1 + Math.pow(10, -pcEloDiff / scales.pc_elo_factor));
+            1 / (1 + Math.pow(10, -pcEloDiff / scales.pcEloFactor));
         const pcEloLogit = Math.log(
             pcEloPctPlayerWin / (1 - pcEloPctPlayerWin)
         );
-
-        console.log({
-            c1,
-            c2,
-            eloPctPlayerWin,
-            pcEloPctPlayerWin,
-            eloScaleDist,
-            charEloScaleDist,
-            eloDiff,
-            pcEloDiff,
-            eloLogit,
-            pcEloLogit,
-            scales,
-            pSkill,
-            oppSkill,
-        });
         if (eloLogit === 0 && pcEloLogit === 0) {
             return null;
         } else if (eloLogit === 0) {
@@ -867,13 +932,48 @@
             const pcEloDist = charEloScaleDist.scale(pcEloLogit);
 
             const skillDiffDist = eloDist.add(pcEloDist);
-
-            console.log({
-                eloDist,
-                pcEloDist,
-                skillDiffDist,
-            });
             return skillDiffDist;
+        }
+    }
+
+    function getPlayerSkillDist(
+        scales: Scales,
+        againstRating: "self" | number,
+        againstCharRating: "self" | number,
+        aggregateSkill: AggregatePlayerSkill,
+        c1: string,
+        c2: string,
+        player: string,
+        pSkill: PlayerSkill,
+        opponent?: string,
+        oSkill?: PlayerSkill
+    ) {
+        if ("eloScaleMean" in scales) {
+            return getPlayerSkillDistElo(
+                scales,
+                againstRating,
+                againstCharRating,
+                aggregateSkill,
+                c1,
+                c2,
+                player,
+                pSkill,
+                opponent,
+                oSkill
+            );
+        } else {
+            return getPlayerSkillDistGlicko(
+                scales,
+                againstRating,
+                againstCharRating,
+                aggregateSkill,
+                c1,
+                c2,
+                player,
+                pSkill,
+                opponent,
+                oSkill
+            );
         }
     }
 
@@ -938,8 +1038,9 @@
 
     function muPDF(
         scales: Scales,
-        againstElo: "self" | number,
-        playerSkill: AggregatePlayerSkill,
+        againstRating: "self" | number,
+        againstCharRating: "self" | number,
+        aggregateSkill: AggregatePlayerSkill,
         matchupData: MatchupData,
         c1: string,
         c2: string,
@@ -954,8 +1055,9 @@
         if (pSkill && player) {
             playerDist = getPlayerSkillDist(
                 scales,
-                againstElo,
-                playerSkill,
+                againstRating,
+                againstCharRating,
+                aggregateSkill,
                 c1,
                 c2,
                 player,
@@ -963,7 +1065,6 @@
                 opponent,
                 oSkill
             );
-            console.log({ player, playerDist });
         }
         return computeData(
             c1,
@@ -980,8 +1081,9 @@
 
     async function renderMUs(
         scales: Scales,
-        againstElo: "self" | number,
-        playerSkill: AggregatePlayerSkill,
+        againstRating: "self" | number,
+        againstCharRating: "self" | number,
+        aggregateSkill: AggregatePlayerSkill,
         matchupData: MatchupData,
         vis: HTMLElement,
         characters: string[],
@@ -995,19 +1097,27 @@
         const oSkill =
             opponent &&
             (await import(`../data/yomi/player/${opponent}/skill.json`));
-        console.log({ fn: "renderMUs", pSkill, oSkill });
         const muEstimates = characters.flatMap(function (c1) {
             return characters.flatMap(function (c2) {
                 let pdf: ReturnType<typeof muPDF> = [];
                 pdf = pdf.concat(
-                    muPDF(scales, againstElo, playerSkill, matchupData, c1, c2)
+                    muPDF(
+                        scales,
+                        againstRating,
+                        againstCharRating,
+                        aggregateSkill,
+                        matchupData,
+                        c1,
+                        c2
+                    )
                 );
                 if (player) {
                     pdf = pdf.concat(
                         muPDF(
                             scales,
-                            againstElo,
-                            playerSkill,
+                            againstRating,
+                            againstCharRating,
+                            aggregateSkill,
                             matchupData,
                             c1,
                             c2,
@@ -1047,15 +1157,17 @@
     export let textOnly: boolean;
     export let player: string | undefined;
     export let opponent: string | undefined;
-    export let againstElo: "self" | number;
-    export let playerSkill: AggregatePlayerSkill;
+    export let againstRating: "self" | number;
+    export let againstCharRating: "self" | number;
+    export let aggregateSkill: AggregatePlayerSkill;
     const hasVersions = false;
 
     $: mounted &&
         renderMUs(
             scales,
-            againstElo,
-            playerSkill,
+            againstRating,
+            againstCharRating,
+            aggregateSkill,
             matchupData,
             vis,
             characters,
@@ -1066,17 +1178,6 @@
     let mounted = false;
     onMount(() => {
         mounted = true;
-        renderMUs(
-            scales,
-            againstElo,
-            playerSkill,
-            matchupData,
-            vis,
-            characters,
-            textOnly,
-            player,
-            opponent
-        );
     });
 </script>
 

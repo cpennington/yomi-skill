@@ -92,7 +92,7 @@ class PyMCModel(YomiModel):
                 tune=self.warmup,
                 draws=self.samples,
                 chains=4,
-                postprocessing_chunks=1000,
+                # postprocessing_chunks=1000,
                 # var_names=["mu", "char_skill", "elo_logit_scale"],=True,
                 idata_kwargs=dict(
                     # log_likelihood=True,

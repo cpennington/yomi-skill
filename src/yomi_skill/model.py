@@ -46,6 +46,7 @@ def weight_by(games, key):
 
 
 def _transform_min_games(X, min_games=0):
+    logger.info("Starting _transform_min_games")
     result = pandas.DataFrame(
         {
             "player_1_orig": X.player_1,
@@ -83,6 +84,7 @@ def _transform_min_games(X, min_games=0):
             result.player_2.isin(not_enough_played), "player_2"
         ] = min_games_player_
 
+    logger.info("Ending _transform_min_games")
     return result.astype({"player_1": "category", "player_2": "category"})
 
 
@@ -90,6 +92,7 @@ min_games_transformer = FunctionTransformer(_transform_min_games)
 
 
 def _transform_matchup(X):
+    logger.info("Starting _transform_matchup")
     characters = X.character_1.dtype.categories.values
     mu_list = [
         f"{c1}-{c2}"
@@ -97,27 +100,30 @@ def _transform_matchup(X):
         for (o2, c2) in enumerate(characters)
         if o1 <= o2
     ]
-    return pandas.DataFrame(
+    df = pandas.DataFrame(
         {
-            "mup": X.apply(lambda r: f"{r.character_1}-{r.character_2}", axis=1).astype(
-                pandas.api.types.CategoricalDtype(mu_list, ordered=True)
-            ),
+            "mup": X[["character_1", "character_2"]]
+            .agg("-".join, axis=1)
+            .astype(pandas.api.types.CategoricalDtype(mu_list, ordered=True)),
             "character_1": X.character_1,
             "character_2": X.character_2,
-            "non_mirror": X.apply(
-                lambda r: int(r.character_1 != r.character_2), axis=1
-            ),
+            "non_mirror": (X.character_1 != X.character_2).astype(int)
         }
     )
+    logger.info("Ending _transform_matchup")
+    return df
 
 
 matchup_transformer = FunctionTransformer(_transform_matchup)
 
-render_transformer = FunctionTransformer(
-    lambda X: pandas.DataFrame(
+
+def _render(X):
+    return pandas.DataFrame(
         {"match_date": X.match_date, "win": X.win, "public": X.public}
     )
-)
+
+
+render_transformer = FunctionTransformer(_render)
 
 
 class YomiModel(ABC, BaseEstimator, ClassifierMixin):
@@ -154,7 +160,6 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     def fit(self, X: pandas.DataFrame, y, sample_weight=None) -> "YomiModel":
         self.clear_all_cached_properties()
         self.sample_weight_ = sample_weight
-        self.data_hash_ = hash(X.values.tobytes())
         self.data_ = X
         self.classes_, y = numpy.unique(y, return_inverse=True)
         self.y_ = y

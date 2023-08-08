@@ -409,5 +409,6 @@ def augment_dataset(games, optional_features=[]):
         games["pc_elo_2"] = pc_elo_ratings.r2
         games["pc_elo_estimate"] = player_character_elo_model.predict_proba(games).pr1
 
+    games["match_date"] = games.match_date.dt.normalize()
     games.sort_values("match_date", inplace=True)
     return games
