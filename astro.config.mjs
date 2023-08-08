@@ -9,5 +9,6 @@ export default defineConfig({
   experimental: {
     assets: true
   },
-  srcDir: './src-js'
+  srcDir: './src-js',
+  base: "/yomi-skill"
 });
