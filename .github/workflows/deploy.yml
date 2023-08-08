@@ -21,6 +21,8 @@ jobs:
       - name: Checkout your repository using git
         uses: actions/checkout@v3
       - name: Install, build, and upload your site output
+        env:
+          NODE_OPTIONS: "--max_old_space_size=4096"
         uses: withastro/action@v0
         # with:
             # path: . # The root location of your Astro project inside the repository. (optional)
@@ -34,7 +36,6 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-      NODE_OPTIONS: "--max_old_space_size=4096"
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
