@@ -3,7 +3,7 @@
    "module": "esnext",
     "baseUrl": ".",
     "paths": {
-        "$lib/*": ["src/*"]
+        "$lib/*": ["src-js/*"]
     }
   },
   "extends": "astro/tsconfigs/strict"

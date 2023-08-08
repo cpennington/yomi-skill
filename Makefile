@@ -15,7 +15,7 @@ validate:
 
 matchups:
 	yomi-skill render \
-		--dest='src-site/src/data/yomi' \
+		--dest='src-js/data/yomi' \
 		--warmup=500 \
 		--samples=1000
 
@@ -23,7 +23,7 @@ all-matchups: matchups
 
 new-matchups:
 	yomi-skill render \
-		--dest='src-site/src/data/yomi' \
+		--dest='src-js/data/yomi' \
 		--warmup 500 \
 		--samples 1000
 
