@@ -71,21 +71,4 @@
       transform: rotate(-360deg);
     }
   }
-
-  #arrows {
-    height: 20px;
-    transform-origin: center center;
-    animation-name: rotate;
-    animation-duration: 5s;
-    animation-iteration-count: infinite;
-    animation-timing-function: linear;
-  }
-
-  #c2-total {
-    padding-left: 46px;
-  }
-
-  #total {
-    padding-left: 15px;
-  }
 </style>

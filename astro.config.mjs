@@ -8,5 +8,6 @@ export default defineConfig({
   integrations: [svelte(), tailwind()],
   experimental: {
     assets: true
-  }
+  },
+  srcDir: './src-js'
 });
