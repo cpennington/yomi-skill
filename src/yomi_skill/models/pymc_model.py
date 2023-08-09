@@ -39,6 +39,33 @@ class PyMCModel(YomiModel):
         )
 
     @cached_property
+    def with_gem_m(self):
+        return pm.Normal(
+            "with_gem",
+            0.0,
+            sigma=0.5,
+            shape=(len(self.data_.gem__with_gem_1.dtype.categories),),
+        )
+
+    @cached_property
+    def against_gem_m(self):
+        return pm.Normal(
+            "against_gem",
+            0.0,
+            sigma=0.5,
+            shape=(len(self.data_.gem__against_gem_1.dtype.categories),),
+        )
+
+    @cached_property
+    def gem_effect_logit_m(self):
+        return (
+            self.with_gem_m[self.data_.gem__with_gem_1.cat.codes]
+            + self.against_gem_m[self.data_.gem__against_gem_1.cat.codes]
+            - self.with_gem_m[self.data_.gem__with_gem_2.cat.codes]
+            - self.against_gem_m[self.data_.gem__against_gem_2.cat.codes]
+        )
+
+    @cached_property
     def global_pc_elo_estimate_logit_m(self):
         pc_elo_scale = pm.HalfNormal("pc_elo_scale", sigma=1.0)
         return pc_elo_scale * logit(self.data_.pc_elo__prob)
@@ -98,10 +125,14 @@ class PyMCModel(YomiModel):
                     # log_likelihood=True,
                     coords={
                         "matchup": X.matchup__mup.dtype.categories.values,
+                        "with_gem_c": X.gem__with_gem_1.dtype.categories.values,
+                        "against_gem_c": X.gem__against_gem_1.dtype.categories.values,
                         "player": X.min_games__player_1.dtype.categories.values,
                     },
                     dims={
                         "mu": ["matchup"],
+                        "with_gem": ["with_gem_c"],
+                        "against_gem": ["against_gem_c"],
                         "player_pc_glicko_scale": ["player"],
                         "player_glicko_scale": ["player"],
                     },

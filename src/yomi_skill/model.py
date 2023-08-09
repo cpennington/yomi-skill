@@ -107,7 +107,7 @@ def _transform_matchup(X):
             .astype(pandas.api.types.CategoricalDtype(mu_list, ordered=True)),
             "character_1": X.character_1,
             "character_2": X.character_2,
-            "non_mirror": (X.character_1 != X.character_2).astype(int)
+            "non_mirror": (X.character_1 != X.character_2).astype(int),
         }
     )
     logger.info("Ending _transform_matchup")
@@ -115,6 +115,37 @@ def _transform_matchup(X):
 
 
 matchup_transformer = FunctionTransformer(_transform_matchup)
+
+
+def _transform_gem_effect(X):
+    logger.info("Starting _transform_gem_effect")
+    characters = X.character_1.dtype.categories.values
+    gems = X.gem_1.dtype.categories.values
+    with_gem_list = [f"{c}-{g}" for c in characters for g in gems]
+    against_gem_list = [f"{g}-{c}" for c in characters for g in gems]
+    df = pandas.DataFrame(
+        {
+            "with_gem_1": X[["character_1", "gem_1"]]
+            .agg("-".join, axis=1)
+            .astype(pandas.api.types.CategoricalDtype(with_gem_list, ordered=True)),
+            "with_gem_2": X[["character_2", "gem_2"]]
+            .agg("-".join, axis=1)
+            .astype(pandas.api.types.CategoricalDtype(with_gem_list, ordered=True)),
+            "against_gem_1": X[["gem_1", "character_2"]]
+            .agg("-".join, axis=1)
+            .astype(pandas.api.types.CategoricalDtype(against_gem_list, ordered=True)),
+            "against_gem_2": X[["gem_2", "character_1"]]
+            .agg("-".join, axis=1)
+            .astype(pandas.api.types.CategoricalDtype(against_gem_list, ordered=True)),
+            "gem_1": X.gem_1,
+            "gem_2": X.gem_2,
+        }
+    )
+    logger.info("Ending _transform_gem_effect")
+    return df
+
+
+gem_effect_transformer = FunctionTransformer(_transform_gem_effect)
 
 
 def _render(X):
