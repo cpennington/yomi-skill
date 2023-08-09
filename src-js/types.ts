@@ -1,26 +1,26 @@
 
-type EloSkill = { elo: number; gamesPlayed: number };
-type GlickoSkill = {
+export type EloSkill = { elo: number; gamesPlayed: number };
+export type GlickoSkill = {
     glickoR: number;
     glickoRD: number;
     glickoV: number;
     gamesPlayed: number;
 };
-type PlayerSkill = EloPlayerSkill | GlickoPlayerSkill;
-type EloPlayerSkill = { char: Record<string, EloSkill> } & EloSkill;
-type GlickoPlayerSkill = {
+export type PlayerSkill = EloPlayerSkill | GlickoPlayerSkill;
+export type EloPlayerSkill = { char: Record<string, EloSkill> } & EloSkill;
+export type GlickoPlayerSkill = {
     char: Record<string, GlickoSkill>;
 } & GlickoSkill;
-type Quantiles = { qs: number[]; std: number };
-type EloQuantiles = { elo: Quantiles };
-type GlickoQuantiles = { glicko: { r: Quantiles, rd: Quantiles, v: Quantiles } };
-type RatingQuantiles = EloQuantiles & GlickoQuantiles;
-type AggregatePlayerSkill = {
+export type Quantiles = { qs: number[]; std: number };
+export type EloQuantiles = { elo: Quantiles };
+export type GlickoQuantiles = { glicko: { r: Quantiles, rd: Quantiles, v: Quantiles } };
+export type RatingQuantiles = EloQuantiles & GlickoQuantiles;
+export type AggregatePlayerSkill = {
     globalSkill: RatingQuantiles,
     characters: Record<string, RatingQuantiles & { glicko: { top20: { player: string, r: number, rd: number, v: number }[] } }>
 };
-type Scales = EloScales | GlickoScales;
-type EloScales = {
+export type Scales = EloScales | GlickoScales;
+export type EloScales = {
     eloScaleMean: number;
     eloScaleStd: number;
     eloFactor: number;
@@ -28,7 +28,7 @@ type EloScales = {
     pcEloScaleStd: number;
     pcEloFactor: number;
 };
-type GlickoScales = {
+export type GlickoScales = {
     glickoScaleMean?: number;
     glickoScaleStd?: number;
     glickoFactor?: number;
@@ -38,13 +38,13 @@ type GlickoScales = {
     playerGlobalScaleMean?: number;
     playerGlobalScaleStd?: number;
 };
-type MUStats = {
+export type MUStats = {
     count: number;
     mean: number;
     std: number;
 };
-type MatchupData = Record<string, Record<string, MUStats>>;
-type Match = {
+export type MatchupData = Record<string, Record<string, MUStats>>;
+export type Match = {
     "elo__ro": number;
     "elo__rp": number;
     "glicko__prob": number,

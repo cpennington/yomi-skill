@@ -1,5 +1,13 @@
 <script context="module" lang="ts">
-    const increment = 0.05;
+    import type {
+        AggregatePlayerSkill,
+        EloScales,
+        GlickoPlayerSkill,
+        GlickoScales,
+        PlayerSkill,
+    } from "../types";
+
+    const increment = 0.025;
     let xs: number[] = [];
     for (let x = 0; x <= 1; x += increment) {
         xs.push(x);
@@ -17,7 +25,7 @@
         winChance: number,
         func: (p: number) => number = Math.round
     ): string {
-        return func(winChance * 20) / 2 + "-" + (10 - func(winChance * 20) / 2);
+        return func(winChance * 40) / 4 + "-" + (10 - func(winChance * 40) / 4);
     }
 
     type MatchupEstimates = {
@@ -27,7 +35,6 @@
     }[];
     function vegaSpec(
         muEstimates: MatchupEstimates,
-        textOnly: boolean,
         characters: string[],
         player?: string,
         pSkill?: PlayerSkill,
@@ -184,41 +191,35 @@
             // }
         };
 
-        const mark = textOnly
-            ? { type: "text" }
-            : {
-                  type: "area",
-                  stroke: "#000",
-                  interpolate: "monotone",
-              };
+        const mark = {
+            type: "area",
+            stroke: "#000",
+            interpolate: "monotone",
+        };
 
-        const baseEncoding = textOnly
-            ? {
-                  text: muNumber,
-              }
-            : {
-                  x: muEstimate,
-                  y: pdf,
-                  detail: statsType,
-                  tooltip: [
-                      {
-                          field: "mu_name",
-                          type: "nominal",
-                          title: "Matchup",
-                      },
-                      statsType,
-                      credInterval,
-                      overallWinChance,
-                      {
-                          field: "muLikelihood",
-                          type: "nominal",
-                          title: "Estimate",
-                      },
-                      muCount,
-                  ],
-                  fill: overallWinChance,
-                  stroke,
-              };
+        const baseEncoding = {
+            x: muEstimate,
+            y: pdf,
+            detail: statsType,
+            tooltip: [
+                {
+                    field: "mu_name",
+                    type: "nominal",
+                    title: "Matchup",
+                },
+                statsType,
+                credInterval,
+                overallWinChance,
+                {
+                    field: "muLikelihood",
+                    type: "nominal",
+                    title: "Estimate",
+                },
+                muCount,
+            ],
+            fill: overallWinChance,
+            stroke,
+        };
 
         const credIntervalTransform = {
             calculate:
@@ -412,6 +413,7 @@
                     header: {
                         title: player ? player + " playing " : "Playing",
                         labelAngle: 0,
+                        labelAlign: "top",
                     },
                     sort: characters,
                 },
@@ -422,7 +424,6 @@
                         title: opponent
                             ? "Against " + opponent + " as"
                             : "Against",
-                        labelAngle: -45,
                     },
                     sort: characters,
                 },
@@ -432,113 +433,7 @@
                 height: 40,
                 mark: mark,
                 encoding: baseEncoding,
-                // Object.assign({}, baseEncoding, {
-                //     color: Object.assign(
-                //         {},
-                //         { field: "newestVersion", type: "ordinal" },
-                //         player
-                //             ? {
-                //                   condition: {
-                //                       test: "datum['type'] == 'global'",
-                //                       value: "#bbb",
-                //                   },
-                //               }
-                //             : {}
-                //     ),
-                //     tooltip: hasVersions
-                //         ? [
-                //               {
-                //                   field: "mu_name",
-                //                   type: "nominal",
-                //                   title: "Matchup",
-                //               },
-                //               { field: "v1v2", type: "ordinal" },
-                //               statsType,
-                //               credInterval,
-                //               overallWinChance,
-                //               {
-                //                   field: "muLikelihood",
-                //                   type: "nominal",
-                //                   title: "Estimate",
-                //               },
-                //               muCount,
-                //               pCount,
-                //               oCount,
-                //           ]
-                //         : [
-                //               {
-                //                   field: "mu_name",
-                //                   type: "nominal",
-                //                   title: "Matchup",
-                //               },
-                //               statsType,
-                //               credInterval,
-                //               overallWinChance,
-                //               {
-                //                   field: "muLikelihood",
-                //                   type: "nominal",
-                //                   title: "Estimate",
-                //               },
-                //               muCount,
-                //               pCount,
-                //               oCount,
-                //           ],
-                // }),
             },
-        };
-        const c1c2Text = {
-            transform: c1c2Transforms,
-            width: 700,
-            height: 700,
-            encoding: {
-                y: {
-                    field: "c1",
-                    type: "nominal",
-                    header: {
-                        title: player ? player + " playing " : "Playing",
-                        labelAngle: 0,
-                    },
-                    sort: characters,
-                },
-                x: {
-                    field: "c2",
-                    type: "nominal",
-                    header: {
-                        title: opponent
-                            ? "Against " + opponent + " as"
-                            : "Against",
-                        labelAngle: -45,
-                    },
-                    sort: characters,
-                },
-            },
-            layer: [
-                { mark: "rect", encoding: baseEncoding },
-                {
-                    mark: "text",
-                    encoding: {
-                        text: muNumber,
-                        tooltip: [
-                            {
-                                field: "mu_name",
-                                type: "nominal",
-                                title: "Matchup",
-                            },
-                            statsType,
-                            credInterval,
-                            overallWinChance,
-                            {
-                                field: "muLikelihood",
-                                type: "nominal",
-                                title: "Estimate",
-                            },
-                            muCount,
-                            pCount,
-                            oCount,
-                        ],
-                    },
-                },
-            ],
         };
 
         const c1Graphs = {
@@ -547,7 +442,7 @@
                 row: {
                     field: "c1",
                     type: "ordinal",
-                    header: { title: null, labelAngle: 0 },
+                    header: { title: null, labelAngle: 0, labelAlign: "top" },
                     sort: characters,
                 },
             },
@@ -573,51 +468,13 @@
             },
         };
 
-        const c1Text = {
-            transform: c1Transforms,
-            width: 35,
-            height: 700,
-            encoding: {
-                y: {
-                    field: "c1",
-                    type: "nominal",
-                    header: {
-                        title: player ? player + " playing " : "Playing",
-                        labelAngle: 0,
-                    },
-                    sort: characters,
-                },
-            },
-            layer: [
-                { mark: "rect", encoding: baseEncoding },
-                {
-                    mark: "text",
-                    encoding: {
-                        text: muNumber,
-                        tooltip: [
-                            statsType,
-                            credInterval,
-                            overallWinChance,
-                            {
-                                field: "muLikelihood",
-                                type: "nominal",
-                                title: "Estimate",
-                            },
-                            muCount,
-                            pCount,
-                        ],
-                    },
-                },
-            ],
-        };
-
         const c2Graphs = {
             transform: c2Transforms,
             facet: {
                 column: {
                     field: "c2",
                     type: "ordinal",
-                    header: { title: null, labelAngle: -45 },
+                    header: { title: null },
                     sort: characters,
                 },
             },
@@ -643,47 +500,9 @@
             },
         };
 
-        const c2Text = {
-            transform: c2Transforms,
-            width: 700,
-            height: 35,
-            encoding: {
-                x: {
-                    field: "c2",
-                    type: "nominal",
-                    header: {
-                        title: player ? player + " playing " : "Playing",
-                        labelAngle: 0,
-                    },
-                    sort: characters,
-                },
-            },
-            layer: [
-                { mark: "rect", encoding: baseEncoding },
-                {
-                    mark: "text",
-                    encoding: {
-                        text: muNumber,
-                        tooltip: [
-                            statsType,
-                            credInterval,
-                            overallWinChance,
-                            {
-                                field: "muLikelihood",
-                                type: "nominal",
-                                title: "Estimate",
-                            },
-                            muCount,
-                            pCount,
-                        ],
-                    },
-                },
-            ],
-        };
-
         const allGraphs = {
             transform: allTransforms,
-            width: 35,
+            width: 50,
             height: 40,
             mark: mark,
             encoding: {
@@ -701,33 +520,6 @@
                     pCount,
                 ],
             },
-        };
-
-        const allText = {
-            transform: allTransforms,
-            width: 35,
-            height: 35,
-            layer: [
-                { mark: "rect", encoding: baseEncoding },
-                {
-                    mark: "text",
-                    encoding: {
-                        text: muNumber,
-                        tooltip: [
-                            statsType,
-                            credInterval,
-                            overallWinChance,
-                            {
-                                field: "muLikelihood",
-                                type: "nominal",
-                                title: "Estimate",
-                            },
-                            muCount,
-                            pCount,
-                        ],
-                    },
-                },
-            ],
         };
 
         const vlMUs = {
@@ -750,16 +542,10 @@
             ],
             vconcat: [
                 {
-                    hconcat: [
-                        textOnly ? c1c2Text : c1c2Graphs,
-                        textOnly ? c1Text : c1Graphs,
-                    ],
+                    hconcat: [c1c2Graphs, c1Graphs],
                 },
                 {
-                    hconcat: [
-                        textOnly ? c2Text : c2Graphs,
-                        textOnly ? allText : allGraphs,
-                    ],
+                    hconcat: [c2Graphs, allGraphs],
                 },
             ],
         };
@@ -849,7 +635,7 @@
             )
         );
         const aggregateSkillDist = glickoRDiffDist.mul(
-            scales.glickoScaleMean || 1 - scales.playerGlobalScaleMean
+            scales.glickoScaleMean || 1 - (scales.playerGlobalScaleMean || 0)
         );
         const charSkillDist = pcGlickoRDiffDist.mul(
             scales.pcGlickoScaleMean || scales.playerGlobalScaleMean
@@ -1087,7 +873,6 @@
         matchupData: MatchupData,
         vis: HTMLElement,
         characters: string[],
-        textOnly: boolean,
         player?: string,
         opponent?: string
     ) {
@@ -1133,7 +918,6 @@
         });
         const vlMUs = vegaSpec(
             muEstimates,
-            textOnly,
             characters,
             player,
             pSkill,
@@ -1154,7 +938,6 @@
     export let characters: string[];
     export let matchupData: MatchupData;
     export let scales: Scales;
-    export let textOnly: boolean;
     export let player: string | undefined;
     export let opponent: string | undefined;
     export let againstRating: "self" | number;
@@ -1171,7 +954,6 @@
             matchupData,
             vis,
             characters,
-            textOnly,
             player,
             opponent
         );

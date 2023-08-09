@@ -32,20 +32,6 @@
     on:blur={(e) => (opponent = e.target.value)}
   />
   <div class="grid col-span-3 grid-cols-12">
-    <button
-      id="graph"
-      onclick="return doGraph(); "
-      class="col-span-4 btn btn-primary justify-content-end"
-    >
-      Graph
-    </button>
-    <button
-      id="text"
-      onclick="return doText();"
-      class="col-span-4 btn btn-primary justify-content-end"
-    >
-      Text
-    </button>
     {#if loading}
       <div id="loading" class="col-span-1 justify-content-end">
         <img
