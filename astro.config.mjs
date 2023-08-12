@@ -10,5 +10,9 @@ export default defineConfig({
     assets: true
   },
   srcDir: './src-js',
-  base: "/yomi-skill"
+  base: "/yomi-skill",
+
+  redirects: {
+    '/': '/yomi-skill/yomi1'
+  }
 });

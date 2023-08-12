@@ -74,4 +74,9 @@ export type Match = {
     "render__match_date": number,
     "render__public": boolean,
     "render__win": number
-}
+};
+export type GemEffects = {
+    with_gem: Record<string, Record<string, MUStats>>,
+    against_gem: Record<string, Record<string, MUStats>>,
+};
+export type CharacterPlayCounts = { character: string, gamesRecorded: number }[];

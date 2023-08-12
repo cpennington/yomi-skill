@@ -17,12 +17,12 @@
     ) {
         const playerMatches =
             player &&
-            (await import(`../data/yomi/player/${player}/history.json`))
+            (await import(`../data/${game}/player/${player}/history.json`))
                 .default;
 
         const opponentMatches =
             opponent &&
-            (await import(`../data/yomi/player/${opponent}/history.json`))
+            (await import(`../data/${game}/player/${opponent}/history.json`))
                 .default;
 
         if (playerMatches || opponentMatches) {

@@ -1,0 +1,20 @@
+---
+import matchupData from "$lib/data/yomi/matchupData.json";
+import characters from "$lib/data/yomi/characters.json";
+import scales from "$lib/data/yomi/scales.json";
+import aggregateSkill from "$lib/data/yomi/playerSkill.json";
+import players from "$lib/data/yomi/players.json";
+import Yomi1 from "$lib/components/Yomi1.svelte";
+import BaseLayout from "$lib/layouts/BaseLayout.astro";
+---
+
+<BaseLayout selected="yomi1">
+  <Yomi1
+    {matchupData}
+    {characters}
+    {scales}
+    {aggregateSkill}
+    {players}
+    client:load
+  />
+</BaseLayout>

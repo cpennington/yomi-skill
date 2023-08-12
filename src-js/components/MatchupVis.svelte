@@ -1,10 +1,14 @@
 <script context="module" lang="ts">
     import type {
         AggregatePlayerSkill,
+        CharacterPlayCounts,
         EloScales,
         GlickoPlayerSkill,
         GlickoScales,
+        MUStats,
+        MatchupData,
         PlayerSkill,
+        Scales,
     } from "../types";
 
     const increment = 0.025;
@@ -685,7 +689,7 @@
                 oppSkill = {
                     elo: aggregateSkill.globalSkill.elo.qs[againstRating],
                     char: Object.fromEntries(
-                        Object.entries(aggregateSkill.character).map(
+                        Object.entries(aggregateSkill.characters).map(
                             ([char, skill]) => [
                                 char,
                                 { elo: skill.elo.qs[againstRating as number] },
@@ -872,18 +876,23 @@
         aggregateSkill: AggregatePlayerSkill,
         matchupData: MatchupData,
         vis: HTMLElement,
-        characters: string[],
+        characters: CharacterPlayCounts,
+        game: string,
         player?: string,
         opponent?: string
     ) {
+        const playedCharacters = characters
+            .filter((char) => char.gamesRecorded > 0)
+            .map((char) => char.character);
+        console.log({ characters, playedCharacters });
         const pSkill =
             player &&
-            (await import(`../data/yomi/player/${player}/skill.json`));
+            (await import(`../data/${game}/player/${player}/skill.json`));
         const oSkill =
             opponent &&
-            (await import(`../data/yomi/player/${opponent}/skill.json`));
-        const muEstimates = characters.flatMap(function (c1) {
-            return characters.flatMap(function (c2) {
+            (await import(`../data/${game}/player/${opponent}/skill.json`));
+        const muEstimates = playedCharacters.flatMap(function (c1) {
+            return playedCharacters.flatMap(function (c2) {
                 let pdf: ReturnType<typeof muPDF> = [];
                 pdf = pdf.concat(
                     muPDF(
@@ -918,7 +927,7 @@
         });
         const vlMUs = vegaSpec(
             muEstimates,
-            characters,
+            playedCharacters,
             player,
             pSkill,
             opponent,
@@ -935,7 +944,7 @@
 
     let vis: HTMLElement;
     import embed from "vega-embed";
-    export let characters: string[];
+    export let characters: CharacterPlayCounts;
     export let matchupData: MatchupData;
     export let scales: Scales;
     export let player: string | undefined;
@@ -943,6 +952,7 @@
     export let againstRating: "self" | number;
     export let againstCharRating: "self" | number;
     export let aggregateSkill: AggregatePlayerSkill;
+    export let game: string;
     const hasVersions = false;
 
     $: mounted &&
@@ -954,6 +964,7 @@
             matchupData,
             vis,
             characters,
+            game,
             player,
             opponent
         );

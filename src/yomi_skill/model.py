@@ -139,6 +139,8 @@ def _transform_gem_effect(X):
             .astype(pandas.api.types.CategoricalDtype(against_gem_list, ordered=True)),
             "gem_1": X.gem_1,
             "gem_2": X.gem_2,
+            "character_1": X.character_1,
+            "character_2": X.character_2,
         }
     )
     logger.info("Ending _transform_gem_effect")

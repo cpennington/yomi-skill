@@ -1,0 +1,22 @@
+---
+import matchupData from "$lib/data/yomi2/matchupData.json";
+import characters from "$lib/data/yomi2/characters.json";
+import scales from "$lib/data/yomi2/scales.json";
+import aggregateSkill from "$lib/data/yomi2/playerSkill.json";
+import players from "$lib/data/yomi2/players.json";
+import gemEffects from "$lib/data/yomi2/gemEffects.json";
+import Yomi2 from "$lib/components/Yomi2.svelte";
+import BaseLayout from "$lib/layouts/BaseLayout.astro";
+---
+
+<BaseLayout selected="yomi2">
+  <Yomi2
+    {matchupData}
+    {characters}
+    {scales}
+    {aggregateSkill}
+    {players}
+    {gemEffects}
+    client:load
+  />
+</BaseLayout>

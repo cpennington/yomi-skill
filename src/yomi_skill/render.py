@@ -8,6 +8,7 @@ import pandas
 import simplejson
 from IPython.core.display import display
 from sklearn.pipeline import Pipeline
+from functools import cached_property
 
 
 def extract_index(col_name):
@@ -17,23 +18,27 @@ def extract_index(col_name):
 
 
 class YomiRender:
-    def __init__(self, pipeline: Pipeline):
+    def __init__(self, pipeline: Pipeline, data_root):
         self.pipeline = pipeline
         self.model = pipeline["model"]
+        self.data_root = data_root
 
-    def render_matchup_comparator(self, data_root):
-        player_data_folder = f"{data_root}/player"
-        orig_players = self.model.data_.min_games__player_1_orig.dtype.categories.values
-        public_games = self.model.data_[self.model.data_.render__public]
-        public_players = pandas.concat(
+    @cached_property
+    def public_games(self):
+        return self.model.data_[self.model.data_.render__public]
+
+    @cached_property
+    def public_players(self):
+        return pandas.concat(
             [
-                public_games.min_games__player_1_orig,
-                public_games.min_games__player_2_orig,
+                self.public_games.min_games__player_1_orig,
+                self.public_games.min_games__player_2_orig,
             ]
         ).unique()
-        print(f"Computing per-player data for {len(public_players)} players")
 
-        player_character_counts = (
+    @cached_property
+    def player_character_counts(self):
+        return (
             pandas.concat(
                 [
                     self.model.data_[
@@ -58,120 +63,36 @@ class YomiRender:
             .size()
         ).dropna()
 
-        rating_columns = [
-            "elo__r1",
-            "elo__r2",
-            "glicko__r1",
-            "glicko__r2",
-            "glicko__rd1",
-            "glicko__rd2",
-            "glicko__v1",
-            "glicko__v2",
-            "matchup__character_1",
-            "matchup__character_2",
-            "min_games__player_1_orig",
-            "min_games__player_2_orig",
-            "pc_elo__r1",
-            "pc_elo__r2",
-            "pc_glicko__r1",
-            "pc_glicko__r2",
-            "pc_glicko__rd1",
-            "pc_glicko__rd2",
-            "pc_glicko__v1",
-            "pc_glicko__v2",
-            "render__match_date",
-        ]
-        ratings_data = self.model.data_.reindex(columns=rating_columns, fill_value=None)
-
-        elo_transformer = self.pipeline["transform"].named_transformers_.get("elo")
-        glicko_transformer = self.pipeline["transform"].named_transformers_.get(
-            "glicko"
+    @cached_property
+    def player_character_ratings_history(self):
+        return self.rating_by_pc.sort_values(["render__match_date"]).groupby(
+            ["player", "character"]
         )
 
-        rating_by_player = pandas.concat(
-            [
-                ratings_data[
-                    [
-                        "render__match_date",
-                        "min_games__player_1_orig",
-                        "elo__r1",
-                        "glicko__r1",
-                        "glicko__rd1",
-                        "glicko__v1",
-                    ]
-                ].rename(
-                    columns={
-                        "min_games__player_1_orig": "player",
-                        "elo__r1": "elo",
-                        "glicko__r1": "glicko_r",
-                        "glicko__rd1": "glicko_rd",
-                        "glicko__v1": "glicko_v",
-                    }
-                ),
-                ratings_data[
-                    [
-                        "render__match_date",
-                        "min_games__player_2_orig",
-                        "elo__r2",
-                        "glicko__r2",
-                        "glicko__rd2",
-                        "glicko__v2",
-                    ]
-                ].rename(
-                    columns={
-                        "min_games__player_2_orig": "player",
-                        "elo__r2": "elo",
-                        "glicko__r2": "glicko_r",
-                        "glicko__rd2": "glicko_rd",
-                        "glicko__v2": "glicko_v",
-                    }
-                ),
-            ]
-        )
-        player_ratings_history = rating_by_player.sort_values(
-            ["render__match_date"]
-        ).groupby("player")
-        player_ratings_devs = (
+    @cached_property
+    def player_character_ratings_devs(self):
+        return (
             {
-                player: pandas.concat([pandas.Series([0]), matches["elo"]])
-                .rolling(30, min_periods=1)
+                (player, character): pandas.concat(
+                    [pandas.Series([0]), matches["pc_elo"]]
+                )
+                .rolling(50, min_periods=0)
                 .std()
                 .iloc[-1]
-                for player, matches in player_ratings_history
+                for (
+                    player,
+                    character,
+                ), matches in self.player_character_ratings_history
             }
-            if "elo" in rating_by_player.columns
+            if "pc_elo" in self.rating_by_pc.columns
             else {}
         )
 
-        # display(player_ratings_devs)
-        player_ratings = player_ratings_history.last().fillna(
-            value={
-                **(
-                    {"elo": (elo_transformer.initial_value or 1500.0)}
-                    if elo_transformer
-                    else {}
-                ),
-                **(
-                    {
-                        "glicko_r": (glicko_transformer.initial_value[0] or 1500.0),
-                        "glicko_rd": (glicko_transformer.initial_value[1] or 350),
-                        "glicko_v": (glicko_transformer.initial_value[2] or 0.06),
-                    }
-                    if glicko_transformer
-                    else {}
-                ),
-            }
-        )
-
-        pc_elo_transformer = self.pipeline["transform"].named_transformers_.get(
-            "pc_elo"
-        )
-        pc_glicko_transformer = self.pipeline["transform"].named_transformers_.get(
-            "pc_glicko"
-        )
-        rating_by_pc = pandas.concat(
+    @cached_property
+    def rating_by_pc(self):
+        return pandas.concat(
             [
-                ratings_data[
+                self.ratings_data[
                     [
                         "render__match_date",
                         "min_games__player_1_orig",
@@ -191,7 +112,7 @@ class YomiRender:
                         "pc_glicko__v1": "pc_glicko_v",
                     }
                 ),
-                ratings_data[
+                self.ratings_data[
                     [
                         "render__match_date",
                         "min_games__player_2_orig",
@@ -213,47 +134,41 @@ class YomiRender:
                 ),
             ]
         )
-        player_character_ratings_history = rating_by_pc.sort_values(
-            ["render__match_date"]
-        ).groupby(["player", "character"])
-        player_character_ratings_devs = (
-            {
-                (player, character): pandas.concat(
-                    [pandas.Series([0]), matches["pc_elo"]]
-                )
-                .rolling(50, min_periods=0)
-                .std()
-                .iloc[-1]
-                for (player, character), matches in player_character_ratings_history
-            }
-            if "pc_elo" in rating_by_pc.columns
-            else {}
-        )
 
-        player_character_ratings = player_character_ratings_history.last().fillna(
-            value={
-                **(
-                    {
-                        "pc_elo": (pc_elo_transformer.initial_value or 1500.0),
-                    }
-                    if pc_elo_transformer
-                    else {}
-                ),
-                **(
-                    {
-                        "pc_glicko_r": (
-                            pc_glicko_transformer.initial_value[0] or 1500.0
-                        ),
-                        "pc_glicko_rd": (pc_glicko_transformer.initial_value[1] or 350),
-                        "pc_glicko_v": (pc_glicko_transformer.initial_value[2] or 0.06),
-                    }
-                    if pc_glicko_transformer
-                    else {}
-                ),
-            }
-        )
+    @cached_property
+    def ratings_data(self):
+        rating_columns = [
+            "elo__r1",
+            "elo__r2",
+            "glicko__r1",
+            "glicko__r2",
+            "glicko__rd1",
+            "glicko__rd2",
+            "glicko__v1",
+            "glicko__v2",
+            "matchup__character_1",
+            "matchup__character_2",
+            "gem__with_gem_1",
+            "gem__against_gem_1",
+            "gem__with_gem_2",
+            "gem__against_gem_2",
+            "min_games__player_1_orig",
+            "min_games__player_2_orig",
+            "pc_elo__r1",
+            "pc_elo__r2",
+            "pc_glicko__r1",
+            "pc_glicko__r2",
+            "pc_glicko__rd1",
+            "pc_glicko__rd2",
+            "pc_glicko__v1",
+            "pc_glicko__v2",
+            "render__match_date",
+        ]
+        return self.model.data_.reindex(columns=rating_columns, fill_value=None)
 
-        player_game_counts = (
+    @cached_property
+    def player_game_counts(self):
+        return (
             (
                 pandas.concat(
                     [
@@ -266,13 +181,205 @@ class YomiRender:
                 .size()
                 .astype(int)
             )
-            .loc[public_players]
+            .loc[self.public_players]
             .dropna()
         )
 
-        for player in public_players:
-            p1_games = public_games[
-                (public_games.min_games__player_1_orig == player)
+    @cached_property
+    def top_glicko_by_character(self):
+        return {
+            character: [
+                {
+                    "player": player,
+                    "r": round(row.pc_glicko_r, 2),
+                    "rd": round(row.pc_glicko_rd, 2),
+                    "v": round(row.pc_glicko_v, 3),
+                }
+                for (player, _), row in pc_ratings.sort_values(
+                    "pc_glicko_r", ascending=False
+                )
+                .head(20)
+                .iterrows()
+            ]
+            for character, pc_ratings in self.player_character_ratings_history.last()
+            .loc[self.public_players, :]
+            .dropna(subset=["pc_glicko_r"])
+            .groupby("character")
+        }
+
+    @cached_property
+    def player_character_ratings(self):
+        return self.player_character_ratings_history.last().fillna(
+            value={
+                **(
+                    {
+                        "pc_elo": (self.pc_elo_transformer.initial_value or 1500.0),
+                    }
+                    if self.pc_elo_transformer
+                    else {}
+                ),
+                **(
+                    {
+                        "pc_glicko_r": (
+                            self.pc_glicko_transformer.initial_value[0] or 1500.0
+                        ),
+                        "pc_glicko_rd": (
+                            self.pc_glicko_transformer.initial_value[1] or 350
+                        ),
+                        "pc_glicko_v": (
+                            self.pc_glicko_transformer.initial_value[2] or 0.06
+                        ),
+                    }
+                    if self.pc_glicko_transformer
+                    else {}
+                ),
+            }
+        )
+
+    @cached_property
+    def rating_by_player(self):
+        return pandas.concat(
+            [
+                self.ratings_data[
+                    [
+                        "render__match_date",
+                        "min_games__player_1_orig",
+                        "elo__r1",
+                        "glicko__r1",
+                        "glicko__rd1",
+                        "glicko__v1",
+                    ]
+                ].rename(
+                    columns={
+                        "min_games__player_1_orig": "player",
+                        "elo__r1": "elo",
+                        "glicko__r1": "glicko_r",
+                        "glicko__rd1": "glicko_rd",
+                        "glicko__v1": "glicko_v",
+                    }
+                ),
+                self.ratings_data[
+                    [
+                        "render__match_date",
+                        "min_games__player_2_orig",
+                        "elo__r2",
+                        "glicko__r2",
+                        "glicko__rd2",
+                        "glicko__v2",
+                    ]
+                ].rename(
+                    columns={
+                        "min_games__player_2_orig": "player",
+                        "elo__r2": "elo",
+                        "glicko__r2": "glicko_r",
+                        "glicko__rd2": "glicko_rd",
+                        "glicko__v2": "glicko_v",
+                    }
+                ),
+            ]
+        )
+
+    @cached_property
+    def player_ratings_history(self):
+        return self.rating_by_player.sort_values(["render__match_date"]).groupby(
+            "player"
+        )
+
+    @cached_property
+    def player_ratings_devs(self):
+        return (
+            {
+                player: pandas.concat([pandas.Series([0]), matches["elo"]])
+                .rolling(30, min_periods=1)
+                .std()
+                .iloc[-1]
+                for player, matches in self.player_ratings_history
+            }
+            if "elo" in self.rating_by_player.columns
+            else {}
+        )
+
+    @cached_property
+    def player_ratings(self):
+        return self.player_ratings_history.last().fillna(
+            value={
+                **(
+                    {"elo": (self.elo_transformer.initial_value or 1500.0)}
+                    if self.elo_transformer
+                    else {}
+                ),
+                **(
+                    {
+                        "glicko_r": (
+                            self.glicko_transformer.initial_value[0] or 1500.0
+                        ),
+                        "glicko_rd": (self.glicko_transformer.initial_value[1] or 350),
+                        "glicko_v": (self.glicko_transformer.initial_value[2] or 0.06),
+                    }
+                    if self.glicko_transformer
+                    else {}
+                ),
+            }
+        )
+
+    @cached_property
+    def elo_transformer(self):
+        return self.pipeline["transform"].named_transformers_.get("elo")
+
+    @cached_property
+    def glicko_transformer(self):
+        return self.pipeline["transform"].named_transformers_.get("glicko")
+
+    @cached_property
+    def pc_elo_transformer(self):
+        return self.pipeline["transform"].named_transformers_.get("pc_elo")
+
+    @cached_property
+    def pc_glicko_transformer(self):
+        return self.pipeline["transform"].named_transformers_.get("pc_glicko")
+
+    def render_scales(self):
+        col_means = self.model.inf_data_["posterior"].mean(["chain", "draw"])
+        col_std = self.model.inf_data_["posterior"].std(["chain", "draw"])
+
+        os.makedirs(self.data_root, exist_ok=True)
+        with open(f"{self.data_root}/scales.json", "w") as outfile:
+            simplejson.dump(
+                {
+                    **{
+                        re.sub(r"_\w", lambda m: m[0][1].upper(), column)
+                        + "Mean": round(float(col_means[column]), 3)
+                        for column in col_means.data_vars.keys()
+                        if column.endswith("scale")
+                    },
+                    **{
+                        re.sub(r"_\w", lambda m: m[0][1].upper(), column)
+                        + "Std": round(float(col_std[column]), 3)
+                        for column in col_std.data_vars.keys()
+                        if column.endswith("scale")
+                    },
+                    **(
+                        {"eloFactor": self.elo_transformer.rating_factor or 400}
+                        if self.elo_transformer
+                        else {}
+                    ),
+                    **(
+                        {"pcEloFactor": self.pc_elo_transformer.rating_factor or 400}
+                        if self.pc_elo_transformer
+                        else {}
+                    ),
+                },
+                outfile,
+                indent=2,
+                sort_keys=True,
+                ignore_nan=True,
+            )
+
+    def render_player_details(self):
+        print(f"Computing per-player data for {len(self.public_players)} players")
+        for player in self.public_players:
+            p1_games = self.public_games[
+                (self.public_games.min_games__player_1_orig == player)
             ].rename(
                 columns={
                     col: re.sub(
@@ -282,11 +389,11 @@ class YomiRender:
                             "min_games__player_1_orig", "player"
                         ),
                     )
-                    for col in public_games.columns
+                    for col in self.public_games.columns
                 }
             )
-            p2_games = public_games[
-                (public_games.min_games__player_2_orig == player)
+            p2_games = self.public_games[
+                (self.public_games.min_games__player_2_orig == player)
             ].rename(
                 columns={
                     col: re.sub(
@@ -296,12 +403,12 @@ class YomiRender:
                             "min_games__player_2_orig", "player"
                         ),
                     )
-                    for col in public_games.columns
+                    for col in self.public_games.columns
                 }
             )
             p2_games.render__win = 1 - p2_games.render__win
 
-            player_folder = f"{player_data_folder}/{player}"
+            player_folder = f"{self.data_root}/player/{player}"
             os.makedirs(player_folder, exist_ok=True)
             with open(f"{player_folder}/history.json", "w") as outfile:
                 simplejson.dump(
@@ -322,34 +429,36 @@ class YomiRender:
                         "char": {
                             character: {
                                 "gamesPlayed": int(
-                                    player_character_counts[player].get(character, 0)
+                                    self.player_character_counts[player].get(
+                                        character, 0
+                                    )
                                 ),
                                 "elo": round(
-                                    player_character_ratings.loc[
+                                    self.player_character_ratings.loc[
                                         player, character
                                     ].pc_elo,
                                     3,
                                 ),
                                 "elo_std": round(
-                                    player_character_ratings_devs.get(
+                                    self.player_character_ratings_devs.get(
                                         (player, character), 1060
                                     ),
                                     3,
                                 ),
                                 "glickoR": round(
-                                    player_character_ratings.loc[
+                                    self.player_character_ratings.loc[
                                         player, character
                                     ].pc_glicko_r,
                                     3,
                                 ),
                                 "glickoRD": round(
-                                    player_character_ratings.loc[
+                                    self.player_character_ratings.loc[
                                         player, character
                                     ].pc_glicko_rd,
                                     3,
                                 ),
                                 "glickoV": round(
-                                    player_character_ratings.loc[
+                                    self.player_character_ratings.loc[
                                         player, character
                                     ].pc_glicko_v,
                                     3,
@@ -357,21 +466,21 @@ class YomiRender:
                             }
                             for character in self.model.data_.matchup__character_1.dtype.categories.values
                         },
-                        "elo": round(player_ratings.loc[player].elo or 1500.0, 3),
-                        "elo_std": round(player_ratings_devs.get(player, 1060), 3),
+                        "elo": round(self.player_ratings.loc[player].elo or 1500.0, 3),
+                        "elo_std": round(self.player_ratings_devs.get(player, 1060), 3),
                         "glickoR": round(
-                            player_ratings.loc[player].glicko_r,
+                            self.player_ratings.loc[player].glicko_r,
                             3,
                         ),
                         "glickoRD": round(
-                            player_ratings.loc[player].glicko_rd,
+                            self.player_ratings.loc[player].glicko_rd,
                             3,
                         ),
                         "glickoV": round(
-                            player_ratings.loc[player].glicko_v,
+                            self.player_ratings.loc[player].glicko_v,
                             3,
                         ),
-                        "gamesPlayed": int(player_game_counts[player]),
+                        "gamesPlayed": int(self.player_game_counts[player]),
                     },
                     outfile,
                     indent=2,
@@ -379,89 +488,60 @@ class YomiRender:
                     ignore_nan=True,
                 )
 
-        print("Computing matchup dict")
-        matchup_dict = defaultdict(dict)
-        mu_means = self.model.inf_data_["posterior"].mu.mean(["chain", "draw"])
-        mu_std = self.model.inf_data_["posterior"].mu.std(["chain", "draw"])
-
-        for matchup in self.model.data_.matchup__mup.dtype.categories.values:
-            c1, c2 = matchup.split("-")
-            matchup_dict[c1][c2] = {
-                "mean": round(float(mu_means.loc[matchup]), 3),
-                "std": round(float(mu_std.loc[matchup]), 3),
-                "count": len(
-                    self.model.data_.loc[
-                        (self.model.data_.matchup__character_1 == c1)
-                        & (self.model.data_.matchup__character_2 == c2)
-                    ]
-                ),
-            }
-            if c1 != c2:
-                matchup_dict[c2][c1] = {
-                    "mean": -matchup_dict[c1][c2]["mean"],
-                    "std": matchup_dict[c1][c2]["std"],
-                    "count": matchup_dict[c1][c2]["count"],
-                }
-
-        with open(f"{data_root}/matchupData.json", "w") as outfile:
+    def render_characters(self):
+        character_counts = (
+            pandas.concat(
+                [
+                    self.model.data_.matchup__character_1.rename("character"),
+                    self.model.data_.matchup__character_2.rename("character"),
+                ]
+            )
+            .to_frame()
+            .groupby("character")
+            .size()
+        ).dropna()
+        os.makedirs(self.data_root, exist_ok=True)
+        with open(f"{self.data_root}/characters.json", "w") as outfile:
             simplejson.dump(
-                matchup_dict,
+                [
+                    {
+                        "character": character,
+                        "gamesRecorded": int(character_counts[character]),
+                    }
+                    for character in list(
+                        self.model.data_.matchup__character_1.dtype.categories.values
+                    )
+                ],
                 outfile,
                 indent=2,
                 sort_keys=True,
                 ignore_nan=True,
             )
 
-        print("Computing player skill")
+    def render_players(self):
+        os.makedirs(self.data_root, exist_ok=True)
+        with open(f"{self.data_root}/players.json", "w") as outfile:
+            simplejson.dump(
+                self.player_game_counts.to_dict(),
+                outfile,
+                indent=2,
+                sort_keys=True,
+                ignore_nan=True,
+            )
 
+    def render_aggregate_skill(self):
+        print("Computing player skill")
         quantiles: List[float] = [0.05, 0.25, 0.5, 0.75, 0.95, 1]
-        character_ratings = player_character_ratings.groupby("character")
+        character_ratings = self.player_character_ratings.groupby("character")
         character_qs = character_ratings.quantile(quantiles, numeric_only=True)
         character_std = character_ratings.std()
-        player_ratings_qs = player_ratings.dropna().quantile(
+        player_ratings_qs = self.player_ratings.dropna().quantile(
             quantiles, numeric_only=True
         )
-        player_ratings_std = player_ratings.dropna().std()
-        # top20_by_character = {
-        #     character: pc_ratings.sort_values("pc_glicko_r", ascending=False)
-        #     .head(20)
-        #     .player
-        #     for character, pc_ratings in player_character_ratings.groupby("character")
-        # }
-        # top20_by_character_alt = {
-        #     character: {
-        #         row.player: {
-        #             "r": row.pc_glicko_r,
-        #             "rd": row.pc_glicko_rd,
-        #             "v": row.pc_glicko_v,
-        #         }
-        #         for row in player_character_ratings.loc[:, character]
-        #         .sort_values("pc_glicko_r", ascending=False)
-        #         .head(20)
-        #         .iterrows()
-        #     }
-        #     for character in self.model.data_.matchup__character_1.dtype.categories.values
-        # }
-        # display(top20_by_character, top20_by_character_alt)
-        top_glicko_by_character = {
-            character: [
-                {
-                    "player": player,
-                    "r": round(row.pc_glicko_r, 2),
-                    "rd": round(row.pc_glicko_rd, 2),
-                    "v": round(row.pc_glicko_v, 3),
-                }
-                for (player, _), row in pc_ratings.sort_values(
-                    "pc_glicko_r", ascending=False
-                )
-                .head(20)
-                .iterrows()
-            ]
-            for character, pc_ratings in player_character_ratings.loc[
-                public_players, :
-            ].groupby("character")
-        }
-        with open(f"{data_root}/playerSkill.json", "w") as outfile:
+        player_ratings_std = self.player_ratings.dropna().std()
+
+        os.makedirs(self.data_root, exist_ok=True)
+        with open(f"{self.data_root}/playerSkill.json", "w") as outfile:
             simplejson.dump(
                 {
                     "globalSkill": {
@@ -491,7 +571,9 @@ class YomiRender:
                                 "std": character_std.pc_elo.loc[character],
                             },
                             "glicko": {
-                                "top20": top_glicko_by_character[character],
+                                "top20": self.top_glicko_by_character.get(
+                                    character, []
+                                ),
                                 "r": {
                                     "qs": character_qs.pc_glicko_r.loc[
                                         character
@@ -521,61 +603,99 @@ class YomiRender:
                 ignore_nan=True,
             )
 
-        with open(f"{data_root}/players.json", "w") as outfile:
+    def render_matchup_data(self):
+        print("Computing matchup dict")
+        matchup_dict = defaultdict(dict)
+        mu_means = self.model.inf_data_["posterior"].mu.mean(["chain", "draw"])
+        mu_std = self.model.inf_data_["posterior"].mu.std(["chain", "draw"])
+
+        for matchup in self.model.data_.matchup__mup.dtype.categories.values:
+            c1, c2 = matchup.split("-")
+            matchup_dict[c1][c2] = {
+                "mean": round(float(mu_means.loc[matchup]), 3),
+                "std": round(float(mu_std.loc[matchup]), 3),
+                "count": len(
+                    self.model.data_.loc[
+                        (self.model.data_.matchup__character_1 == c1)
+                        & (self.model.data_.matchup__character_2 == c2)
+                    ]
+                ),
+            }
+            if c1 != c2:
+                matchup_dict[c2][c1] = {
+                    "mean": -matchup_dict[c1][c2]["mean"],
+                    "std": matchup_dict[c1][c2]["std"],
+                    "count": matchup_dict[c1][c2]["count"],
+                }
+
+        os.makedirs(self.data_root, exist_ok=True)
+        with open(f"{self.data_root}/matchupData.json", "w") as outfile:
             simplejson.dump(
-                player_game_counts.to_dict(),
+                matchup_dict,
                 outfile,
                 indent=2,
                 sort_keys=True,
                 ignore_nan=True,
             )
 
-        with open(f"{data_root}/characters.json", "w") as outfile:
-            simplejson.dump(
-                list(self.model.data_.matchup__character_1.dtype.categories.values),
-                outfile,
-                indent=2,
-                sort_keys=True,
-                ignore_nan=True,
-            )
-
-        col_means = self.model.inf_data_["posterior"].mean(["chain", "draw"])
-        col_std = self.model.inf_data_["posterior"].std(["chain", "draw"])
-        with open(f"{data_root}/scales.json", "w") as outfile:
-            simplejson.dump(
-                {
-                    **{
-                        re.sub(r"_\w", lambda m: m[0][1].upper(), column)
-                        + "Mean": round(float(col_means[column]), 3)
-                        for column in col_means.data_vars.keys()
-                        if column.endswith("scale")
-                    },
-                    **{
-                        re.sub(r"_\w", lambda m: m[0][1].upper(), column)
-                        + "Std": round(float(col_std[column]), 3)
-                        for column in col_std.data_vars.keys()
-                        if column.endswith("scale")
-                    },
-                    **(
-                        {"eloFactor": elo_transformer.rating_factor or 400}
-                        if elo_transformer
-                        else {}
-                    ),
-                    **(
-                        {"pcEloFactor": pc_elo_transformer.rating_factor or 400}
-                        if pc_elo_transformer
-                        else {}
-                    ),
-                },
-                outfile,
-                indent=2,
-                sort_keys=True,
-                ignore_nan=True,
-            )
-        return dict(
-            player_character_ratings=player_character_ratings,
-            col_means=col_means,
-            col_std=col_std,
-            player_ratings=player_ratings,
-            public_players=public_players,
+    def render_gem_effects(self):
+        print("Computing matchup dict")
+        with_gem_means = self.model.inf_data_["posterior"].with_gem.mean(
+            ["chain", "draw"]
         )
+        with_gem_std = self.model.inf_data_["posterior"].with_gem.std(["chain", "draw"])
+        against_gem_means = self.model.inf_data_["posterior"].against_gem.mean(
+            ["chain", "draw"]
+        )
+        against_gem_std = self.model.inf_data_["posterior"].against_gem.std(
+            ["chain", "draw"]
+        )
+
+        gems = {"with_gem": defaultdict(dict), "against_gem": defaultdict(dict)}
+        for with_gem in self.model.data_.gem__with_gem_1.dtype.categories.values:
+            c, g = with_gem.split("-")
+            gems["with_gem"][c][g] = {
+                "mean": round(float(with_gem_means.loc[with_gem]), 3),
+                "std": round(float(with_gem_std.loc[with_gem]), 3),
+                "count": len(
+                    self.model.data_.loc[
+                        (
+                            (self.model.data_.gem__character_1 == c)
+                            & (self.model.data_.gem__gem_1 == g)
+                        )
+                        | (
+                            (self.model.data_.gem__character_2 == c)
+                            & (self.model.data_.gem__gem_2 == g)
+                        )
+                    ]
+                ),
+            }
+
+        for against_gem in self.model.data_.gem__against_gem_1.dtype.categories.values:
+            g, c = against_gem.split("-")
+            gems["against_gem"][g][c] = {
+                "mean": round(float(against_gem_means.loc[against_gem]), 3),
+                "std": round(float(against_gem_std.loc[against_gem]), 3),
+                "count": len(
+                    self.model.data_.loc[
+                        (
+                            (self.model.data_.gem__character_2 == c)
+                            & (self.model.data_.gem__gem_1 == g)
+                        )
+                        | (
+                            (self.model.data_.gem__character_1 == c)
+                            & (self.model.data_.gem__gem_2 == g)
+                        )
+                    ]
+                ),
+            }
+
+        os.makedirs(self.data_root, exist_ok=True)
+        with open(f"{self.data_root}/gemEffects.json", "w") as outfile:
+            simplejson.dump(
+                gems,
+                outfile,
+                indent=2,
+                sort_keys=True,
+                ignore_nan=True,
+            )

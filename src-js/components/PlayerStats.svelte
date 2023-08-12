@@ -1,15 +1,18 @@
 <script lang="ts">
+    import type { PlayerSkill } from "$lib/types";
+
     let pSkill: Promise<PlayerSkill> | null;
     let oSkill: Promise<PlayerSkill> | null;
 
     export let player: string;
     export let opponent: string;
+    export let game: string;
 
     $: pSkill = player
-        ? import(`../data/yomi/player/${player}/skill.json`)
+        ? import(`../data/${game}/player/${player}/skill.json`)
         : null;
     $: oSkill = opponent
-        ? import(`../data/yomi/player/${opponent}/skill.json`)
+        ? import(`../data/${game}/player/${opponent}/skill.json`)
         : null;
 
     $: console.log({ player, opponent, pSkill, oSkill });

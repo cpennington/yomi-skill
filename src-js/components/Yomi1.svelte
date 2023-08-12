@@ -5,10 +5,16 @@
   import MatchupVis from "./MatchupVis.svelte";
   import CharacterSkillVis from "./CharacterSkillVis.svelte";
   import PlayerHistoryVis from "./PlayerHistoryVis.svelte";
+  import type {
+    AggregatePlayerSkill,
+    CharacterPlayCounts,
+    MatchupData,
+    Scales,
+  } from "$lib/types";
 
   const game = "yomi";
   export let matchupData: MatchupData;
-  export let characters: string[];
+  export let characters: CharacterPlayCounts;
   export let scales: Scales;
   export let aggregateSkill: AggregatePlayerSkill;
   export let players: Record<string, number>;
@@ -30,7 +36,7 @@
   {#if player && !opponent}
     <AgainstConfig bind:againstRating bind:againstCharRating />
   {/if}
-  <PlayerStats {player} {opponent} />
+  <PlayerStats {game} {player} {opponent} />
 
   <div class="row col-12">
     <p class="col-12 mt-4">
@@ -40,35 +46,34 @@
   </div>
 </div>
 {#if characters && matchupData && aggregateSkill}
-  <MatchupVis
-    {characters}
-    {matchupData}
-    {scales}
-    {player}
-    {opponent}
-    {againstRating}
-    {againstCharRating}
-    {aggregateSkill}
-    textOnly={false}
-  />
+  <div>
+    <MatchupVis
+      {characters}
+      {matchupData}
+      {scales}
+      {player}
+      {opponent}
+      {againstRating}
+      {againstCharRating}
+      {aggregateSkill}
+      {game}
+    />
+  </div>
 {/if}
 
 {#if aggregateSkill}
-  <CharacterSkillVis {aggregateSkill} {player} {opponent} game="yomi" />
+  <div>
+    <CharacterSkillVis
+      {characters}
+      {aggregateSkill}
+      {player}
+      {opponent}
+      {game}
+    />
+  </div>
 {/if}
-
 {#if player}
-  <PlayerHistoryVis {player} {opponent} game="yomi" />
+  <div>
+    <PlayerHistoryVis {player} {opponent} {game} />
+  </div>
 {/if}
-
-<style>
-  @keyframes rotate {
-    from {
-      transform: rotate(0deg);
-    }
-
-    to {
-      transform: rotate(-360deg);
-    }
-  }
-</style>

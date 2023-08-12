@@ -125,8 +125,16 @@ class PyMCModel(YomiModel):
                     # log_likelihood=True,
                     coords={
                         "matchup": X.matchup__mup.dtype.categories.values,
-                        "with_gem_c": X.gem__with_gem_1.dtype.categories.values,
-                        "against_gem_c": X.gem__against_gem_1.dtype.categories.values,
+                        "with_gem_c": (
+                            X.gem__with_gem_1.dtype.categories.values
+                            if "gem__with_gem_1" in X.columns
+                            else []
+                        ),
+                        "against_gem_c": (
+                            X.gem__against_gem_1.dtype.categories.values
+                            if "gem__against_gem_1" in X.columns
+                            else []
+                        ),
                         "player": X.min_games__player_1.dtype.categories.values,
                     },
                     dims={

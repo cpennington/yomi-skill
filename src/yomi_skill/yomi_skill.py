@@ -24,7 +24,7 @@ from sklearn.model_selection import cross_validate
 from .model import YomiModel, weight_by
 from .models import *
 from .render import *
-from .yomi import historical_record
+from .games import yomi, yomi2
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -52,19 +52,28 @@ def cli():
     pass
 
 
-@cli.command()
+@cli.group()
+def yomi1():
+    pass
+
+
+@cli.group()
+def yomi2():
+    pass
+
+
+@yomi1.command()
 @click.option("--min-games", default=0, type=int)
-@click.option("--dest")
 @click.option(
     "--model", type=click.Choice(list(MODELS.keys())), default="full_glicko_no_scale"
 )
-@click.option("--warmup", type=int)
-@click.option("--samples", type=int)
-def render(dest, min_games, model, warmup, samples):
-    tournament_games = historical_record.latest_tournament_games()
-    sirlin_games = historical_record.sirlin_db()
+@click.option("--warmup", type=int, default=500)
+@click.option("--samples", type=int, default=1000)
+def render(min_games, model, warmup, samples):
+    tournament_games = yomi.latest_tournament_games()
+    sirlin_games = yomi.sirlin_db()
     games = pandas.concat([tournament_games, sirlin_games]).reset_index(drop=True)
-    hist_games = historical_record.augment_dataset(games)
+    hist_games = yomi.augment_dataset(games)
 
     pipeline = (
         MODELS[model]
@@ -85,61 +94,66 @@ def render(dest, min_games, model, warmup, samples):
         .fit(hist_games, hist_games.win)
     )
 
-    render = YomiRender(pipeline)
+    render = YomiRender(pipeline, "src-js/data/yomi")
+    render.render_aggregate_skill()
+    render.render_players()
+    render.render_characters()
+    render.render_matchup_data()
+    render.render_player_details()
+    render.render_scales()
 
-    render.render_matchup_comparator(dest)
 
-
-@cli.command()
+@yomi2.command()
 @click.option("--min-games", default=0, type=int)
-@click.option("--model", type=click.Choice(list(MODELS.keys())), default="full")
-@click.option("--warmup", type=int)
-@click.option("--samples", type=int)
-def validate(min_games, model, warmup, samples):
-    tournament_games = historical_record.latest_tournament_games()
-    sirlin_games = historical_record.sirlin_db()
-    games = pandas.concat([tournament_games, sirlin_games]).reset_index(drop=True)
-    hist_games = historical_record.augment_dataset(games)
-
-    model = MODELS[model](
-        tempfile.mkdtemp(),
-        min_games,
-        warmup=warmup,
-        samples=samples,
+@click.option(
+    "--model", type=click.Choice(list(MODELS.keys())), default="full_glicko_no_scale"
+)
+@click.option("--warmup", type=int, default=500)
+@click.option("--samples", type=int, default=1000)
+def render(min_games, model, warmup, samples):
+    y1_tournament_games = yomi.latest_tournament_games()
+    y1_sirlin_games = yomi.sirlin_db()
+    y1_games = pandas.concat([y1_tournament_games, y1_sirlin_games]).reset_index(
+        drop=True
     )
-    hist_games = weight_by(hist_games, model.weight_key)
-    display(hist_games.sort_values("weight"))
+    y1_games = yomi.augment_dataset(y1_games)
 
-    model.fit(hist_games, hist_games.win)
-    display(arviz.summary(model.inf_data_))
+    y2_games = yomi2.latest_tournament_games()
+    y2_games = yomi.augment_dataset(y2_games)
 
-    display(
-        pandas.concat(
-            [
-                hist_games,
-                pandas.DataFrame(model.predict_proba(hist_games)),
-            ]
+    pipeline = (
+        MODELS[model]
+        .pipeline(
+            transform__glicko__initial_time=pandas.concat(
+                [y1_games, y2_games]
+            ).match_date.min(),
+            transform__pc_glicko__initial_time=pandas.concat(
+                [y1_games, y2_games]
+            ).match_date.min(),
+            model__min_games=min_games,
+            model__warmup=warmup,
+            model__samples=samples,
+            # transform__elo__default_k=16,
+            # transform__pc_elo__default_k=1,
+            transform__glicko__initial_value=(1500.0, 50, 0.059),
+            transform__pc_glicko__initial_value=(1500.0, 40, 0.027),
+            transform__glicko__rating_period="1D",
+            transform__pc_glicko__rating_period="8D",
+            # transform__elo__rating_factor=1135.77,  # 200-point rating difference corresponds to 60% win chance
+            verbose=True,
+            prefit_games=y1_games,
         )
+        .fit(y2_games, y2_games.win)
     )
 
-    scores = cross_validate(
-        model,
-        hist_games,
-        y=hist_games.win,
-        cv=5,
-        scoring=(
-            "neg_brier_score",
-            "neg_log_loss",
-            "roc_auc",
-            "precision",
-            "recall",
-            "f1",
-        ),
-        fit_params=dict(
-            sample_weight=hist_games.weight,
-        ),
-    )
-    display(pandas.DataFrame(scores).describe())
+    render = YomiRender(pipeline, "src-js/data/yomi2")
+    render.render_aggregate_skill()
+    render.render_players()
+    render.render_characters()
+    render.render_matchup_data()
+    render.render_player_details()
+    render.render_scales()
+    render.gem_effects()
 
 
 if __name__ == "__main__":

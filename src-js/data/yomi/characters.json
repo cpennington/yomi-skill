@@ -1,22 +1,82 @@
 [
-  "grave",
-  "midori",
-  "rook",
-  "valerie",
-  "lum",
-  "jaina",
-  "setsuki",
-  "degrey",
-  "geiger",
-  "argagarg",
-  "quince",
-  "bbb",
-  "menelker",
-  "gloria",
-  "vendetta",
-  "onimaru",
-  "troq",
-  "persephone",
-  "gwen",
-  "zane"
+  {
+    "character": "grave",
+    "gamesRecorded": 13628
+  },
+  {
+    "character": "midori",
+    "gamesRecorded": 10652
+  },
+  {
+    "character": "rook",
+    "gamesRecorded": 15609
+  },
+  {
+    "character": "valerie",
+    "gamesRecorded": 13190
+  },
+  {
+    "character": "lum",
+    "gamesRecorded": 9194
+  },
+  {
+    "character": "jaina",
+    "gamesRecorded": 11720
+  },
+  {
+    "character": "setsuki",
+    "gamesRecorded": 17995
+  },
+  {
+    "character": "degrey",
+    "gamesRecorded": 14049
+  },
+  {
+    "character": "geiger",
+    "gamesRecorded": 12533
+  },
+  {
+    "character": "argagarg",
+    "gamesRecorded": 13023
+  },
+  {
+    "character": "quince",
+    "gamesRecorded": 8575
+  },
+  {
+    "character": "bbb",
+    "gamesRecorded": 8216
+  },
+  {
+    "character": "menelker",
+    "gamesRecorded": 13446
+  },
+  {
+    "character": "gloria",
+    "gamesRecorded": 10181
+  },
+  {
+    "character": "vendetta",
+    "gamesRecorded": 11290
+  },
+  {
+    "character": "onimaru",
+    "gamesRecorded": 9677
+  },
+  {
+    "character": "troq",
+    "gamesRecorded": 10924
+  },
+  {
+    "character": "persephone",
+    "gamesRecorded": 10108
+  },
+  {
+    "character": "gwen",
+    "gamesRecorded": 12693
+  },
+  {
+    "character": "zane",
+    "gamesRecorded": 13909
+  }
 ]
