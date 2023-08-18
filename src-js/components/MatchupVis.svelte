@@ -271,7 +271,7 @@
                 joinaggregate: [
                     { op: "sum", field: "w_p", as: "signed_cum_p" },
                 ],
-                groupby: ["c1", "c2", "type", "v1v2"],
+                groupby: ["c1", "c2", "type"],
             },
             {
                 calculate: "abs(datum.signed_cum_p)",
@@ -297,14 +297,20 @@
                     { op: "mean", field: "credUpper", as: "credUpper" },
                     { op: "mean", field: "pCount", as: "pCount" },
                 ],
-                groupby: ["c1", "mu", "type", "v1"],
+                groupby: ["c1", "mu", "type"],
             },
             {
-                calculate: "datum.sum_p / " + (characters.length - 1),
+                joinaggregate: [
+                    { op: "sum", field: "sum_p", as: "total_sum_p" },
+                ],
+                groupby: ["c1", "type"],
+            },
+            {
+                calculate: "datum.sum_p / datum.total_sum_p",
                 as: "p",
             },
             {
-                calculate: "datum.sum_pdf / " + (characters.length - 1),
+                calculate: "datum.sum_pdf / datum.total_sum_p",
                 as: "pdf",
             },
             {
@@ -337,14 +343,20 @@
                     { op: "mean", field: "credUpper", as: "credUpper" },
                     { op: "mean", field: "oCount", as: "oCount" },
                 ],
-                groupby: ["c2", "mu", "type", "v2"],
+                groupby: ["c2", "mu", "type"],
             },
             {
-                calculate: "datum.sum_p / " + (characters.length - 1),
+                joinaggregate: [
+                    { op: "sum", field: "sum_p", as: "total_sum_p" },
+                ],
+                groupby: ["c2", "type"],
+            },
+            {
+                calculate: "datum.sum_p / datum.total_sum_p",
                 as: "p",
             },
             {
-                calculate: "datum.sum_pdf / " + (characters.length - 1),
+                calculate: "datum.sum_pdf / datum.total_sum_p",
                 as: "pdf",
             },
             {
@@ -455,7 +467,6 @@
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
-                    color: { field: "v1", type: "ordinal" },
                     tooltip: [
                         statsType,
                         credInterval,
@@ -487,7 +498,6 @@
                 height: 40,
                 mark: mark,
                 encoding: Object.assign({}, baseEncoding, {
-                    color: { field: "v2", type: "ordinal" },
                     tooltip: [
                         statsType,
                         credInterval,

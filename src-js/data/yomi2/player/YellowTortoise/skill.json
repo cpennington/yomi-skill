@@ -123,7 +123,7 @@
     "setsuki": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 4,
+      "gamesPlayed": 5,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,7 +163,7 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 4,
+  "gamesPlayed": 5,
   "glickoR": 1500.0,
   "glickoRD": 50.0,
   "glickoV": 0.059

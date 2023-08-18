@@ -59,9 +59,9 @@
     "jaina": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 19,
-      "glickoR": 1493.82,
-      "glickoRD": 37.424,
+      "gamesPlayed": 28,
+      "glickoR": 1502.033,
+      "glickoRD": 35.013,
       "glickoV": 0.027
     },
     "lum": {
@@ -83,9 +83,9 @@
     "midori": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 4,
-      "glickoR": 1500.0,
-      "glickoRD": 40.0,
+      "gamesPlayed": 17,
+      "glickoR": 1480.641,
+      "glickoRD": 38.344,
       "glickoV": 0.027
     },
     "onimaru": {
@@ -123,7 +123,7 @@
     "setsuki": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 2,
+      "gamesPlayed": 3,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 25,
-  "glickoR": 1524.293,
-  "glickoRD": 48.908,
+  "gamesPlayed": 48,
+  "glickoR": 1561.549,
+  "glickoRD": 45.784,
   "glickoV": 0.059
 }

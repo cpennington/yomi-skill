@@ -19,7 +19,7 @@
     "degrey": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 3,
+      "gamesPlayed": 5,
       "glickoR": 1496.101,
       "glickoRD": 38.805,
       "glickoV": 0.027
@@ -43,7 +43,7 @@
     "grave": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 1,
+      "gamesPlayed": 2,
       "glickoR": 1482.517,
       "glickoRD": 39.603,
       "glickoV": 0.027
@@ -59,7 +59,7 @@
     "jaina": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 2,
+      "gamesPlayed": 3,
       "glickoR": 1479.187,
       "glickoRD": 39.797,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 8,
-  "glickoR": 1563.794,
-  "glickoRD": 41.808,
+  "gamesPlayed": 12,
+  "glickoR": 1550.799,
+  "glickoRD": 42.403,
   "glickoV": 0.059
 }

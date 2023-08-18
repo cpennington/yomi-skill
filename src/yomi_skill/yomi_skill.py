@@ -24,7 +24,7 @@ from sklearn.model_selection import cross_validate
 from .model import YomiModel, weight_by
 from .models import *
 from .render import *
-from .games import yomi, yomi2
+from .games import yomi, yomi2 as games_yomi2
 
 logging.basicConfig(
     format="%(asctime)s %(levelname)-8s %(message)s",
@@ -106,7 +106,7 @@ def render(min_games, model, warmup, samples):
 @yomi2.command()
 @click.option("--min-games", default=0, type=int)
 @click.option(
-    "--model", type=click.Choice(list(MODELS.keys())), default="full_glicko_no_scale"
+    "--model", type=click.Choice(list(MODELS.keys())), default="y2_full_glicko_no_scale"
 )
 @click.option("--warmup", type=int, default=500)
 @click.option("--samples", type=int, default=1000)
@@ -118,7 +118,7 @@ def render(min_games, model, warmup, samples):
     )
     y1_games = yomi.augment_dataset(y1_games)
 
-    y2_games = yomi2.latest_tournament_games()
+    y2_games = games_yomi2.latest_tournament_games()
     y2_games = yomi.augment_dataset(y2_games)
 
     pipeline = (
@@ -153,7 +153,7 @@ def render(min_games, model, warmup, samples):
     render.render_matchup_data()
     render.render_player_details()
     render.render_scales()
-    render.gem_effects()
+    render.render_gem_effects()
 
 
 if __name__ == "__main__":

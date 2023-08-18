@@ -43,7 +43,7 @@
     "grave": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 2,
+      "gamesPlayed": 3,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,7 +163,7 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 2,
+  "gamesPlayed": 3,
   "glickoR": 1500.0,
   "glickoRD": 50.0,
   "glickoV": 0.059

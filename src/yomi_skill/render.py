@@ -611,22 +611,24 @@ class YomiRender:
 
         for matchup in self.model.data_.matchup__mup.dtype.categories.values:
             c1, c2 = matchup.split("-")
-            matchup_dict[c1][c2] = {
-                "mean": round(float(mu_means.loc[matchup]), 3),
-                "std": round(float(mu_std.loc[matchup]), 3),
-                "count": len(
-                    self.model.data_.loc[
-                        (self.model.data_.matchup__character_1 == c1)
-                        & (self.model.data_.matchup__character_2 == c2)
-                    ]
-                ),
-            }
-            if c1 != c2:
-                matchup_dict[c2][c1] = {
-                    "mean": -matchup_dict[c1][c2]["mean"],
-                    "std": matchup_dict[c1][c2]["std"],
-                    "count": matchup_dict[c1][c2]["count"],
+            count = len(
+                self.model.data_.loc[
+                    (self.model.data_.matchup__character_1 == c1)
+                    & (self.model.data_.matchup__character_2 == c2)
+                ]
+            )
+            if count > 0:
+                matchup_dict[c1][c2] = {
+                    "mean": round(float(mu_means.loc[matchup]), 3),
+                    "std": round(float(mu_std.loc[matchup]), 3),
+                    "count": count,
                 }
+                if c1 != c2:
+                    matchup_dict[c2][c1] = {
+                        "mean": -matchup_dict[c1][c2]["mean"],
+                        "std": matchup_dict[c1][c2]["std"],
+                        "count": matchup_dict[c1][c2]["count"],
+                    }
 
         os.makedirs(self.data_root, exist_ok=True)
         with open(f"{self.data_root}/matchupData.json", "w") as outfile:
@@ -654,41 +656,45 @@ class YomiRender:
         gems = {"with_gem": defaultdict(dict), "against_gem": defaultdict(dict)}
         for with_gem in self.model.data_.gem__with_gem_1.dtype.categories.values:
             c, g = with_gem.split("-")
-            gems["with_gem"][c][g] = {
-                "mean": round(float(with_gem_means.loc[with_gem]), 3),
-                "std": round(float(with_gem_std.loc[with_gem]), 3),
-                "count": len(
-                    self.model.data_.loc[
-                        (
-                            (self.model.data_.gem__character_1 == c)
-                            & (self.model.data_.gem__gem_1 == g)
-                        )
-                        | (
-                            (self.model.data_.gem__character_2 == c)
-                            & (self.model.data_.gem__gem_2 == g)
-                        )
-                    ]
-                ),
-            }
+            count = len(
+                self.model.data_.loc[
+                    (
+                        (self.model.data_.gem__character_1 == c)
+                        & (self.model.data_.gem__gem_1 == g)
+                    )
+                    | (
+                        (self.model.data_.gem__character_2 == c)
+                        & (self.model.data_.gem__gem_2 == g)
+                    )
+                ]
+            )
+            if count > 0:
+                gems["with_gem"][c][g] = {
+                    "mean": round(float(with_gem_means.loc[with_gem]), 3),
+                    "std": round(float(with_gem_std.loc[with_gem]), 3),
+                    "count": count,
+                }
 
         for against_gem in self.model.data_.gem__against_gem_1.dtype.categories.values:
             g, c = against_gem.split("-")
-            gems["against_gem"][g][c] = {
-                "mean": round(float(against_gem_means.loc[against_gem]), 3),
-                "std": round(float(against_gem_std.loc[against_gem]), 3),
-                "count": len(
-                    self.model.data_.loc[
-                        (
-                            (self.model.data_.gem__character_2 == c)
-                            & (self.model.data_.gem__gem_1 == g)
-                        )
-                        | (
-                            (self.model.data_.gem__character_1 == c)
-                            & (self.model.data_.gem__gem_2 == g)
-                        )
-                    ]
-                ),
-            }
+            count = len(
+                self.model.data_.loc[
+                    (
+                        (self.model.data_.gem__character_2 == c)
+                        & (self.model.data_.gem__gem_1 == g)
+                    )
+                    | (
+                        (self.model.data_.gem__character_1 == c)
+                        & (self.model.data_.gem__gem_2 == g)
+                    )
+                ]
+            )
+            if count > 0:
+                gems["against_gem"][g][c] = {
+                    "mean": round(float(against_gem_means.loc[against_gem]), 3),
+                    "std": round(float(against_gem_std.loc[against_gem]), 3),
+                    "count": count,
+                }
 
         os.makedirs(self.data_root, exist_ok=True)
         with open(f"{self.data_root}/gemEffects.json", "w") as outfile:

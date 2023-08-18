@@ -139,7 +139,7 @@
     "valerie": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 1,
+      "gamesPlayed": 2,
       "glickoR": 1544.059,
       "glickoRD": 33.313,
       "glickoV": 0.027
@@ -163,7 +163,7 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 1,
+  "gamesPlayed": 2,
   "glickoR": 1625.368,
   "glickoRD": 38.238,
   "glickoV": 0.059

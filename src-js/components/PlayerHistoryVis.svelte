@@ -101,67 +101,69 @@
                     {
                         width: 1500,
                         height: 100,
-                        transform:
-                            game == "yomi"
-                                ? [
-                                      //   { filter: "datum.ratingDelta != 0" },
-                                      {
-                                          aggregate: [
-                                              {
-                                                  op: "min",
-                                                  field: "index",
-                                                  as: "index",
-                                              },
-                                              {
-                                                  op: "mean",
-                                                  field: "ratingDelta",
-                                                  as: "ratingDelta",
-                                              },
-                                              {
-                                                  op: "mean",
-                                                  field: "ratingP",
-                                                  as: "ratingP",
-                                              },
-                                              {
-                                                  op: "mean",
-                                                  field: "ratingO",
-                                                  as: "ratingO",
-                                              },
-                                          ],
-                                          groupby: [
-                                              "player",
-                                              "opponent",
-                                              "render__match_date",
-                                          ],
-                                      },
-                                  ]
-                                : [],
-                        mark: {
-                            type: "bar",
-                        },
-                        encoding: {
-                            x: { field: "index", type: "ordinal" },
-                            y: { field: "ratingDelta", type: "quantitative" },
-                            row: { field: "player", type: "nominal" },
-                            color: {
-                                condition: [
-                                    {
-                                        test: "datum.ratingDelta > 0 && datum.ratingP > datum.ratingO",
-                                        value: "#050",
+                        row: { field: "player", type: "nominal" },
+                        layer: [
+                            {
+                                mark: {
+                                    type: "bar",
+                                },
+                                encoding: {
+                                    x: { field: "index", type: "ordinal" },
+                                    y: {
+                                        field: "ratingDelta",
+                                        type: "quantitative",
                                     },
-                                    {
-                                        test: "datum.ratingDelta > 0 && datum.ratingP < datum.ratingO",
-                                        value: "#0d0",
+                                    color: {
+                                        condition: [
+                                            {
+                                                test: "datum.ratingDelta > 0 && datum.ratingP > datum.ratingO",
+                                                value: "#050",
+                                            },
+                                            {
+                                                test: "datum.ratingDelta > 0 && datum.ratingP < datum.ratingO",
+                                                value: "#0d0",
+                                            },
+                                            {
+                                                test: "datum.ratingDelta < 0 && datum.ratingP < datum.ratingO",
+                                                value: "#500",
+                                            },
+                                        ],
+                                        value: "#d00",
                                     },
-                                    {
-                                        test: "datum.ratingDelta < 0 && datum.ratingP < datum.ratingO",
-                                        value: "#500",
-                                    },
-                                ],
-                                value: "#d00",
+                                    tooltip: yomiRatingTooltips,
+                                },
                             },
-                            tooltip: yomiRatingTooltips,
-                        },
+                            {
+                                mark: {
+                                    type: "point",
+                                },
+                                encoding: {
+                                    x: { field: "index", type: "ordinal" },
+                                    y: {
+                                        field: "ratingDelta",
+                                        type: "quantitative",
+                                    },
+                                    color: {
+                                        condition: [
+                                            {
+                                                test: "datum.render__win > 0 && datum.ratingP > datum.ratingO",
+                                                value: "#050",
+                                            },
+                                            {
+                                                test: "datum.render__win > 0 && datum.ratingP < datum.ratingO",
+                                                value: "#0d0",
+                                            },
+                                            {
+                                                test: "datum.render__win < 0 && datum.ratingP < datum.ratingO",
+                                                value: "#500",
+                                            },
+                                        ],
+                                        value: "#d00",
+                                    },
+                                    tooltip: yomiRatingTooltips,
+                                },
+                            },
+                        ],
                     },
                     {
                         width: 1500,
