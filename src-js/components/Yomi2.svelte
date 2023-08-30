@@ -82,7 +82,7 @@
       <a href="https://forms.gle/DRMW4MAxB3dWZS1K9">Yomi 2 Match Report form</a
       >!
     </p>
-    <button on:click={watchLogs}>Upload!</button>
+    <!-- <button on:click={watchLogs}>Upload!</button> -->
   </div>
 </div>
 {#if characters && matchupData && aggregateSkill}
