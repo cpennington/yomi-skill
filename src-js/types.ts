@@ -1,9 +1,9 @@
 
-export type EloSkill = { elo: number; gamesPlayed: number };
+export type EloSkill = { elo: number | null; gamesPlayed: number };
 export type GlickoSkill = {
-    glickoR: number;
-    glickoRD: number;
-    glickoV: number;
+    glickoR: number | null;
+    glickoRD: number | null;
+    glickoV: number | null;
     gamesPlayed: number;
 };
 export type PlayerSkill = EloPlayerSkill | GlickoPlayerSkill;
@@ -44,6 +44,8 @@ export type MUStats = {
     std: number;
 };
 export type MatchupData = Record<string, Record<string, MUStats>>;
+
+export type PlayerSummary = (EloSkill & GlickoSkill & { player: string })[]
 export type Match = {
     "elo__ro": number;
     "elo__rp": number;

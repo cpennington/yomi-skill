@@ -1,12 +1,12 @@
 [
   {
-    "gem__against_gem_o": "purple-valerie",
+    "gem__against_gem_o": "white-valerie",
     "gem__against_gem_p": "purple-jaina",
     "gem__character_o": "jaina",
     "gem__character_p": "valerie",
-    "gem__gem_o": "purple",
+    "gem__gem_o": "white",
     "gem__gem_p": "purple",
-    "gem__with_gem_o": "jaina-purple",
+    "gem__with_gem_o": "jaina-white",
     "gem__with_gem_p": "valerie-purple",
     "glicko__prob": 0.56,
     "glicko__rdo": 46.477,
@@ -37,13 +37,13 @@
     "render__win": 0
   },
   {
-    "gem__against_gem_o": "white-valerie",
+    "gem__against_gem_o": "purple-valerie",
     "gem__against_gem_p": "purple-jaina",
     "gem__character_o": "jaina",
     "gem__character_p": "valerie",
-    "gem__gem_o": "white",
+    "gem__gem_o": "purple",
     "gem__gem_p": "purple",
-    "gem__with_gem_o": "jaina-white",
+    "gem__with_gem_o": "jaina-purple",
     "gem__with_gem_p": "valerie-purple",
     "glicko__prob": 0.56,
     "glicko__rdo": 46.477,

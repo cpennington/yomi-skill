@@ -88,7 +88,6 @@
             opponentMatches && processMatches(opponentMatches);
 
             const allMatches = playerMatches.concat(opponentMatches);
-            console.log(allMatches);
             const vlMatches = {
                 $schema: "https://vega.github.io/schema/vega-lite/v4.json",
                 data: {
@@ -99,71 +98,73 @@
                 },
                 vconcat: [
                     {
-                        width: 1500,
-                        height: 100,
-                        row: { field: "player", type: "nominal" },
-                        layer: [
-                            {
-                                mark: {
-                                    type: "bar",
-                                },
-                                encoding: {
-                                    x: { field: "index", type: "ordinal" },
-                                    y: {
-                                        field: "ratingDelta",
-                                        type: "quantitative",
+                        facet: { row: { field: "player" } },
+                        spec: {
+                            width: 1500,
+                            height: 100,
+                            layer: [
+                                {
+                                    mark: {
+                                        type: "bar",
                                     },
-                                    color: {
-                                        condition: [
-                                            {
-                                                test: "datum.ratingDelta > 0 && datum.ratingP > datum.ratingO",
-                                                value: "#050",
-                                            },
-                                            {
-                                                test: "datum.ratingDelta > 0 && datum.ratingP < datum.ratingO",
-                                                value: "#0d0",
-                                            },
-                                            {
-                                                test: "datum.ratingDelta < 0 && datum.ratingP < datum.ratingO",
-                                                value: "#500",
-                                            },
-                                        ],
-                                        value: "#d00",
+                                    encoding: {
+                                        x: { field: "index", type: "ordinal" },
+                                        y: {
+                                            field: "ratingDelta",
+                                            type: "quantitative",
+                                        },
+                                        color: {
+                                            condition: [
+                                                {
+                                                    test: "datum.ratingDelta > 0 && datum.ratingP > datum.ratingO",
+                                                    value: "#050",
+                                                },
+                                                {
+                                                    test: "datum.ratingDelta > 0 && datum.ratingP < datum.ratingO",
+                                                    value: "#0d0",
+                                                },
+                                                {
+                                                    test: "datum.ratingDelta < 0 && datum.ratingP < datum.ratingO",
+                                                    value: "#500",
+                                                },
+                                            ],
+                                            value: "#d00",
+                                        },
+                                        tooltip: yomiRatingTooltips,
                                     },
-                                    tooltip: yomiRatingTooltips,
                                 },
-                            },
-                            {
-                                mark: {
-                                    type: "point",
-                                },
-                                encoding: {
-                                    x: { field: "index", type: "ordinal" },
-                                    y: {
-                                        field: "ratingDelta",
-                                        type: "quantitative",
+                                {
+                                    mark: {
+                                        type: "point",
                                     },
-                                    color: {
-                                        condition: [
-                                            {
-                                                test: "datum.render__win > 0 && datum.ratingP > datum.ratingO",
-                                                value: "#050",
-                                            },
-                                            {
-                                                test: "datum.render__win > 0 && datum.ratingP < datum.ratingO",
-                                                value: "#0d0",
-                                            },
-                                            {
-                                                test: "datum.render__win < 0 && datum.ratingP < datum.ratingO",
-                                                value: "#500",
-                                            },
-                                        ],
-                                        value: "#d00",
+                                    encoding: {
+                                        x: { field: "index", type: "ordinal" },
+                                        y: {
+                                            field: "ratingDelta",
+                                            type: "quantitative",
+                                        },
+                                        color: {
+                                            condition: [
+                                                {
+                                                    test: "datum.render__win > 0 && datum.ratingP > datum.ratingO",
+                                                    value: "#050",
+                                                },
+                                                {
+                                                    test: "datum.render__win > 0 && datum.ratingP < datum.ratingO",
+                                                    value: "#0d0",
+                                                },
+                                                {
+                                                    test: "datum.render__win < 0 && datum.ratingP < datum.ratingO",
+                                                    value: "#500",
+                                                },
+                                            ],
+                                            value: "#d00",
+                                        },
+                                        tooltip: yomiRatingTooltips,
                                     },
-                                    tooltip: yomiRatingTooltips,
                                 },
-                            },
-                        ],
+                            ],
+                        },
                     },
                     {
                         width: 1500,

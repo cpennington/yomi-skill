@@ -522,7 +522,35 @@ class YomiRender:
         os.makedirs(self.data_root, exist_ok=True)
         with open(f"{self.data_root}/players.json", "w") as outfile:
             simplejson.dump(
-                self.player_game_counts.to_dict(),
+                sorted(
+                    [
+                        {
+                            "player": player,
+                            "elo": round(
+                                self.player_ratings.loc[player].elo or 1500.0, 3
+                            ),
+                            "elo_std": round(
+                                self.player_ratings_devs.get(player, 1060), 3
+                            ),
+                            "glickoR": round(
+                                self.player_ratings.loc[player].glicko_r,
+                                3,
+                            ),
+                            "glickoRD": round(
+                                self.player_ratings.loc[player].glicko_rd,
+                                3,
+                            ),
+                            "glickoV": round(
+                                self.player_ratings.loc[player].glicko_v,
+                                3,
+                            ),
+                            "gamesPlayed": int(self.player_game_counts[player]),
+                        }
+                        for player in self.public_players
+                    ],
+                    key=lambda player: player["glickoR"],
+                    reverse=True,
+                ),
                 outfile,
                 indent=2,
                 sort_keys=True,

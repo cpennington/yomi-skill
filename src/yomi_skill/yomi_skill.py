@@ -23,6 +23,7 @@ from sklearn.model_selection import cross_validate
 
 from .model import YomiModel, weight_by
 from .models import *
+from .models.yomi2 import *
 from .render import *
 from .games import yomi, yomi2 as games_yomi2
 
@@ -38,6 +39,10 @@ click_log.basic_config(logger)
 from sklearn import set_config
 
 set_config(transform_output="pandas")
+
+from .models.pymc_model import PyMCModel
+
+print(PyMCModel.__subclasses__())
 
 MODELS = {
     model.model_name: model

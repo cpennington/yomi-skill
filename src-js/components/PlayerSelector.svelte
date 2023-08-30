@@ -1,16 +1,19 @@
-<script>
-  import { createEventDispatcher } from "svelte";
+<script lang="ts">
+  import type { PlayerSummary } from "$lib/types";
   export let loading = true;
   import loadingSVG from "../assets/loading.svg";
+
   // playerInput.onblur = updatePlayerStats;
   // opponentInput.onblur = updatePlayerStats;
-  export let players = {};
-  export let player;
-  export let opponent;
+  export let players: PlayerSummary;
+  export let player: string;
+  export let opponent: string;
 
-  let playCounts = [];
+  let playCounts: [string, number][] = [];
   $: {
-    playCounts = Object.entries(players).sort((a, b) => a[1] < b[1]);
+    playCounts = [...players]
+      .sort((a, b) => b.gamesPlayed - a.gamesPlayed)
+      .map((player) => [player.player, player.gamesPlayed]);
   }
 </script>
 

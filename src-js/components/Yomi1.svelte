@@ -9,15 +9,17 @@
     AggregatePlayerSkill,
     CharacterPlayCounts,
     MatchupData,
+    PlayerSummary,
     Scales,
   } from "$lib/types";
+  import PlayerRanking from "./PlayerRanking.svelte";
 
   const game = "yomi";
   export let matchupData: MatchupData;
   export let characters: CharacterPlayCounts;
   export let scales: Scales;
   export let aggregateSkill: AggregatePlayerSkill;
-  export let players: Record<string, number>;
+  export let players: PlayerSummary;
 
   let againstRating: "self" | number = "self";
   let againstCharRating: "self" | number = "self";
@@ -33,9 +35,9 @@
     bind:player
     bind:opponent
   />
-  {#if player && !opponent}
+  <!-- {#if player && !opponent}
     <AgainstConfig bind:againstRating bind:againstCharRating />
-  {/if}
+  {/if} -->
   <PlayerStats {game} {player} {opponent} />
 
   <div class="row col-12">
@@ -77,3 +79,5 @@
     <PlayerHistoryVis {player} {opponent} {game} />
   </div>
 {/if}
+
+<PlayerRanking {players} />
