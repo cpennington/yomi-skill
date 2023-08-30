@@ -42,8 +42,6 @@ set_config(transform_output="pandas")
 
 from .models.pymc_model import PyMCModel
 
-print(PyMCModel.__subclasses__())
-
 MODELS = {
     model.model_name: model
     for model_type in YomiModel.__subclasses__()

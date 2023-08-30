@@ -83,9 +83,9 @@
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 12,
-    "glickoR": 1550.799,
-    "glickoRD": 42.403,
+    "gamesPlayed": 18,
+    "glickoR": 1556.175,
+    "glickoRD": 42.64,
     "glickoV": 0.059,
     "player": "vengefulpickle"
   },
@@ -232,6 +232,15 @@
     "glickoRD": 50.0,
     "glickoV": 0.059,
     "player": "noshots000"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
+    "gamesPlayed": 6,
+    "glickoR": 1500.0,
+    "glickoRD": 50.0,
+    "glickoV": 0.059,
+    "player": "interruptvector"
   },
   {
     "elo": null,

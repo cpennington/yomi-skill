@@ -626,7 +626,7 @@
     "player": "feathers",
     "render__match_date": 1688515200000,
     "render__public": true,
-    "render__win": 0
+    "render__win": 1
   },
   {
     "gem__against_gem_o": "white-geiger",
@@ -663,7 +663,7 @@
     "player": "feathers",
     "render__match_date": 1688515200000,
     "render__public": true,
-    "render__win": 1
+    "render__win": 0
   },
   {
     "gem__against_gem_o": "purple-valerie",
