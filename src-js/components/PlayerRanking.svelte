@@ -23,7 +23,7 @@
               {
                   name: "Rating Deviation",
                   id: "glickoRD",
-                  formatter: (value: number) => value.toPrecision(3),
+                  formatter: (value: number) => `+/- ${value.toPrecision(2)}`,
               },
           ];
 </script>
