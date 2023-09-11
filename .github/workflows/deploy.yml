@@ -62,6 +62,6 @@ jobs:
           aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
-          function_name: yomi2_results_upload
+          function_name: yomi-2-results-uploader
           zip_file: src-lambda/results_uploader.py
           handler: results_uploader.handle_result
