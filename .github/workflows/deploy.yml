@@ -50,6 +50,12 @@ jobs:
       - name: install requirements
         run: |
           pip install -r src-lambda/requirements.txt --target src-lambda/deps
+      - name: build zip file
+        run: |
+          cd src-lamdba/deps
+          zip -r ../yomi-2-uploader.zip .
+          cd ..
+          zip yomi-2-uploader.zip results_uploader.py
       - name: default deploy
         uses: appleboy/lambda-action@v0.1.9
         with:
@@ -57,7 +63,5 @@ jobs:
           aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws_region: ${{ secrets.AWS_REGION }}
           function_name: yomi2_results_upload
-          source:
-            - src-lambda/results_uploader.py
-            - src-lambda/deps/*
+          zip_file: src-lambda/results_uploader.py
           handler: results_uploader.handle_result
