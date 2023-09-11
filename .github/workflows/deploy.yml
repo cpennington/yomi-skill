@@ -40,3 +40,24 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+
+  deploy_lambda:
+    name: deploy lambda from source
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout source code
+        uses: actions/checkout@v3
+      - name: install requirements
+        run: |
+          pip install -r src-lambda/requirements.txt --target src-lambda/deps
+      - name: default deploy
+        uses: appleboy/lambda-action@v0.1.9
+        with:
+          aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws_region: ${{ secrets.AWS_REGION }}
+          function_name: yomi2_results_upload
+          source:
+            - src-lambda/results_uploader.py
+            - src-lambda/deps/*
+          handler: results_uploader.handle_result
