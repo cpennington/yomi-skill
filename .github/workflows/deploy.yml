@@ -52,7 +52,7 @@ jobs:
           pip install -r src-lambda/requirements.txt --target src-lambda/deps
       - name: build zip file
         run: |
-          cd src-lamdba/deps
+          cd src-lambda/deps
           zip -r ../yomi-2-uploader.zip .
           cd ..
           zip yomi-2-uploader.zip results_uploader.py
