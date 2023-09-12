@@ -86,15 +86,15 @@ def handle_result(event, context):
             else:
                 rows.append(
                     [
-                        body_json["realTime"],
-                        body_json["p0Name"],
-                        body_json["p0Char"],
-                        body_json["p0Gem"],
-                        body_json["p1Name"],
-                        body_json["p1Char"],
-                        body_json["p1Gem"],
-                        "P1" if body_json["result"] == "wins" else "P2",
-                        body_json["rawLine"],
+                        game["realTime"],
+                        game["p0Name"],
+                        game["p0Char"],
+                        game["p0Gem"],
+                        game["p1Name"],
+                        game["p1Char"],
+                        game["p1Gem"],
+                        "P1" if game["result"] == "wins" else "P2",
+                        game["rawLine"],
                     ]
                 )
                 results.append(
