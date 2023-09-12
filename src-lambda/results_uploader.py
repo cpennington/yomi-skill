@@ -14,7 +14,7 @@ sh = gc.open_by_key("1DMq27BcMST27m4A_sws-CYs4PI41B7T8G28bqSyFSr8")
 wksh = sh.worksheet("Results")
 
 
-# Example body:
+# Example game:
 # {
 #     "threadId": "_",
 #     "timestamp": "2455.518",
@@ -33,8 +33,10 @@ wksh = sh.worksheet("Results")
 #     "rawLine": "[_ 2455.518] FriendMatchOnline Game over: Remote P0 [Hobusu] Lum-Black wins vs Local P1 [vengefulpickle] DragonMidori-Green"
 # }
 
+# Message body should contain a list of games under the "games" key
+
 # Example cmdline
-# '{"body": "{\"threadId\": \"_\",\"timestamp\": \"2455.518\",\"gameType\": \"FriendMatchOnline\",\"p0Location\": \"Remote\",\"p0Name\": \"Hobusu\",\"p0Char\": \"Lum\",\"p0Gem\": \"Black\",\"result\": \"wins\",\"p1Location\": \"Local\",\"p1Name\": \"vengefulpickle\",\"p1Char\": \"DragonMidori\",\"p1Gem\": \"Green\",\"realTime\": \"2023-09-09T03:28:20.804Z\",\"zeroTime\": 1694227645286,\"rawLine\":\"[_ 2455.518] FriendMatchOnline Game over: Remote P0 [Hobusu] Lum-Black wins vs Local P1 [vengefulpickle] DragonMidori-Green\"}"}'
+# '{"httpMethod": "POST", "body": "{\"games\": [{\"threadId\": \"_\",\"timestamp\": \"2455.518\",\"gameType\": \"FriendMatchOnline\",\"p0Location\": \"Remote\",\"p0Name\": \"Hobusu\",\"p0Char\": \"Lum\",\"p0Gem\": \"Black\",\"result\": \"wins\",\"p1Location\": \"Local\",\"p1Name\": \"vengefulpickle\",\"p1Char\": \"DragonMidori\",\"p1Gem\": \"Green\",\"realTime\": \"2023-09-09T03:28:20.804Z\",\"zeroTime\": 1694227645286,\"rawLine\":\"[_ 2455.518] FriendMatchOnline Game over: Remote P0 [Hobusu] Lum-Black wins vs Local P1 [vengefulpickle] DragonMidori-Green\"}]}"}'
 
 
 def format_response(status, body):
@@ -54,7 +56,12 @@ def format_response(status, body):
 def handle_result(event, context):
     if event["httpMethod"] == "OPTIONS":
         return format_response(200, {})
+    if event["httpMethod"] != "POST":
+        return format_response(
+            405, {"message": "Only POST AND OPTIONS are accepted methods"}
+        )
 
+    print(event["body"])
     body_json = json.loads(event["body"])
 
     if "games" in body_json:
@@ -105,8 +112,8 @@ def handle_result(event, context):
                 }
             )
 
-    first_empty = wksh.find("", in_column=1)
-    next_row = first_empty.row
+    dates = wksh.col_values(1)
+    next_row = len(dates)
     wksh.update(range_name=f"A{next_row}:I{next_row + len(rows)}", values=[rows])
 
     return format_response(200, {"results": results})
