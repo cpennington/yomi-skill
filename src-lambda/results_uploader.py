@@ -56,30 +56,60 @@ def handle_result(event, context):
         return format_response(200, {})
 
     body_json = json.loads(event["body"])
-    existing_cell = wksh.find(body_json["rawLine"], in_column=9)
-    if existing_cell:
-        return format_response(200, {"message": "Row already exists"})
+
+    if "games" in body_json:
+        games = body_json["games"]
+    else:
+        games = [body_json]
+
+    results = []
+    rows = []
+    for game in games:
+        try:
+            existing_cell = wksh.find(game["rawLine"], in_column=9)
+            if existing_cell:
+                results.append(
+                    {
+                        "rawLine": game["rawLine"],
+                        "result": "skipped",
+                        "message": "Game already exists",
+                    }
+                )
+            else:
+                rows.append(
+                    [
+                        body_json["realTime"],
+                        body_json["p0Name"],
+                        body_json["p0Char"],
+                        body_json["p0Gem"],
+                        body_json["p1Name"],
+                        body_json["p1Char"],
+                        body_json["p1Gem"],
+                        "P1" if body_json["result"] == "wins" else "P2",
+                        body_json["rawLine"],
+                    ]
+                )
+                results.append(
+                    {
+                        "rawLine": game["rawLine"],
+                        "result": "uploaded",
+                        "message": "Game uploaded",
+                    }
+                )
+        except:
+            results.append(
+                {
+                    "rawLine": game["rawLine"],
+                    "result": "failed",
+                    "message": "Game parsing failed",
+                }
+            )
 
     first_empty = wksh.find("", in_column=1)
     next_row = first_empty.row
-    wksh.update(
-        range_name=f"A{next_row}:I{next_row}",
-        values=[
-            [
-                body_json["realTime"],
-                body_json["p0Name"],
-                body_json["p0Char"],
-                body_json["p0Gem"],
-                body_json["p1Name"],
-                body_json["p1Char"],
-                body_json["p1Gem"],
-                "P1" if body_json["result"] == "wins" else "P2",
-                body_json["rawLine"],
-            ]
-        ],
-    )
+    wksh.update(range_name=f"A{next_row}:I{next_row + len(rows)}", values=[rows])
 
-    return format_response(200, {"message": "Row added"})
+    return format_response(200, {"results": results})
 
 
 if __name__ == "__main__":
