@@ -40,13 +40,21 @@ wksh = sh.worksheet("Results")
 def format_response(status, body):
     return {
         "statusCode": status,
-        "headers": {"Content-Type": "application/json"},
+        "headers": {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Headers": "Content-Type",
+            "Access-Control-Allow-Origin": "https://vengefulpickle.com",
+            "Access-Control-Allow-Methods": "OPTIONS,POST",
+        },
         "isBase64Encoded": False,
         "body": json.dumps(body),
     }
 
 
 def handle_result(event, context):
+    if context["httpMethod"] == "OPTIONS":
+        return format_response(200, {})
+
     body_json = json.loads(event["body"])
     existing_cell = wksh.find(body_json["rawLine"], in_column=9)
     if existing_cell:
