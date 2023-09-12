@@ -52,7 +52,7 @@ def format_response(status, body):
 
 
 def handle_result(event, context):
-    if context["httpMethod"] == "OPTIONS":
+    if event["httpMethod"] == "OPTIONS":
         return format_response(200, {})
 
     body_json = json.loads(event["body"])
