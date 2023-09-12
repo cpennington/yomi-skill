@@ -4,6 +4,7 @@ from tempfile import NamedTemporaryFile
 import sys
 import json
 import pprint
+import logging
 
 creds_file = NamedTemporaryFile()
 creds_file.write(os.environ["GOOGLE_CREDS"].encode("utf8"))
@@ -104,6 +105,7 @@ def handle_result(event, context):
                     }
                 )
         except:
+            logging.exception("Failed to parse line")
             results.append(
                 {
                     "rawLine": game["rawLine"],
