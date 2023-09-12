@@ -36,3 +36,4 @@ pnpm-debug.log*
 .DS_Store
 src-lambda/deps
 tmp
+src-lambda/api-project-*.json

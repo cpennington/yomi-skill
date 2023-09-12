@@ -77,7 +77,7 @@
             ) + zeroTime!
           ),
           zeroTime,
-          rawLine: line,
+          rawLine: line.trim(),
         };
         const response = fetch(
           "https://yomi-2-results-uploader.vengefulpickle.com",
