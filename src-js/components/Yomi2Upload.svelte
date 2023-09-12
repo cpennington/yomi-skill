@@ -95,12 +95,12 @@
                 "Error uploading results, please ping @vengefulpickle on the Sirlin Games discord.";
         } else {
             if (failures > 0) {
-                lastMessage = `{successes} games successfully uploaded, {failed} games failed to uploade`;
+                lastMessage = `${successes} games successfully uploaded, ${failures} games failed to uploade`;
             } else {
-                lastMessage = `{successes} games successfully uploaded`;
+                lastMessage = `${successes} games successfully uploaded`;
             }
         }
-        console.log(response);
+        console.log({ response, lastMessage });
         setTimeout(() => processLogFiles(fileHandles), toMillis(300));
     }
 

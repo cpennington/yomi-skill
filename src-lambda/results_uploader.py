@@ -115,8 +115,8 @@ def handle_result(event, context):
             )
 
     dates = wksh.col_values(1)
-    next_row = len(dates)
-    wksh.update(range_name=f"A{next_row}:I{next_row + len(rows)}", values=[rows])
+    next_row = len(dates) + 1
+    wksh.update(range_name=f"A{next_row}:I{next_row + len(rows)-1}", values=rows)
 
     return format_response(200, {"results": results})
 
