@@ -15,6 +15,7 @@
   } from "$lib/types";
   import GemVis from "./GemVis.svelte";
   import PlayerRanking from "./PlayerRanking.svelte";
+  import Yomi2Upload from "./Yomi2Upload.svelte";
 
   const game = "yomi2";
   export let matchupData: MatchupData;
@@ -24,81 +25,11 @@
   export let players: PlayerSummary;
   export let gemEffects: GemEffects;
 
-  const CHAR_MAP = { A: "Grave", G: "Valerie" };
-  const GEM_MAP = { a: "Red", b: "Green" };
-  type CharKey = keyof typeof CHAR_MAP;
-  type GemKey = keyof typeof GEM_MAP;
-  type CharGem = `${CharKey}${GemKey}`;
-
   let againstRating: "self" | number = "self";
   let againstCharRating: "self" | number = "self";
 
   let player = "";
   let opponent = "";
-
-  function parseCharGem(charGem: CharGem) {
-    const char = CHAR_MAP[charGem[0] as CharKey];
-    const gem = GEM_MAP[charGem[1] as GemKey];
-  }
-
-  function toMillis(seconds: number): number {
-    return seconds * 1000;
-  }
-
-  async function processLogFile(fileHandle) {
-    console.log({ fileHandle });
-    const file = await fileHandle.getFile();
-    const startTime =
-      /\[(?<threadId>.) (?<timestamp>[^\]]*)\] Yomi2 Start: (?<version>.*) at localtime (?<localTime>[^,]*), UTC (?<utcTime>.*)/;
-
-    const matchComplete =
-      /\[(?<threadId>.) (?<timestamp>[^\]]*)\] (?<gameType>[^ ]*) Game over: (?<p0Location>Remote|Local) P0 \[(?<p0Name>[^\]]*)\] (?<p0Char>[^-]*)-(?<p0Gem>[^ ]*) (?<result>[^ ]*) vs (?<p1Location>Remote|Local) P1 \[(?<p1Name>[^\]]*)\] (?<p1Char>[^-]*)-(?<p1Gem>\S*)/;
-
-    let zeroTime = null;
-    for (const line of (await file.text()).split("\n") as string[]) {
-      const startTimeMatch = startTime.exec(line);
-      const matchCompleteMatch = matchComplete.exec(line);
-
-      if (startTimeMatch) {
-        const startMillis = new Date(
-          startTimeMatch.groups!.utcTime.replace(" ", "T")
-        ).valueOf();
-        const offsetMillis = toMillis(
-          new Number(startTimeMatch.groups!.timestamp).valueOf()
-        );
-        zeroTime = startMillis - offsetMillis;
-      }
-      if (matchCompleteMatch) {
-        const message = {
-          ...matchCompleteMatch.groups,
-          realTime: new Date(
-            toMillis(
-              new Number(matchCompleteMatch.groups!.timestamp).valueOf()
-            ) + zeroTime!
-          ),
-          zeroTime,
-          rawLine: line.trim(),
-        };
-        const response = fetch(
-          "https://yomi-2-results-uploader.vengefulpickle.com",
-          {
-            body: JSON.stringify(message),
-            headers: { "Content-Type": "application/json" },
-            method: "POST",
-          }
-        );
-        console.log(response);
-      }
-    }
-  }
-
-  async function watchLogs(evt) {
-    const handle = await window.showDirectoryPicker({});
-    const playerLog = handle.getFileHandle("Player.log");
-    const oldPlayerLog = handle.getFileHandle("Player-prev.log");
-    processLogFile(await playerLog);
-    processLogFile(await oldPlayerLog);
-  }
 </script>
 
 <div class="grid grid-template-column max-w-6xl place-content-center">
@@ -113,31 +44,7 @@
   {/if} -->
   <PlayerStats {game} {player} {opponent} />
 
-  <div class="row col-12">
-    <p class="col-12 mt-4">
-      If you'd like to improve the matchup chart, upload your match results by
-      clicking the Upload button below, and navigating to the Yomi 2 log files
-      directory:
-    </p>
-    <ul class="list-disc pl-10">
-      <li>
-        Windows: <pre
-          class="inline">%USERPROFILE%\AppData\LocalLow\Sirlin Games\Yomi 2\Player.log</pre>
-      </li>
-      <li>
-        Mac: <pre
-          class="inline">~/Library/Logs/Sirlin Games/Yomi 2/Player.log</pre>
-      </li>
-      <li>
-        Linux: <pre
-          class="inline">~/.config/unity3d/Sirlin Games/Yomi 2/Player.log</pre>
-      </li>
-    </ul>
-    <button
-      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-      on:click={watchLogs}>Upload!</button
-    >
-  </div>
+  <Yomi2Upload />
 </div>
 {#if characters && matchupData && aggregateSkill}
   <div>
