@@ -115,11 +115,28 @@
 
   <div class="row col-12">
     <p class="col-12 mt-4">
-      If you'd like to improve the matchup chart, report your matches with the
-      <a href="https://forms.gle/DRMW4MAxB3dWZS1K9">Yomi 2 Match Report form</a
-      >!
+      If you'd like to improve the matchup chart, upload your match results by
+      clicking the Upload button below, and navigating to the Yomi 2 log files
+      directory:
     </p>
-    <button on:click={watchLogs}>Upload!</button>
+    <ul class="list-disc pl-10">
+      <li>
+        Windows: <pre
+          class="inline">%USERPROFILE%\AppData\LocalLow\Sirlin Games\Yomi 2\Player.log</pre>
+      </li>
+      <li>
+        Mac: <pre
+          class="inline">~/Library/Logs/Sirlin Games/Yomi 2/Player.log</pre>
+      </li>
+      <li>
+        Linux: <pre
+          class="inline">~/.config/unity3d/Sirlin Games/Yomi 2/Player.log</pre>
+      </li>
+    </ul>
+    <button
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      on:click={watchLogs}>Upload!</button
+    >
   </div>
 </div>
 {#if characters && matchupData && aggregateSkill}
