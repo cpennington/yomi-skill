@@ -32,7 +32,10 @@
             let zeroTime = null;
             for (const line of (await file.text()).split("\n") as string[]) {
                 const rawLine = line.trim();
-                if (now - (await get(rawLine)) < toMillis(4 * 60 * 60)) {
+                if (
+                    now.getTime() - (await get(rawLine)).getTime() <
+                    toMillis(4 * 60 * 60)
+                ) {
                     continue;
                 }
                 const startTimeMatch = startTime.exec(line);
