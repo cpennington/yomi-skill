@@ -41,26 +41,63 @@
     const gem = GEM_MAP[charGem[1] as GemKey];
   }
 
-  function processLogFile(fileHandle) {
-    const file = fileHandle.getFile();
-    const modifiedTime = file.lastModified;
+  function toMillis(seconds: number): number {
+    return seconds * 1000;
+  }
 
-    const connectedAndAuthenticated =
-      /YServerConnection.ConnectedAndAuthenticated as (?<p1Name>.*)/;
-    const startLiveOnlineGame =
-      /StartLiveOnlineGame as (?<whichPlayer>.*) (?<p1Char>[^:]*):(?<p1Gem>[^ ]*) vs (?<p2Name>interruptvector) (?<p2Char>[^:]*):(?<p2Gem>[^,*]), asRejoin (?<rejoin>[^,]*), isFriendMatch (?<friendMatch>.*)/;
-    const timestamp = /$\[(?<threadId>.) (?<timestamp>[^\]]*)\]/;
-    const charGemChoice =
-      /RememberCharGemChoice: (?<char>[^ ]*) (?<gem>[^ ]*), forOpp (?<forOpp>[^,]*),/;
-    const matchCommand =
-      /< Server: \[(?<matchCommand>startgame|want_rematch|endmatch|want_changechargemandrematch:(?<newCharGem>[^\]]*))\]/;
+  async function processLogFile(fileHandle) {
+    console.log({ fileHandle });
+    const file = await fileHandle.getFile();
+    const startTime =
+      /\[(?<threadId>.) (?<timestamp>[^\]]*)\] Yomi2 Start: (?<version>.*) at localtime (?<localTime>[^,]*), UTC (?<utcTime>.*)/;
+
+    const matchComplete =
+      /\[(?<threadId>.) (?<timestamp>[^\]]*)\] (?<gameType>[^ ]*) Game over: (?<p0Location>Remote|Local) P0 \[(?<p0Name>[^\]]*)\] (?<p0Char>[^-]*)-(?<p0Gem>[^ ]*) (?<result>[^ ]*) vs (?<p1Location>Remote|Local) P1 \[(?<p1Name>[^\]]*)\] (?<p1Char>[^-]*)-(?<p1Gem>\S*)/;
+
+    let zeroTime = null;
+    for (const line of (await file.text()).split("\n") as string[]) {
+      const startTimeMatch = startTime.exec(line);
+      const matchCompleteMatch = matchComplete.exec(line);
+
+      if (startTimeMatch) {
+        const startMillis = new Date(
+          startTimeMatch.groups!.utcTime.replace(" ", "T")
+        ).valueOf();
+        const offsetMillis = toMillis(
+          new Number(startTimeMatch.groups!.timestamp).valueOf()
+        );
+        zeroTime = startMillis - offsetMillis;
+      }
+      if (matchCompleteMatch) {
+        const message = {
+          ...matchCompleteMatch.groups,
+          realTime: new Date(
+            toMillis(
+              new Number(matchCompleteMatch.groups!.timestamp).valueOf()
+            ) + zeroTime!
+          ),
+          zeroTime,
+          rawLine: line,
+        };
+        const response = fetch(
+          "https://yomi-2-results-uploader.vengefulpickle.com",
+          {
+            body: JSON.stringify(message),
+            headers: { "Content-Type": "application/json" },
+            method: "POST",
+          }
+        );
+        console.log(response);
+      }
+    }
   }
 
   async function watchLogs(evt) {
     const handle = await window.showDirectoryPicker({});
     const playerLog = handle.getFileHandle("Player.log");
     const oldPlayerLog = handle.getFileHandle("Player-prev.log");
-    console.log({ handle });
+    processLogFile(await playerLog);
+    processLogFile(await oldPlayerLog);
   }
 </script>
 
@@ -82,7 +119,7 @@
       <a href="https://forms.gle/DRMW4MAxB3dWZS1K9">Yomi 2 Match Report form</a
       >!
     </p>
-    <!-- <button on:click={watchLogs}>Upload!</button> -->
+    <button on:click={watchLogs}>Upload!</button>
   </div>
 </div>
 {#if characters && matchupData && aggregateSkill}

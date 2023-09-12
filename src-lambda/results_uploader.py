@@ -29,7 +29,7 @@ wksh = sh.worksheet("Results")
 #     "p1Char": "DragonMidori",
 #     "p1Gem": "Green",
 #     "realTime": "2023-09-09T03:28:20.804Z",
-#     "zeroTime": 1694227645286
+#     "zeroTime": 1694227645286,
 #     "rawLine": "[_ 2455.518] FriendMatchOnline Game over: Remote P0 [Hobusu] Lum-Black wins vs Local P1 [vengefulpickle] DragonMidori-Green"
 # }
 
