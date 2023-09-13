@@ -46,7 +46,6 @@
                     zeroTime = startMillis - offsetMillis;
                 }
                 if (matchCompleteMatch) {
-                    console.log({ rawLine, lastProcessed });
                     if (
                         lastProcessed &&
                         now.getTime() - lastProcessed.getTime() <
@@ -72,7 +71,6 @@
             }
         }
 
-        console.log({ games });
         if (games.length > 0) {
             const response = await fetch(
                 "https://yomi-2-results-uploader.vengefulpickle.com",
@@ -91,7 +89,7 @@
                     successes += 1;
                 } else if (result === "failed") {
                     failures += 1;
-                    console.log({ rawLine, result, message });
+                    console.warn({ rawLine, result, message });
                 } else if (result === "skipped") {
                     set(rawLine, now);
                 }

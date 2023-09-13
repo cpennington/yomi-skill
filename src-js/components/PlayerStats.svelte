@@ -14,8 +14,6 @@
     $: oSkill = opponent
         ? import(`../data/${game}/player/${opponent}/skill.json`)
         : null;
-
-    $: console.log({ player, opponent, pSkill, oSkill });
 </script>
 
 <table id="player-stats" class="table-auto">

@@ -520,7 +520,6 @@
             height: 40,
             mark: mark,
             encoding: {
-                text: muNumber,
                 tooltip: [
                     statsType,
                     credInterval,
@@ -549,11 +548,6 @@
                     },
                 },
             },
-            transform: [
-                {
-                    // filter: "datum.count > 0 && datum.p >= 0.001"
-                },
-            ],
             vconcat: [
                 {
                     hconcat: [c1c2Graphs, c1Graphs],
@@ -894,7 +888,6 @@
         const playedCharacters = characters
             .filter((char) => char.gamesRecorded > 0)
             .map((char) => char.character);
-        console.log({ characters, playedCharacters });
         const pSkill =
             player &&
             (await import(`../data/${game}/player/${player}/skill.json`));

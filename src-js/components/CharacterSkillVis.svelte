@@ -24,11 +24,6 @@
             opponent &&
             (await import(`../data/${game}/player/${opponent}/skill.json`));
 
-        console.log({
-            aggregateSkill,
-            entries: Object.entries(aggregateSkill.characters),
-        });
-
         var data = Object.entries(aggregateSkill.characters)
             .filter(([character, _]) => playedCharacters.includes(character))
             .flatMap(([character, skill]) => {
@@ -78,7 +73,7 @@
             [];
         var spec = {
             data: { values: data.concat(playerData, opponentData) },
-            $schema: "https://vega.github.io/schema/vega-lite/v4.json",
+            $schema: "https://vega.github.io/schema/vega-lite/v5.json",
             facet: { field: "character", type: "nominal" },
             columns: 5,
             spec: {

@@ -10,7 +10,6 @@
         const playedCharacters = characters
             .filter((char) => char.gamesRecorded > 0)
             .map((char) => char.character);
-        console.log(playedCharacters);
         var data = Object.entries(gemEffects.with_gem)
             .filter(([character, _]) => playedCharacters.includes(character))
             .flatMap(([character, gems]) =>
@@ -36,10 +35,9 @@
                             }))
                 )
             );
-        console.log({ data });
         var spec = {
             data: { values: data },
-            $schema: "https://vega.github.io/schema/vega-lite/v4.json",
+            $schema: "https://vega.github.io/schema/vega-lite/v5.json",
             facet: {
                 row: { field: "effect", type: "nominal" },
                 column: { field: "character", type: "nominal" },
