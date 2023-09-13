@@ -43,9 +43,9 @@
     "grave": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 5,
-      "glickoR": 1474.536,
-      "glickoRD": 39.65,
+      "gamesPlayed": 6,
+      "glickoR": 1471.109,
+      "glickoRD": 39.174,
       "glickoV": 0.027
     },
     "gwen": {
@@ -59,9 +59,9 @@
     "jaina": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 4,
-      "glickoR": 1483.71,
-      "glickoRD": 39.303,
+      "gamesPlayed": 3,
+      "glickoR": 1479.187,
+      "glickoRD": 39.797,
       "glickoV": 0.027
     },
     "lum": {
@@ -82,10 +82,10 @@
     },
     "midori": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
-      "glickoR": 1500.0,
-      "glickoRD": 40.0,
+      "elo_std": null,
+      "gamesPlayed": 1,
+      "glickoR": 1491.847,
+      "glickoRD": 37.004,
       "glickoV": 0.027
     },
     "onimaru": {
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 18,
-  "glickoR": 1556.175,
-  "glickoRD": 42.64,
+  "gamesPlayed": 19,
+  "glickoR": 1550.981,
+  "glickoRD": 43.185,
   "glickoV": 0.059
 }

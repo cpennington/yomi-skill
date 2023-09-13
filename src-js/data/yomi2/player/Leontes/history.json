@@ -34,7 +34,7 @@
     "player": "Leontes",
     "render__match_date": 1691712000000,
     "render__public": true,
-    "render__win": 0
+    "render__win": 1
   },
   {
     "gem__against_gem_o": "purple-midori",
@@ -71,7 +71,7 @@
     "player": "Leontes",
     "render__match_date": 1691712000000,
     "render__public": true,
-    "render__win": 1
+    "render__win": 0
   },
   {
     "gem__against_gem_o": "purple-midori",
