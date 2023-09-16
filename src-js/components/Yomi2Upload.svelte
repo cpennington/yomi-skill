@@ -5,6 +5,7 @@
 
     let uploading = false;
     let lastMessage: string | undefined = undefined;
+    let lastModified: Record<string, number> = {};
 
     function toMillis(seconds: number): number {
         return seconds * 1000;
@@ -23,6 +24,10 @@
 
         for (const handle of handles) {
             const file = await handle.getFile();
+            if (lastModified[file.name] >= file.lastModified) {
+                continue;
+            }
+            lastModified[file.name] = file.lastModified;
             const startTime =
                 /\[(?<threadId>.) (?<timestamp>[^\]]*)\] Yomi2 Start: (?<version>.*) at localtime (?<localTime>[^,]*), UTC (?<utcTime>.*)/;
 
@@ -100,15 +105,13 @@
             } else {
                 if (failures > 0) {
                     lastMessage = `${now}: ${successes} games successfully uploaded, ${failures} games failed to uploade`;
-                } else {
+                } else if (successes > 0) {
                     lastMessage = `${now}: ${successes} games successfully uploaded`;
                 }
             }
             console.log({ response, lastMessage });
-        } else {
-            lastMessage = `${now}: No new games found`;
         }
-        setTimeout(() => processLogFiles(fileHandles), toMillis(300));
+        setTimeout(() => processLogFiles(fileHandles), toMillis(1));
     }
 
     async function watchLogs() {
