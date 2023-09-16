@@ -2,521 +2,526 @@
   "against_gem": {
     "black": {
       "argagarg": {
-        "count": 9,
-        "mean": 0.097,
-        "std": 0.444
+        "count": 11,
+        "mean": -0.007,
+        "std": 0.427
       },
       "geiger": {
         "count": 3,
-        "mean": 0.207,
+        "mean": 0.206,
         "std": 0.481
       },
       "grave": {
         "count": 2,
-        "mean": -0.096,
-        "std": 0.492
+        "mean": -0.106,
+        "std": 0.489
       },
       "jaina": {
         "count": 5,
-        "mean": 0.022,
-        "std": 0.462
+        "mean": 0.043,
+        "std": 0.476
       },
       "lum": {
-        "count": 1,
-        "mean": -0.099,
-        "std": 0.481
+        "count": 2,
+        "mean": -0.195,
+        "std": 0.467
       },
       "midori": {
-        "count": 13,
-        "mean": 0.178,
-        "std": 0.433
+        "count": 15,
+        "mean": 0.057,
+        "std": 0.424
       },
       "rook": {
         "count": 6,
-        "mean": -0.105,
-        "std": 0.462
+        "mean": -0.099,
+        "std": 0.467
       },
       "setsuki": {
         "count": 10,
-        "mean": -0.246,
-        "std": 0.457
+        "mean": -0.263,
+        "std": 0.463
       },
       "valerie": {
         "count": 5,
         "mean": -0.01,
-        "std": 0.468
+        "std": 0.472
       }
     },
     "blue": {
       "argagarg": {
         "count": 2,
-        "mean": -0.098,
+        "mean": -0.089,
         "std": 0.489
       },
       "degrey": {
         "count": 2,
-        "mean": -0.087,
-        "std": 0.476
+        "mean": -0.08,
+        "std": 0.488
       },
       "jaina": {
         "count": 2,
-        "mean": -0.092,
-        "std": 0.484
+        "mean": -0.1,
+        "std": 0.477
       },
       "rook": {
         "count": 2,
-        "mean": -0.034,
+        "mean": -0.043,
         "std": 0.485
       },
       "setsuki": {
         "count": 16,
-        "mean": -0.004,
-        "std": 0.421
+        "mean": -0.019,
+        "std": 0.412
       },
       "valerie": {
         "count": 1,
-        "mean": 0.162,
-        "std": 0.497
+        "mean": 0.161,
+        "std": 0.481
       }
     },
     "green": {
       "argagarg": {
-        "count": 6,
-        "mean": 0.05,
-        "std": 0.461
+        "count": 10,
+        "mean": 0.091,
+        "std": 0.445
       },
       "degrey": {
         "count": 5,
-        "mean": -0.088,
-        "std": 0.458
+        "mean": -0.087,
+        "std": 0.454
       },
       "grave": {
         "count": 6,
-        "mean": 0.198,
-        "std": 0.471
+        "mean": 0.197,
+        "std": 0.466
       },
       "jaina": {
         "count": 3,
-        "mean": -0.07,
-        "std": 0.475
+        "mean": -0.09,
+        "std": 0.471
       },
       "midori": {
         "count": 4,
-        "mean": 0.252,
-        "std": 0.48
+        "mean": 0.212,
+        "std": 0.463
       },
       "rook": {
         "count": 2,
-        "mean": 0.085,
-        "std": 0.488
+        "mean": 0.089,
+        "std": 0.498
       },
       "setsuki": {
-        "count": 3,
-        "mean": 0.213,
-        "std": 0.486
+        "count": 5,
+        "mean": 0.383,
+        "std": 0.446
       },
       "valerie": {
         "count": 4,
-        "mean": -0.046,
-        "std": 0.456
+        "mean": -0.047,
+        "std": 0.468
       }
     },
     "purple": {
       "argagarg": {
         "count": 7,
-        "mean": 0.104,
+        "mean": 0.11,
         "std": 0.44
       },
       "degrey": {
         "count": 12,
-        "mean": 0.262,
-        "std": 0.429
+        "mean": 0.265,
+        "std": 0.436
       },
       "geiger": {
         "count": 2,
-        "mean": -0.09,
-        "std": 0.509
+        "mean": -0.094,
+        "std": 0.492
       },
       "grave": {
         "count": 18,
-        "mean": -0.115,
-        "std": 0.424
+        "mean": -0.127,
+        "std": 0.428
       },
       "jaina": {
-        "count": 26,
-        "mean": -0.053,
-        "std": 0.383
+        "count": 29,
+        "mean": -0.067,
+        "std": 0.386
       },
       "midori": {
         "count": 20,
-        "mean": -0.049,
-        "std": 0.407
+        "mean": -0.021,
+        "std": 0.418
       },
       "rook": {
         "count": 24,
-        "mean": -0.157,
+        "mean": -0.172,
         "std": 0.383
       },
       "setsuki": {
         "count": 13,
-        "mean": 0.17,
-        "std": 0.431
+        "mean": 0.168,
+        "std": 0.432
       },
       "valerie": {
         "count": 4,
-        "mean": -0.029,
-        "std": 0.467
+        "mean": -0.034,
+        "std": 0.462
       }
     },
     "red": {
       "argagarg": {
-        "count": 6,
-        "mean": -0.157,
-        "std": 0.455
+        "count": 7,
+        "mean": -0.074,
+        "std": 0.463
       },
       "degrey": {
         "count": 10,
-        "mean": -0.159,
-        "std": 0.432
+        "mean": -0.149,
+        "std": 0.428
       },
       "grave": {
         "count": 11,
-        "mean": 0.428,
-        "std": 0.44
+        "mean": 0.42,
+        "std": 0.439
       },
       "jaina": {
         "count": 10,
-        "mean": 0.08,
-        "std": 0.436
+        "mean": 0.084,
+        "std": 0.42
       },
       "midori": {
-        "count": 4,
-        "mean": -0.199,
-        "std": 0.46
+        "count": 13,
+        "mean": -0.133,
+        "std": 0.426
       },
       "rook": {
         "count": 16,
-        "mean": -0.161,
-        "std": 0.404
+        "mean": -0.174,
+        "std": 0.405
       },
       "setsuki": {
         "count": 6,
-        "mean": 0.165,
-        "std": 0.458
+        "mean": 0.148,
+        "std": 0.447
       },
       "valerie": {
         "count": 8,
-        "mean": -0.143,
-        "std": 0.44
+        "mean": -0.149,
+        "std": 0.463
       }
     },
     "white": {
       "argagarg": {
         "count": 5,
-        "mean": -0.09,
-        "std": 0.461
+        "mean": -0.085,
+        "std": 0.471
       },
       "degrey": {
         "count": 8,
-        "mean": 0.059,
-        "std": 0.451
+        "mean": 0.057,
+        "std": 0.465
       },
       "geiger": {
-        "count": 17,
-        "mean": -0.146,
-        "std": 0.42
+        "count": 19,
+        "mean": -0.213,
+        "std": 0.407
       },
       "grave": {
         "count": 11,
-        "mean": -0.113,
-        "std": 0.426
+        "mean": -0.127,
+        "std": 0.425
       },
       "jaina": {
         "count": 30,
-        "mean": -0.282,
-        "std": 0.384
+        "mean": -0.289,
+        "std": 0.404
       },
       "rook": {
         "count": 14,
-        "mean": -0.091,
-        "std": 0.435
+        "mean": -0.09,
+        "std": 0.439
       },
       "setsuki": {
         "count": 16,
-        "mean": 0.292,
-        "std": 0.431
+        "mean": 0.276,
+        "std": 0.42
       },
       "valerie": {
-        "count": 9,
-        "mean": 0.107,
-        "std": 0.441
+        "count": 11,
+        "mean": 0.199,
+        "std": 0.443
       }
     }
   },
   "with_gem": {
     "argagarg": {
       "black": {
-        "count": 3,
-        "mean": -0.031,
-        "std": 0.469
+        "count": 4,
+        "mean": -0.092,
+        "std": 0.457
       },
       "green": {
         "count": 4,
-        "mean": 0.175,
-        "std": 0.468
+        "mean": 0.157,
+        "std": 0.469
       },
       "purple": {
         "count": 13,
-        "mean": -0.045,
-        "std": 0.423
+        "mean": -0.035,
+        "std": 0.427
       },
       "red": {
-        "count": 11,
-        "mean": -0.063,
-        "std": 0.425
+        "count": 17,
+        "mean": 0.0,
+        "std": 0.414
       },
       "white": {
         "count": 4,
-        "mean": 0.042,
-        "std": 0.47
+        "mean": 0.053,
+        "std": 0.454
       }
     },
     "degrey": {
       "black": {
         "count": 5,
-        "mean": -0.015,
-        "std": 0.467
+        "mean": -0.01,
+        "std": 0.462
       },
       "blue": {
         "count": 2,
-        "mean": 0.144,
-        "std": 0.505
+        "mean": 0.152,
+        "std": 0.471
       },
       "green": {
         "count": 4,
-        "mean": 0.155,
-        "std": 0.486
+        "mean": 0.153,
+        "std": 0.454
       },
       "purple": {
         "count": 9,
-        "mean": -0.177,
-        "std": 0.441
+        "mean": -0.169,
+        "std": 0.444
       },
       "red": {
         "count": 4,
-        "mean": 0.11,
-        "std": 0.472
+        "mean": 0.111,
+        "std": 0.458
       },
       "white": {
         "count": 13,
-        "mean": -0.229,
-        "std": 0.419
+        "mean": -0.225,
+        "std": 0.426
       }
     },
     "geiger": {
       "black": {
         "count": 3,
-        "mean": -0.22,
-        "std": 0.495
+        "mean": -0.222,
+        "std": 0.484
       },
       "blue": {
         "count": 5,
-        "mean": -0.209,
-        "std": 0.467
+        "mean": -0.211,
+        "std": 0.457
       },
       "purple": {
         "count": 8,
-        "mean": 0.242,
-        "std": 0.454
+        "mean": 0.236,
+        "std": 0.462
       },
       "white": {
-        "count": 6,
-        "mean": 0.2,
-        "std": 0.456
+        "count": 8,
+        "mean": 0.287,
+        "std": 0.458
       }
     },
     "grave": {
       "black": {
         "count": 6,
-        "mean": 0.093,
-        "std": 0.457
+        "mean": 0.091,
+        "std": 0.451
       },
       "blue": {
         "count": 1,
-        "mean": -0.096,
-        "std": 0.499
+        "mean": -0.081,
+        "std": 0.502
       },
       "purple": {
         "count": 16,
-        "mean": -0.255,
-        "std": 0.426
+        "mean": -0.246,
+        "std": 0.417
       },
       "red": {
         "count": 8,
         "mean": -0.119,
-        "std": 0.449
+        "std": 0.458
       },
       "white": {
         "count": 17,
-        "mean": 0.099,
-        "std": 0.418
+        "mean": 0.106,
+        "std": 0.423
       }
     },
     "jaina": {
       "black": {
         "count": 3,
-        "mean": 0.069,
-        "std": 0.469
+        "mean": 0.062,
+        "std": 0.471
       },
       "blue": {
         "count": 3,
-        "mean": -0.109,
-        "std": 0.473
+        "mean": -0.112,
+        "std": 0.489
       },
       "green": {
         "count": 3,
-        "mean": 0.127,
-        "std": 0.495
+        "mean": 0.114,
+        "std": 0.48
       },
       "purple": {
         "count": 32,
-        "mean": 0.122,
-        "std": 0.372
+        "mean": 0.129,
+        "std": 0.381
       },
       "red": {
-        "count": 17,
-        "mean": -0.136,
-        "std": 0.41
+        "count": 20,
+        "mean": -0.145,
+        "std": 0.398
       },
       "white": {
         "count": 18,
-        "mean": 0.333,
-        "std": 0.413
+        "mean": 0.33,
+        "std": 0.403
       }
     },
     "lum": {
       "green": {
         "count": 1,
-        "mean": 0.112,
-        "std": 0.516
+        "mean": 0.095,
+        "std": 0.477
+      },
+      "red": {
+        "count": 1,
+        "mean": 0.09,
+        "std": 0.474
       }
     },
     "midori": {
       "black": {
-        "count": 6,
-        "mean": -0.145,
-        "std": 0.477
+        "count": 8,
+        "mean": -0.238,
+        "std": 0.433
       },
       "green": {
-        "count": 11,
-        "mean": -0.093,
-        "std": 0.443
+        "count": 17,
+        "mean": 0.094,
+        "std": 0.416
       },
       "purple": {
-        "count": 7,
+        "count": 10,
         "mean": 0.201,
-        "std": 0.461
+        "std": 0.44
       },
       "red": {
         "count": 11,
-        "mean": 0.041,
-        "std": 0.443
+        "mean": 0.045,
+        "std": 0.455
       },
       "white": {
         "count": 6,
-        "mean": -0.201,
-        "std": 0.466
+        "mean": -0.217,
+        "std": 0.474
       }
     },
     "rook": {
       "black": {
         "count": 11,
-        "mean": 0.037,
-        "std": 0.449
+        "mean": 0.045,
+        "std": 0.441
       },
       "blue": {
         "count": 5,
-        "mean": 0.153,
-        "std": 0.46
+        "mean": 0.171,
+        "std": 0.453
       },
       "green": {
         "count": 1,
-        "mean": 0.03,
-        "std": 0.497
+        "mean": 0.035,
+        "std": 0.507
       },
       "purple": {
         "count": 15,
-        "mean": 0.077,
-        "std": 0.414
+        "mean": 0.083,
+        "std": 0.418
       },
       "red": {
         "count": 10,
-        "mean": 0.073,
-        "std": 0.44
+        "mean": 0.068,
+        "std": 0.439
       },
       "white": {
         "count": 22,
-        "mean": 0.109,
-        "std": 0.403
+        "mean": 0.102,
+        "std": 0.408
       }
     },
     "setsuki": {
       "black": {
-        "count": 17,
-        "mean": 0.143,
-        "std": 0.434
+        "count": 19,
+        "mean": 0.014,
+        "std": 0.421
       },
       "blue": {
         "count": 6,
-        "mean": -0.147,
-        "std": 0.46
+        "mean": -0.134,
+        "std": 0.456
       },
       "green": {
         "count": 6,
-        "mean": 0.032,
-        "std": 0.469
+        "mean": 0.016,
+        "std": 0.447
       },
       "purple": {
         "count": 7,
-        "mean": -0.026,
-        "std": 0.456
+        "mean": -0.035,
+        "std": 0.447
       },
       "red": {
         "count": 6,
-        "mean": -0.063,
-        "std": 0.454
+        "mean": -0.064,
+        "std": 0.445
       },
       "white": {
         "count": 22,
-        "mean": -0.499,
-        "std": 0.4
+        "mean": -0.489,
+        "std": 0.382
       }
     },
     "valerie": {
       "blue": {
         "count": 3,
-        "mean": 0.08,
-        "std": 0.466
+        "mean": 0.083,
+        "std": 0.492
       },
       "green": {
         "count": 3,
-        "mean": 0.076,
-        "std": 0.479
+        "mean": 0.067,
+        "std": 0.482
       },
       "purple": {
         "count": 19,
-        "mean": -0.102,
-        "std": 0.403
+        "mean": -0.08,
+        "std": 0.402
       },
       "red": {
         "count": 4,
-        "mean": -0.006,
-        "std": 0.462
+        "mean": -0.004,
+        "std": 0.478
       },
       "white": {
-        "count": 2,
-        "mean": -0.1,
-        "std": 0.51
+        "count": 4,
+        "mean": -0.199,
+        "std": 0.463
       }
     }
   }

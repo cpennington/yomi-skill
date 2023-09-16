@@ -3,9 +3,9 @@
     "argagarg": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 3,
-      "glickoR": 1506.626,
-      "glickoRD": 37.858,
+      "gamesPlayed": 9,
+      "glickoR": 1511.871,
+      "glickoRD": 37.491,
       "glickoV": 0.027
     },
     "bbb": {
@@ -27,9 +27,9 @@
     "geiger": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 3,
-      "glickoR": 1503.231,
-      "glickoRD": 38.061,
+      "gamesPlayed": 5,
+      "glickoR": 1499.751,
+      "glickoRD": 37.678,
       "glickoV": 0.027
     },
     "gloria": {
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 31,
-  "glickoR": 1587.567,
-  "glickoRD": 43.294,
+  "gamesPlayed": 39,
+  "glickoR": 1582.027,
+  "glickoRD": 43.964,
   "glickoV": 0.059
 }
