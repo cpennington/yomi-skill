@@ -130,17 +130,20 @@
     <ul class="list-disc pl-10">
         <li>
             Windows: <pre
-                class="inline">%USERPROFILE%\AppData\LocalLow\Sirlin Games\Yomi 2\Player.log</pre>
+                class="inline">%USERPROFILE%\AppData\LocalLow\Sirlin Games\Yomi 2</pre>
         </li>
         <li>
-            Mac: <pre
-                class="inline">~/Library/Logs/Sirlin Games/Yomi 2/Player.log</pre>
+            Mac: <pre class="inline">~/Library/Logs/Sirlin Games/Yomi 2</pre>
         </li>
         <li>
             Linux: <pre
-                class="inline">~/.config/unity3d/Sirlin Games/Yomi 2/Player.log</pre>
+                class="inline">~/.config/unity3d/Sirlin Games/Yomi 2</pre>
         </li>
     </ul>
+    <p>
+        <em>N.B.</em> The directory may appear empty in the directory picker, but
+        you should be able to "Select Folder" to trigger the upload.
+    </p>
     {#if uploading}
         <button
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
