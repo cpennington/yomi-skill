@@ -82,10 +82,10 @@
     "gem__gem_p": "red",
     "gem__with_gem_o": "argagarg-black",
     "gem__with_gem_p": "lum-red",
-    "glicko__prob": 0.586,
-    "glicko__rdo": 43.201,
+    "glicko__prob": 0.595,
+    "glicko__rdo": 44.058,
     "glicko__rdp": 39.194,
-    "glicko__ro": 1558.808,
+    "glicko__ro": 1552.363,
     "glicko__rp": 1620.547,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -106,7 +106,7 @@
     "pc_glicko__vo": 0.027,
     "pc_glicko__vp": 0.027,
     "player": "SirHandsome",
-    "render__match_date": 1694563200000,
+    "render__match_date": 1694574750285,
     "render__public": true,
     "render__win": true
   }

@@ -661,7 +661,7 @@
     "pc_glicko__vo": 0.027,
     "pc_glicko__vp": 0.027,
     "player": "vengefulpickle",
-    "render__match_date": 1694217600000,
+    "render__match_date": 1694230100804,
     "render__public": true,
     "render__win": 0
   },
@@ -711,11 +711,11 @@
     "gem__gem_p": "black",
     "gem__with_gem_o": "lum-red",
     "gem__with_gem_p": "argagarg-black",
-    "glicko__prob": 0.586,
+    "glicko__prob": 0.595,
     "glicko__rdo": 39.194,
-    "glicko__rdp": 43.201,
+    "glicko__rdp": 44.058,
     "glicko__ro": 1620.547,
-    "glicko__rp": 1558.808,
+    "glicko__rp": 1552.363,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
     "matchup__character_o": "lum",
@@ -735,7 +735,7 @@
     "pc_glicko__vo": 0.027,
     "pc_glicko__vp": 0.027,
     "player": "vengefulpickle",
-    "render__match_date": 1694563200000,
+    "render__match_date": 1694574750285,
     "render__public": true,
     "render__win": 0
   },
@@ -772,7 +772,7 @@
     "pc_glicko__vo": 0.027,
     "pc_glicko__vp": 0.027,
     "player": "vengefulpickle",
-    "render__match_date": 1694822400000,
+    "render__match_date": 1694827255313,
     "render__public": true,
     "render__win": 1
   }

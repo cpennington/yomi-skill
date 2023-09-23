@@ -352,6 +352,6 @@ def augment_dataset(games):
         lambda r: f"{r.player_2}-{r.character_2}", axis=1
     ).astype("category")
 
-    games["match_date"] = games.match_date.dt.normalize()
+    # games["match_date"] = games.match_date.dt.normalize()
     games.sort_values("match_date", inplace=True)
     return games
