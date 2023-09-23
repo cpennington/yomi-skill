@@ -124,7 +124,7 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 23,
-      "glickoR": 1468.963,
+      "glickoR": 1468.96,
       "glickoRD": 37.42,
       "glickoV": 0.027
     },
@@ -164,7 +164,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 26,
-  "glickoR": 1474.354,
-  "glickoRD": 45.866,
+  "glickoR": 1487.0,
+  "glickoRD": 45.9,
   "glickoV": 0.059
 }

@@ -44,8 +44,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 5,
-      "glickoR": 1479.124,
-      "glickoRD": 30.042,
+      "glickoR": 1479.12,
+      "glickoRD": 30.04,
       "glickoV": 0.027
     },
     "gwen": {
@@ -84,8 +84,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 4,
-      "glickoR": 1495.886,
-      "glickoRD": 39.763,
+      "glickoR": 1486.86,
+      "glickoRD": 39.76,
       "glickoV": 0.027
     },
     "onimaru": {
@@ -116,8 +116,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 4,
-      "glickoR": 1489.568,
-      "glickoRD": 26.339,
+      "glickoR": 1489.57,
+      "glickoRD": 26.34,
       "glickoV": 0.027
     },
     "setsuki": {
@@ -125,7 +125,7 @@
       "elo_std": null,
       "gamesPlayed": 2,
       "glickoR": 1472.21,
-      "glickoRD": 29.375,
+      "glickoRD": 29.38,
       "glickoV": 0.027
     },
     "troq": {
@@ -164,7 +164,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 15,
-  "glickoR": 1543.82,
-  "glickoRD": 39.887,
+  "glickoR": 1537.0,
+  "glickoRD": 39.88,
   "glickoV": 0.059
 }

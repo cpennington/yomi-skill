@@ -1,7 +1,7 @@
 images
 .ipynb_checkpoints
 fits/
-games/
+/games/
 container/.ipynb_checkpoints
 __pycache__
 .vscode
@@ -11,6 +11,7 @@ build
 src/yomi_skill/models/*
 !src/yomi_skill/models/*.py
 !src/yomi_skill/models/*.stan
+!src/yomi_skill/models/yomi2
 node_modules/
 
 # build output

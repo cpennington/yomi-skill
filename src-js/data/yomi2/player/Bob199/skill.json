@@ -116,16 +116,16 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 16,
-      "glickoR": 1543.535,
-      "glickoRD": 32.976,
+      "glickoR": 1537.32,
+      "glickoRD": 32.98,
       "glickoV": 0.027
     },
     "setsuki": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 9,
-      "glickoR": 1487.923,
-      "glickoRD": 33.158,
+      "glickoR": 1487.92,
+      "glickoRD": 33.16,
       "glickoV": 0.027
     },
     "troq": {
@@ -164,7 +164,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 25,
-  "glickoR": 1568.494,
-  "glickoRD": 38.913,
+  "glickoR": 1560.0,
+  "glickoRD": 38.89,
   "glickoV": 0.058
 }

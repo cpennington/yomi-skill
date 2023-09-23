@@ -140,8 +140,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 2,
-      "glickoR": 1491.436,
-      "glickoRD": 39.248,
+      "glickoR": 1491.44,
+      "glickoRD": 39.25,
       "glickoV": 0.027
     },
     "vendetta": {
@@ -164,7 +164,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 2,
-  "glickoR": 1426.882,
-  "glickoRD": 45.683,
+  "glickoR": 1427.0,
+  "glickoRD": 45.68,
   "glickoV": 0.059
 }

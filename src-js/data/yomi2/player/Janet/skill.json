@@ -60,8 +60,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 28,
-      "glickoR": 1502.033,
-      "glickoRD": 35.013,
+      "glickoR": 1501.92,
+      "glickoRD": 35.01,
       "glickoV": 0.027
     },
     "lum": {
@@ -84,8 +84,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 17,
-      "glickoR": 1480.641,
-      "glickoRD": 38.344,
+      "glickoR": 1472.45,
+      "glickoRD": 38.35,
       "glickoV": 0.027
     },
     "onimaru": {
@@ -164,7 +164,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 48,
-  "glickoR": 1561.549,
-  "glickoRD": 45.784,
+  "glickoR": 1551.0,
+  "glickoRD": 46.0,
   "glickoV": 0.059
 }

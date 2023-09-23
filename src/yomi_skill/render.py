@@ -3,6 +3,7 @@ import os
 import re
 from collections import defaultdict
 from typing import List
+from datetime import datetime
 
 import pandas
 import simplejson
@@ -191,7 +192,7 @@ class YomiRender:
             character: [
                 {
                     "player": player,
-                    "r": round(row.pc_glicko_r, 2),
+                    "r": round(row.pc_glicko_r, 0),
                     "rd": round(row.pc_glicko_rd, 2),
                     "v": round(row.pc_glicko_v, 3),
                 }
@@ -348,13 +349,13 @@ class YomiRender:
                 {
                     **{
                         re.sub(r"_\w", lambda m: m[0][1].upper(), column)
-                        + "Mean": round(float(col_means[column]), 3)
+                        + "Mean": round(float(col_means[column]), 2)
                         for column in col_means.data_vars.keys()
                         if column.endswith("scale")
                     },
                     **{
                         re.sub(r"_\w", lambda m: m[0][1].upper(), column)
-                        + "Std": round(float(col_std[column]), 3)
+                        + "Std": round(float(col_std[column]), 2)
                         for column in col_std.data_vars.keys()
                         if column.endswith("scale")
                     },
@@ -368,6 +369,7 @@ class YomiRender:
                         if self.pc_elo_transformer
                         else {}
                     ),
+                    "renderedAt": datetime.now().isoformat(),
                 },
                 outfile,
                 indent=2,
@@ -437,25 +439,25 @@ class YomiRender:
                                     self.player_character_ratings.loc[
                                         player, character
                                     ].pc_elo,
-                                    3,
+                                    0,
                                 ),
                                 "elo_std": round(
                                     self.player_character_ratings_devs.get(
                                         (player, character), 1060
                                     ),
-                                    3,
+                                    2,
                                 ),
                                 "glickoR": round(
                                     self.player_character_ratings.loc[
                                         player, character
                                     ].pc_glicko_r,
-                                    3,
+                                    2,
                                 ),
                                 "glickoRD": round(
                                     self.player_character_ratings.loc[
                                         player, character
                                     ].pc_glicko_rd,
-                                    3,
+                                    2,
                                 ),
                                 "glickoV": round(
                                     self.player_character_ratings.loc[
@@ -466,15 +468,15 @@ class YomiRender:
                             }
                             for character in self.model.data_.matchup__character_1.dtype.categories.values
                         },
-                        "elo": round(self.player_ratings.loc[player].elo or 1500.0, 3),
-                        "elo_std": round(self.player_ratings_devs.get(player, 1060), 3),
+                        "elo": round(self.player_ratings.loc[player].elo or 1500.0, 0),
+                        "elo_std": round(self.player_ratings_devs.get(player, 1060), 2),
                         "glickoR": round(
                             self.player_ratings.loc[player].glicko_r,
-                            3,
+                            0,
                         ),
                         "glickoRD": round(
                             self.player_ratings.loc[player].glicko_rd,
-                            3,
+                            2,
                         ),
                         "glickoV": round(
                             self.player_ratings.loc[player].glicko_v,
@@ -527,18 +529,18 @@ class YomiRender:
                         {
                             "player": player,
                             "elo": round(
-                                self.player_ratings.loc[player].elo or 1500.0, 3
+                                self.player_ratings.loc[player].elo or 1500.0, 0
                             ),
                             "elo_std": round(
-                                self.player_ratings_devs.get(player, 1060), 3
+                                self.player_ratings_devs.get(player, 1060), 2
                             ),
                             "glickoR": round(
                                 self.player_ratings.loc[player].glicko_r,
-                                3,
+                                0,
                             ),
                             "glickoRD": round(
                                 self.player_ratings.loc[player].glicko_rd,
-                                3,
+                                2,
                             ),
                             "glickoV": round(
                                 self.player_ratings.loc[player].glicko_v,
@@ -647,8 +649,8 @@ class YomiRender:
             )
             if count > 0:
                 matchup_dict[c1][c2] = {
-                    "mean": round(float(mu_means.loc[matchup]), 3),
-                    "std": round(float(mu_std.loc[matchup]), 3),
+                    "mean": round(float(mu_means.loc[matchup]), 2),
+                    "std": round(float(mu_std.loc[matchup]), 2),
                     "count": count,
                 }
                 if c1 != c2:
@@ -698,8 +700,8 @@ class YomiRender:
             )
             if count > 0:
                 gems["with_gem"][c][g] = {
-                    "mean": round(float(with_gem_means.loc[with_gem]), 3),
-                    "std": round(float(with_gem_std.loc[with_gem]), 3),
+                    "mean": round(float(with_gem_means.loc[with_gem]), 2),
+                    "std": round(float(with_gem_std.loc[with_gem]), 2),
                     "count": count,
                 }
 
@@ -719,8 +721,8 @@ class YomiRender:
             )
             if count > 0:
                 gems["against_gem"][g][c] = {
-                    "mean": round(float(against_gem_means.loc[against_gem]), 3),
-                    "std": round(float(against_gem_std.loc[against_gem]), 3),
+                    "mean": round(float(against_gem_means.loc[against_gem]), 2),
+                    "std": round(float(against_gem_std.loc[against_gem]), 2),
                     "count": count,
                 }
 

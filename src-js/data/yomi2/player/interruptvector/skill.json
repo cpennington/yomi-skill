@@ -82,8 +82,8 @@
     },
     "midori": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 1,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 6,
-  "glickoR": 1498.615,
-  "glickoRD": 48.591,
+  "gamesPlayed": 7,
+  "glickoR": 1507.0,
+  "glickoRD": 49.2,
   "glickoV": 0.059
 }

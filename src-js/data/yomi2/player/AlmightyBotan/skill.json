@@ -26,8 +26,8 @@
     },
     "geiger": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 2,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -83,7 +83,7 @@
     "midori": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 11,
+      "gamesPlayed": 8,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 11,
-  "glickoR": 1500.0,
-  "glickoRD": 50.0,
+  "gamesPlayed": 10,
+  "glickoR": 1515.0,
+  "glickoRD": 47.38,
   "glickoV": 0.059
 }

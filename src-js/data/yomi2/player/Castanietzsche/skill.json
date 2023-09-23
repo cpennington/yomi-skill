@@ -124,8 +124,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 3,
-      "glickoR": 1520.788,
-      "glickoRD": 39.574,
+      "glickoR": 1520.79,
+      "glickoRD": 39.57,
       "glickoV": 0.027
     },
     "troq": {
@@ -164,7 +164,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 3,
-  "glickoR": 1617.115,
-  "glickoRD": 39.973,
+  "glickoR": 1617.0,
+  "glickoRD": 39.97,
   "glickoV": 0.059
 }
