@@ -66,9 +66,9 @@ class YomiRender:
 
     @cached_property
     def player_character_ratings_history(self):
-        return self.rating_by_pc.sort_values(["render__match_date"], kind="stable").groupby(
-            ["player", "character"]
-        )
+        return self.rating_by_pc.sort_values(
+            ["render__match_date"], kind="stable"
+        ).groupby(["player", "character"])
 
     @cached_property
     def player_character_ratings_devs(self):
@@ -302,25 +302,33 @@ class YomiRender:
 
     @cached_property
     def player_ratings(self):
-        return self.player_ratings_history.last().fillna(
-            value={
-                **(
-                    {"elo": (self.elo_transformer.initial_value or 1500.0)}
-                    if self.elo_transformer
-                    else {}
-                ),
-                **(
-                    {
-                        "glicko_r": (
-                            self.glicko_transformer.initial_value[0] or 1500.0
-                        ),
-                        "glicko_rd": (self.glicko_transformer.initial_value[1] or 350),
-                        "glicko_v": (self.glicko_transformer.initial_value[2] or 0.06),
-                    }
-                    if self.glicko_transformer
-                    else {}
-                ),
-            }
+        return (
+            self.player_ratings_history.last()
+            .fillna(
+                value={
+                    **(
+                        {"elo": (self.elo_transformer.initial_value or 1500.0)}
+                        if self.elo_transformer
+                        else {}
+                    ),
+                    **(
+                        {
+                            "glicko_r": (
+                                self.glicko_transformer.initial_value[0] or 1500.0
+                            ),
+                            "glicko_rd": (
+                                self.glicko_transformer.initial_value[1] or 350
+                            ),
+                            "glicko_v": (
+                                self.glicko_transformer.initial_value[2] or 0.06
+                            ),
+                        }
+                        if self.glicko_transformer
+                        else {}
+                    ),
+                }
+            )
+            .drop(columns="render__match_date")
         )
 
     @cached_property
@@ -568,7 +576,14 @@ class YomiRender:
         player_ratings_qs = self.player_ratings.dropna().quantile(
             quantiles, numeric_only=True
         )
-        player_ratings_std = self.player_ratings.dropna().std()
+        player_ratings_std = (
+            self.player_ratings[["elo", "glicko_r", "glicko_rd", "glicko_v"]]
+            .dropna()
+            .std()
+        )
+        import pprint
+
+        pprint.pprint(player_ratings_std)
 
         os.makedirs(self.data_root, exist_ok=True)
         with open(f"{self.data_root}/playerSkill.json", "w") as outfile:
@@ -576,51 +591,59 @@ class YomiRender:
                 {
                     "globalSkill": {
                         "elo": {
-                            "qs": player_ratings_qs.elo.to_dict(),
-                            "std": player_ratings_std.elo,
+                            "qs": player_ratings_qs.elo.round(0).to_dict(),
+                            "std": player_ratings_std.round(2).elo,
                         },
                         "glicko": {
                             "r": {
-                                "qs": player_ratings_qs.glicko_r.to_dict(),
-                                "std": player_ratings_std.glicko_r,
+                                "qs": player_ratings_qs.glicko_r.round(0).to_dict(),
+                                "std": player_ratings_std.round(3).glicko_r,
                             },
                             "rd": {
-                                "qs": player_ratings_qs.glicko_rd.to_dict(),
-                                "std": player_ratings_std.glicko_rd,
+                                "qs": player_ratings_qs.glicko_rd.round(2).to_dict(),
+                                "std": player_ratings_std.round(3).glicko_rd,
                             },
                             "v": {
-                                "qs": player_ratings_qs.glicko_v.to_dict(),
-                                "std": player_ratings_std.glicko_v,
+                                "qs": player_ratings_qs.glicko_v.round(2).to_dict(),
+                                "std": player_ratings_std.round(3).glicko_v,
                             },
                         },
                     },
                     "characters": {
                         character: {
                             "elo": {
-                                "qs": character_qs.pc_elo.loc[character].to_dict(),
-                                "std": character_std.pc_elo.loc[character],
+                                "qs": character_qs.pc_elo.loc[character]
+                                .round(0)
+                                .to_dict(),
+                                "std": character_std.pc_elo.round(2).loc[character],
                             },
                             "glicko": {
                                 "top20": self.top_glicko_by_character.get(
                                     character, []
                                 ),
                                 "r": {
-                                    "qs": character_qs.pc_glicko_r.loc[
+                                    "qs": character_qs.pc_glicko_r.loc[character]
+                                    .round(0)
+                                    .to_dict(),
+                                    "std": character_std.pc_glicko_r.round(2).loc[
                                         character
-                                    ].to_dict(),
-                                    "std": character_std.pc_glicko_r.loc[character],
+                                    ],
                                 },
                                 "rd": {
-                                    "qs": character_qs.pc_glicko_rd.loc[
+                                    "qs": character_qs.pc_glicko_rd.loc[character]
+                                    .round(2)
+                                    .to_dict(),
+                                    "std": character_std.pc_glicko_rd.round(3).loc[
                                         character
-                                    ].to_dict(),
-                                    "std": character_std.pc_glicko_rd.loc[character],
+                                    ],
                                 },
                                 "v": {
-                                    "qs": character_qs.pc_glicko_v.loc[
+                                    "qs": character_qs.pc_glicko_v.loc[character]
+                                    .round(2)
+                                    .to_dict(),
+                                    "std": character_std.pc_glicko_v.round(3).loc[
                                         character
-                                    ].to_dict(),
-                                    "std": character_std.pc_glicko_v.loc[character],
+                                    ],
                                 },
                             },
                         }
