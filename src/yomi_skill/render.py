@@ -66,7 +66,7 @@ class YomiRender:
 
     @cached_property
     def player_character_ratings_history(self):
-        return self.rating_by_pc.sort_values(["render__match_date"]).groupby(
+        return self.rating_by_pc.sort_values(["render__match_date"], kind="stable").groupby(
             ["player", "character"]
         )
 
@@ -197,7 +197,7 @@ class YomiRender:
                     "v": round(row.pc_glicko_v, 3),
                 }
                 for (player, _), row in pc_ratings.sort_values(
-                    "pc_glicko_r", ascending=False
+                    "pc_glicko_r", ascending=False, kind="stable"
                 )
                 .head(20)
                 .iterrows()
@@ -282,9 +282,9 @@ class YomiRender:
 
     @cached_property
     def player_ratings_history(self):
-        return self.rating_by_player.sort_values(["render__match_date"]).groupby(
-            "player"
-        )
+        return self.rating_by_player.sort_values(
+            ["render__match_date"], kind="stable"
+        ).groupby("player")
 
     @cached_property
     def player_ratings_devs(self):

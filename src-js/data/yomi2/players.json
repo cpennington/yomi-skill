@@ -3,8 +3,8 @@
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 150,
-    "glickoR": 1797.0,
-    "glickoRD": 42.43,
+    "glickoR": 1842.0,
+    "glickoRD": 43.86,
     "glickoV": 0.059,
     "player": "cpat"
   },
@@ -12,8 +12,8 @@
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 2,
-    "glickoR": 1642.0,
-    "glickoRD": 38.98,
+    "glickoR": 1655.0,
+    "glickoRD": 39.11,
     "glickoV": 0.058,
     "player": "mysticjuicer"
   },
@@ -21,98 +21,98 @@
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 3,
-    "glickoR": 1621.0,
-    "glickoRD": 39.19,
-    "glickoV": 0.059,
-    "player": "SirHandsome"
-  },
-  {
-    "elo": null,
-    "elo_std": null,
-    "gamesPlayed": 3,
-    "glickoR": 1617.0,
-    "glickoRD": 39.97,
+    "glickoR": 1622.0,
+    "glickoRD": 40.05,
     "glickoV": 0.059,
     "player": "Castanietzsche"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 36,
-    "glickoR": 1613.0,
-    "glickoRD": 43.97,
+    "gamesPlayed": 3,
+    "glickoR": 1621.0,
+    "glickoRD": 39.21,
     "glickoV": 0.059,
-    "player": "feathers"
+    "player": "SirHandsome"
   },
   {
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 7,
-    "glickoR": 1601.0,
-    "glickoRD": 43.1,
+    "glickoR": 1604.0,
+    "glickoRD": 43.24,
     "glickoV": 0.059,
     "player": "Zqxx"
   },
   {
     "elo": null,
     "elo_std": null,
+    "gamesPlayed": 39,
+    "glickoR": 1592.0,
+    "glickoRD": 43.89,
+    "glickoV": 0.059,
+    "player": "feathers"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
     "gamesPlayed": 25,
-    "glickoR": 1560.0,
-    "glickoRD": 38.89,
+    "glickoR": 1570.0,
+    "glickoRD": 38.92,
     "glickoV": 0.058,
     "player": "Bob199"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 3,
-    "glickoR": 1558.0,
-    "glickoRD": 40.24,
-    "glickoV": 0.059,
-    "player": "Leontes"
-  },
-  {
-    "elo": null,
-    "elo_std": null,
     "gamesPlayed": 48,
-    "glickoR": 1551.0,
-    "glickoRD": 46.0,
+    "glickoR": 1569.0,
+    "glickoRD": 46.32,
     "glickoV": 0.059,
     "player": "Janet"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 21,
-    "glickoR": 1548.0,
-    "glickoRD": 44.87,
+    "gamesPlayed": 3,
+    "glickoR": 1563.0,
+    "glickoRD": 40.28,
     "glickoV": 0.059,
-    "player": "vengefulpickle"
+    "player": "Leontes"
   },
   {
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 15,
-    "glickoR": 1537.0,
-    "glickoRD": 39.88,
+    "glickoR": 1549.0,
+    "glickoRD": 39.86,
     "glickoV": 0.059,
     "player": "noshots00"
   },
   {
     "elo": null,
     "elo_std": null,
+    "gamesPlayed": 21,
+    "glickoR": 1538.0,
+    "glickoRD": 44.9,
+    "glickoV": 0.059,
+    "player": "vengefulpickle"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
     "gamesPlayed": 2,
-    "glickoR": 1520.0,
-    "glickoRD": 40.55,
+    "glickoR": 1523.0,
+    "glickoRD": 40.64,
     "glickoV": 0.059,
     "player": "scymrian"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 10,
-    "glickoR": 1515.0,
-    "glickoRD": 47.38,
+    "gamesPlayed": 14,
+    "glickoR": 1521.0,
+    "glickoRD": 47.63,
     "glickoV": 0.059,
     "player": "AlmightyBotan"
   },
@@ -120,17 +120,26 @@
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 7,
-    "glickoR": 1507.0,
-    "glickoRD": 49.2,
+    "glickoR": 1506.0,
+    "glickoRD": 49.17,
     "glickoV": 0.059,
     "player": "interruptvector"
   },
   {
     "elo": null,
     "elo_std": null,
+    "gamesPlayed": 6,
+    "glickoR": 1505.0,
+    "glickoRD": 49.88,
+    "glickoV": 0.059,
+    "player": "machineguy"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
     "gamesPlayed": 8,
-    "glickoR": 1506.0,
-    "glickoRD": 48.55,
+    "glickoR": 1505.0,
+    "glickoRD": 48.56,
     "glickoV": 0.059,
     "player": "odstmaster24"
   },
@@ -138,19 +147,10 @@
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 7,
-    "glickoR": 1503.0,
-    "glickoRD": 49.71,
+    "glickoR": 1504.0,
+    "glickoRD": 49.81,
     "glickoV": 0.059,
     "player": "sardek"
-  },
-  {
-    "elo": null,
-    "elo_std": null,
-    "gamesPlayed": 6,
-    "glickoR": 1503.0,
-    "glickoRD": 49.63,
-    "glickoV": 0.059,
-    "player": "machineguy"
   },
   {
     "elo": null,
@@ -191,6 +191,15 @@
   {
     "elo": null,
     "elo_std": null,
+    "gamesPlayed": 5,
+    "glickoR": 1500.0,
+    "glickoRD": 50.0,
+    "glickoV": 0.059,
+    "player": "Omniraptor"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
     "gamesPlayed": 4,
     "glickoR": 1500.0,
     "glickoRD": 50.0,
@@ -205,6 +214,15 @@
     "glickoRD": 50.0,
     "glickoV": 0.059,
     "player": "N1gBlaster"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
+    "gamesPlayed": 7,
+    "glickoR": 1500.0,
+    "glickoRD": 50.0,
+    "glickoV": 0.059,
+    "player": "Time Fish Ludic"
   },
   {
     "elo": null,
@@ -245,15 +263,6 @@
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 5,
-    "glickoR": 1500.0,
-    "glickoRD": 50.0,
-    "glickoV": 0.059,
-    "player": "Omniraptor"
-  },
-  {
-    "elo": null,
-    "elo_std": null,
     "gamesPlayed": 1,
     "glickoR": 1500.0,
     "glickoRD": 50.0,
@@ -265,25 +274,16 @@
     "elo_std": null,
     "gamesPlayed": 11,
     "glickoR": 1495.0,
-    "glickoRD": 46.45,
+    "glickoRD": 46.46,
     "glickoV": 0.059,
     "player": "hobusu"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 15,
-    "glickoR": 1492.0,
-    "glickoRD": 51.16,
-    "glickoV": 0.059,
-    "player": "MollyWantsHugs"
-  },
-  {
-    "elo": null,
-    "elo_std": null,
     "gamesPlayed": 26,
-    "glickoR": 1487.0,
-    "glickoRD": 45.9,
+    "glickoR": 1488.0,
+    "glickoRD": 46.05,
     "glickoV": 0.059,
     "player": "shobbs"
   },
@@ -291,36 +291,45 @@
     "elo": null,
     "elo_std": null,
     "gamesPlayed": 7,
-    "glickoR": 1484.0,
-    "glickoRD": 48.58,
+    "glickoR": 1485.0,
+    "glickoRD": 48.59,
     "glickoV": 0.059,
     "player": "Ludic"
   },
   {
     "elo": null,
     "elo_std": null,
+    "gamesPlayed": 15,
+    "glickoR": 1481.0,
+    "glickoRD": 51.63,
+    "glickoV": 0.059,
+    "player": "MollyWantsHugs"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
     "gamesPlayed": 14,
-    "glickoR": 1480.0,
-    "glickoRD": 45.79,
+    "glickoR": 1458.0,
+    "glickoRD": 45.87,
     "glickoV": 0.059,
     "player": "jjjdragon31"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 6,
-    "glickoR": 1431.0,
-    "glickoRD": 44.94,
+    "gamesPlayed": 2,
+    "glickoR": 1426.0,
+    "glickoRD": 45.67,
     "glickoV": 0.059,
-    "player": "darkness"
+    "player": "Accel"
   },
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 2,
-    "glickoR": 1427.0,
-    "glickoRD": 45.68,
+    "gamesPlayed": 6,
+    "glickoR": 1407.0,
+    "glickoRD": 45.46,
     "glickoV": 0.059,
-    "player": "Accel"
+    "player": "darkness"
   }
 ]

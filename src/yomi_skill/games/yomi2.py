@@ -179,7 +179,7 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
     date_matches = historical_record[match_has_date_only]
     datetime_matches = historical_record[~match_has_date_only].copy()
     datetime_matches["cluster"] = (
-        datetime_matches.match_date.sort_values()
+        datetime_matches.match_date.sort_values(kind="stable")
         .diff()
         .gt(timedelta(minutes=1))
         .cumsum()
@@ -198,7 +198,9 @@ def fetch_historical_record(url=HISTORICAL_GSHEET):
         ]
     ).drop(columns="cluster")
 
-    return pandas.concat([date_matches, datetime_matches]).sort_values("match_date")
+    return pandas.concat([date_matches, datetime_matches]).sort_values(
+        "match_date", kind="stable"
+    )
 
 
 def latest_tournament_games() -> pandas.DataFrame:

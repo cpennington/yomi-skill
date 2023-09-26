@@ -3,7 +3,7 @@
     "argagarg": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 4,
+      "gamesPlayed": 7,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -26,8 +26,8 @@
     },
     "geiger": {
       "elo": null,
-      "elo_std": null,
-      "gamesPlayed": 2,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -82,8 +82,8 @@
     },
     "midori": {
       "elo": null,
-      "elo_std": null,
-      "gamesPlayed": 8,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 14,
-  "glickoR": 1521.0,
-  "glickoRD": 47.63,
+  "gamesPlayed": 7,
+  "glickoR": 1500.0,
+  "glickoRD": 50.0,
   "glickoV": 0.059
 }

@@ -43,6 +43,7 @@ def normalize_players(games: pandas.DataFrame):
 
 def order_by_character(games):
     backwards_mus = games.character_1 > games.character_2
+    games.win = games.win.astype(bool)
     games.loc[backwards_mus] = games[backwards_mus].rename(
         columns={
             "player_1": "player_2",
@@ -51,12 +52,10 @@ def order_by_character(games):
             "character_2": "character_1",
         }
     )
-    games.loc[backwards_mus, ["win"]] = 1 - games[backwards_mus].win
+    games.loc[backwards_mus, ["win"]] = ~games[backwards_mus].win
 
-    mirror_mus_to_flip = list(
-        games[games.character_1 == games.character_2].iloc[::2].index.values
-    )
-    games.iloc[mirror_mus_to_flip] = games.iloc[mirror_mus_to_flip].rename(
+    mirror_mus_to_flip = games[games.character_1 == games.character_2].index[::2]
+    games.loc[mirror_mus_to_flip] = games.loc[mirror_mus_to_flip].rename(
         columns={
             "player_1": "player_2",
             "player_2": "player_1",
@@ -64,9 +63,7 @@ def order_by_character(games):
             "character_2": "character_1",
         }
     )
-    games.iloc[mirror_mus_to_flip, games.columns.get_loc("win")] = (
-        1 - games.iloc[mirror_mus_to_flip].win
-    )
+    games.loc[mirror_mus_to_flip, "win"] = ~games.loc[mirror_mus_to_flip].win
     return games
 
 
@@ -264,7 +261,7 @@ def as_boolean_win_record(historical_record):
     ]
 
     games = games.astype({"win": "int8"})
-    return games.sort_values(["match_date"])
+    return games.sort_values(["match_date"], kind="stable")
 
 
 def latest_tournament_games() -> pandas.DataFrame:
@@ -352,6 +349,4 @@ def augment_dataset(games):
         lambda r: f"{r.player_2}-{r.character_2}", axis=1
     ).astype("category")
 
-    # games["match_date"] = games.match_date.dt.normalize()
-    games.sort_values("match_date", inplace=True)
-    return games
+    return games.sort_values("match_date", kind="stable")
