@@ -27,17 +27,23 @@
         var data = Object.entries(aggregateSkill.characters)
             .filter(([character, _]) => playedCharacters.includes(character))
             .flatMap(([character, skill]) => {
-                return skill.glicko.top20.map((topSkill, rank) => ({
-                    mean: topSkill.r,
-                    dev: 2 * topSkill.rd,
-                    character,
-                    player: topSkill.player,
-                    rank,
-                    type: "top",
-                }));
+                return skill.glicko.top20
+                    .filter(
+                        ({ player: topPlayer }, _) =>
+                            ![player, opponent].includes(topPlayer)
+                    )
+                    .map((topSkill, rank) => ({
+                        mean: topSkill.r,
+                        dev: 2 * topSkill.rd,
+                        character,
+                        player: topSkill.player,
+                        type: "top",
+                    }));
             });
+
         var playerData =
             (playerSkill &&
+                player &&
                 Object.entries(playerSkill.char)
                     .filter(
                         ([character, skill]) =>
@@ -47,27 +53,26 @@
                     .map(([character, skill]) => ({
                         character,
                         player,
-                        mean: skill.glickoR || skill.elo,
+                        mean: (skill.glickoR || skill.elo) as number,
                         dev: 2 * skill.glickoRD || 0,
-                        rank: data.length,
                         type: "player",
                     }))) ||
             [];
 
         var opponentData =
             (opponentSkill &&
+                opponent &&
                 Object.entries(opponentSkill.char)
                     .filter(
-                        ([character, _]) =>
+                        ([character, skill]) =>
                             playedCharacters.includes(character) &&
                             skill.gamesPlayed > 0
                     )
                     .map(([character, skill]) => ({
                         character,
-                        opponent,
-                        mean: skill.glickoR || skill.elo,
+                        player: opponent,
+                        mean: (skill.glickoR || skill.elo) as number,
                         dev: 2 * skill.glickoRD || 0,
-                        rank: data.length + 1,
                         type: "opponent",
                     }))) ||
             [];
@@ -76,6 +81,20 @@
             $schema: "https://vega.github.io/schema/vega-lite/v5.json",
             facet: { field: "character", type: "nominal" },
             columns: 5,
+            transform: [
+                {
+                    // Window Transform
+                    window: [
+                        {
+                            op: "rank",
+                            as: "rank",
+                        },
+                    ],
+                    sort: [{ field: "mean", order: "descending" }],
+                    groupby: ["character"],
+                    frame: [null, null],
+                },
+            ],
             spec: {
                 width: 250,
                 height: 150,
@@ -97,9 +116,14 @@
                     {
                         mark: {
                             type: "point",
-                            tooltip: { content: "data" },
                         },
                         encoding: {
+                            tooltip: [
+                                { field: "player" },
+                                { field: "mean" },
+                                { field: "dev" },
+                                { field: "type" },
+                            ],
                             fill: { field: "type", type: "nominal" },
                             stroke: { field: "type", type: "nominal" },
                             shape: { field: "type", type: "nominal" },
