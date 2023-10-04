@@ -90,7 +90,10 @@
                             as: "rank",
                         },
                     ],
-                    sort: [{ field: "mean", order: "descending" }],
+                    sort: [
+                        { field: "mean", order: "descending" },
+                        { field: "player" },
+                    ],
                     groupby: ["character"],
                     frame: [null, null],
                 },
