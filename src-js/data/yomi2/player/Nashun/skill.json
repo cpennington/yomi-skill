@@ -2,10 +2,10 @@
   "char": {
     "argagarg": {
       "elo": null,
-      "elo_std": null,
-      "gamesPlayed": 21,
-      "glickoR": 1504.22,
-      "glickoRD": 38.53,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
       "glickoV": 0.027
     },
     "bbb": {
@@ -58,10 +58,10 @@
     },
     "jaina": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
-      "glickoR": 1500.0,
-      "glickoRD": 40.0,
+      "elo_std": null,
+      "gamesPlayed": 19,
+      "glickoR": 1480.07,
+      "glickoRD": 29.59,
       "glickoV": 0.027
     },
     "lum": {
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 21,
-  "glickoR": 1531.0,
-  "glickoRD": 46.73,
-  "glickoV": 0.059
+  "gamesPlayed": 19,
+  "glickoR": 1682.0,
+  "glickoRD": 36.43,
+  "glickoV": 0.058
 }

@@ -2,10 +2,10 @@
   "char": {
     "argagarg": {
       "elo": null,
-      "elo_std": null,
-      "gamesPlayed": 21,
-      "glickoR": 1504.22,
-      "glickoRD": 38.53,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
       "glickoV": 0.027
     },
     "bbb": {
@@ -18,16 +18,16 @@
     },
     "degrey": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 2,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
     },
     "geiger": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 2,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 21,
-  "glickoR": 1531.0,
-  "glickoRD": 46.73,
+  "gamesPlayed": 4,
+  "glickoR": 1500.0,
+  "glickoRD": 50.0,
   "glickoV": 0.059
 }

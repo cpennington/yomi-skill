@@ -11,6 +11,15 @@
   {
     "elo": null,
     "elo_std": null,
+    "gamesPlayed": 19,
+    "glickoR": 1682.0,
+    "glickoRD": 36.43,
+    "glickoV": 0.058,
+    "player": "Nashun"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
     "gamesPlayed": 2,
     "glickoR": 1655.0,
     "glickoRD": 39.11,
@@ -97,6 +106,15 @@
     "glickoRD": 44.9,
     "glickoV": 0.059,
     "player": "vengefulpickle"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
+    "gamesPlayed": 21,
+    "glickoR": 1531.0,
+    "glickoRD": 46.73,
+    "glickoV": 0.059,
+    "player": "Time Fish Ludic"
   },
   {
     "elo": null,
@@ -218,11 +236,11 @@
   {
     "elo": null,
     "elo_std": null,
-    "gamesPlayed": 7,
+    "gamesPlayed": 1,
     "glickoR": 1500.0,
     "glickoRD": 50.0,
     "glickoV": 0.059,
-    "player": "Time Fish Ludic"
+    "player": "RinaDerp"
   },
   {
     "elo": null,
@@ -268,6 +286,15 @@
     "glickoRD": 50.0,
     "glickoV": 0.059,
     "player": "noshots000"
+  },
+  {
+    "elo": null,
+    "elo_std": null,
+    "gamesPlayed": 4,
+    "glickoR": 1500.0,
+    "glickoRD": 50.0,
+    "glickoV": 0.059,
+    "player": "Nino"
   },
   {
     "elo": null,
