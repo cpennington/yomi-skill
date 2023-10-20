@@ -19,9 +19,9 @@
     "degrey": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 2,
-      "glickoR": 1500.0,
-      "glickoRD": 40.0,
+      "gamesPlayed": 5,
+      "glickoR": 1491.74,
+      "glickoRD": 39.76,
       "glickoV": 0.027
     },
     "geiger": {
@@ -74,8 +74,8 @@
     },
     "menelker": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 2,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 5,
-  "glickoR": 1500.0,
-  "glickoRD": 50.0,
+  "gamesPlayed": 10,
+  "glickoR": 1501.0,
+  "glickoRD": 51.37,
   "glickoV": 0.059
 }

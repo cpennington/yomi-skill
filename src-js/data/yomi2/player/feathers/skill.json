@@ -74,8 +74,8 @@
     },
     "menelker": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 4,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -115,9 +115,9 @@
     "rook": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 11,
-      "glickoR": 1521.19,
-      "glickoRD": 38.53,
+      "gamesPlayed": 13,
+      "glickoR": 1505.72,
+      "glickoRD": 38.18,
       "glickoV": 0.027
     },
     "setsuki": {
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 39,
-  "glickoR": 1592.0,
-  "glickoRD": 43.89,
+  "gamesPlayed": 45,
+  "glickoR": 1593.0,
+  "glickoRD": 44.07,
   "glickoV": 0.059
 }

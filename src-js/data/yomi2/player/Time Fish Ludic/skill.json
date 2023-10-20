@@ -3,9 +3,9 @@
     "argagarg": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 21,
-      "glickoR": 1504.22,
-      "glickoRD": 38.53,
+      "gamesPlayed": 23,
+      "glickoR": 1496.08,
+      "glickoRD": 38.07,
       "glickoV": 0.027
     },
     "bbb": {
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 21,
-  "glickoR": 1531.0,
-  "glickoRD": 46.73,
+  "gamesPlayed": 23,
+  "glickoR": 1528.0,
+  "glickoRD": 47.31,
   "glickoV": 0.059
 }
