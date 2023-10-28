@@ -74,8 +74,8 @@
     },
     "menelker": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 2,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 15,
-  "glickoR": 1481.0,
-  "glickoRD": 51.63,
+  "gamesPlayed": 17,
+  "glickoR": 1476.0,
+  "glickoRD": 49.92,
   "glickoV": 0.059
 }

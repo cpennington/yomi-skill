@@ -59,9 +59,9 @@
     "jaina": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 23,
-      "glickoR": 1484.4,
-      "glickoRD": 28.08,
+      "gamesPlayed": 25,
+      "glickoR": 1485.6,
+      "glickoRD": 28.1,
       "glickoV": 0.027
     },
     "lum": {
@@ -115,9 +115,9 @@
     "rook": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 4,
-      "glickoR": 1603.28,
-      "glickoRD": 17.87,
+      "gamesPlayed": 6,
+      "glickoR": 1606.03,
+      "glickoRD": 18.38,
       "glickoV": 0.027
     },
     "setsuki": {
@@ -163,8 +163,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 32,
-  "glickoR": 1652.0,
-  "glickoRD": 37.46,
+  "gamesPlayed": 36,
+  "glickoR": 1662.0,
+  "glickoRD": 38.02,
   "glickoV": 0.058
 }
