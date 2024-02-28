@@ -12,11 +12,8 @@ import jax
 print(jax.default_backend())
 print(jax.devices())
 
-import inspect
 import logging
-import tempfile
 
-import arviz
 import click
 import click_log
 from sklearn.model_selection import cross_validate
@@ -81,6 +78,10 @@ def render(min_games, model, warmup, samples):
     pipeline = (
         MODELS[model]
         .pipeline(
+            rating_periods__player__kw_args=dict(field_prefix="player", threshold=1),
+            rating_periods__player_character__kw_args=dict(
+                field_prefix="player_character", threshold=3
+            ),
             transform__glicko__initial_time=hist_games.match_date.min(),
             transform__pc_glicko__initial_time=hist_games.match_date.min(),
             model__min_games=min_games,
@@ -90,8 +91,6 @@ def render(min_games, model, warmup, samples):
             # transform__pc_elo__default_k=1,
             transform__glicko__initial_value=(1500.0, 50, 0.059),
             transform__pc_glicko__initial_value=(1500.0, 40, 0.027),
-            transform__glicko__rating_period="1D",
-            transform__pc_glicko__rating_period="8D",
             # transform__elo__rating_factor=1135.77,  # 200-point rating difference corresponds to 60% win chance
         )
         .fit(hist_games, hist_games.win)
@@ -127,6 +126,10 @@ def render(min_games, model, warmup, samples):
     pipeline = (
         MODELS[model]
         .pipeline(
+            rating_periods__player__kw_args=dict(field_prefix="player", threshold=1),
+            rating_periods__player_character__kw_args=dict(
+                field_prefix="player_character", threshold=3
+            ),
             transform__glicko__initial_time=pandas.concat(
                 [y1_games, y2_games]
             ).match_date.min(),
@@ -140,8 +143,6 @@ def render(min_games, model, warmup, samples):
             # transform__pc_elo__default_k=1,
             transform__glicko__initial_value=(1500.0, 50, 0.059),
             transform__pc_glicko__initial_value=(1500.0, 40, 0.027),
-            transform__glicko__rating_period="1D",
-            transform__pc_glicko__rating_period="8D",
             # transform__elo__rating_factor=1135.77,  # 200-point rating difference corresponds to 60% win chance
             verbose=True,
             prefit_games=y1_games,

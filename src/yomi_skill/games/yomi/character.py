@@ -44,6 +44,8 @@ class Character(Enum):
     Persephone = "persephone"
     Gwen = "gwen"
     Zane = "zane"
+    Bigby = "bigby"
+    River = "river"
 
     def __str__(self):
         return self.name

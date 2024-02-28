@@ -75,14 +75,14 @@ def _transform_min_games(X, min_games=0):
         min_games_player_ = f"< {min_games} games"
 
         result.loc[result.player_1.isin(not_enough_played), "min_games_player_1"] = True
-        result.loc[
-            result.player_1.isin(not_enough_played), "player_1"
-        ] = min_games_player_
+        result.loc[result.player_1.isin(not_enough_played), "player_1"] = (
+            min_games_player_
+        )
 
         result.loc[result.player_2.isin(not_enough_played), "min_games_player_2"] = True
-        result.loc[
-            result.player_2.isin(not_enough_played), "player_2"
-        ] = min_games_player_
+        result.loc[result.player_2.isin(not_enough_played), "player_2"] = (
+            min_games_player_
+        )
 
     logger.info("Ending _transform_min_games")
     return result.astype({"player_1": "category", "player_2": "category"})
@@ -121,8 +121,10 @@ def _transform_gem_effect(X):
     logger.info("Starting _transform_gem_effect")
     characters = X.character_1.dtype.categories.values
     gems = X.gem_1.dtype.categories.values
+    print(characters, gems)
     with_gem_list = [f"{c}-{g}" for c in characters for g in gems]
     against_gem_list = [f"{g}-{c}" for c in characters for g in gems]
+    print(X[["character_1", "gem_1"]])
     df = pandas.DataFrame(
         {
             "with_gem_1": X[["character_1", "gem_1"]]
@@ -159,6 +161,33 @@ def _render(X):
 render_transformer = FunctionTransformer(_render)
 
 
+def _dynamic_period_grouper(X, threshold, field_prefix):
+    current_period = None
+    current_idx = 0
+
+    result = pandas.DataFrame({}, index=X.index)
+
+    for date, games in X.resample("1D", label="right", on="match_date"):
+        if current_period is None:
+            current_period = games
+        else:
+            current_period = pandas.concat([current_period, games])
+
+        player_counts = pandas.concat(
+            [current_period[f"{field_prefix}_1"], current_period[f"{field_prefix}_2"]]
+        ).value_counts()
+        played = player_counts[player_counts > 0]
+        games_played = played.mean()
+        result.loc[games.index, f"period_idx"] = current_idx
+        if games_played > threshold:
+            current_idx += 1
+            current_period = None
+    return result
+
+
+dynamic_period_transformer = FunctionTransformer(_dynamic_period_grouper)
+
+
 class YomiModel(ABC, BaseEstimator, ClassifierMixin):
     model_name: str
     model_hash: str
@@ -186,8 +215,7 @@ class YomiModel(ABC, BaseEstimator, ClassifierMixin):
                 delattr(self, attr)
 
     @abstractclassmethod
-    def pipeline(cls, **kwargs) -> Pipeline:
-        ...
+    def pipeline(cls, **kwargs) -> Pipeline: ...
 
     @abstractmethod
     def fit(self, X: pandas.DataFrame, y, sample_weight=None) -> "YomiModel":

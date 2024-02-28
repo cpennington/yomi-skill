@@ -78,5 +78,13 @@
   {
     "character": "zane",
     "gamesRecorded": 13909
+  },
+  {
+    "character": "bigby",
+    "gamesRecorded": 0
+  },
+  {
+    "character": "river",
+    "gamesRecorded": 0
   }
 ]

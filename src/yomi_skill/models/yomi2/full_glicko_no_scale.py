@@ -6,12 +6,14 @@ from scipy.special import expit, logit
 from skelo.model.glicko2 import Glicko2Estimator
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
 
 from ...model import (
     matchup_transformer,
     min_games_transformer,
     render_transformer,
     gem_effect_transformer,
+    _dynamic_period_grouper,
 )
 from ..pymc_model import PyMCModel
 
@@ -22,31 +24,93 @@ class Y2FullGlickoNoScale(PyMCModel):
 
     @classmethod
     def pipeline(cls, memory=None, verbose=False, prefit_games=None, **params):
+
+        prefit_games["player__period_idx"] = _dynamic_period_grouper(
+            prefit_games, **params["rating_periods__player__kw_args"]
+        ).period_idx
+
+        prefit_games["player_character__period_idx"] = _dynamic_period_grouper(
+            prefit_games,
+            **params["rating_periods__player_character__kw_args"],
+        ).period_idx
         glicko = Glicko2Estimator(
             key1_field="player_1",
             key2_field="player_2",
             timestamp_field="match_date",
+            rating_period_field="player__period_idx",
             **{
                 name.replace("transform__glicko__", ""): value
                 for name, value in params.items()
                 if name.startswith("transform__glicko__")
             },
         )
-        glicko.fit(prefit_games, prefit_games.win)
+        glicko.fit(
+            prefit_games,
+            prefit_games.win,
+        )
 
         pc_glicko = Glicko2Estimator(
             key1_field="player_character_1",
             key2_field="player_character_2",
             timestamp_field="match_date",
+            rating_period_field="player_character__period_idx",
             **{
                 name.replace("transform__pc_glicko__", ""): value
                 for name, value in params.items()
                 if name.startswith("transform__pc_glicko__")
             },
         )
-        pc_glicko.fit(prefit_games, prefit_games.win)
+        pc_glicko.fit(
+            prefit_games,
+            prefit_games.win,
+        )
+
         return Pipeline(
             [
+                (
+                    "rating_periods",
+                    ColumnTransformer(
+                        [
+                            (
+                                "player",
+                                FunctionTransformer(_dynamic_period_grouper),
+                                ["match_date", "player_1", "player_2"],
+                            ),
+                            (
+                                "player_character",
+                                FunctionTransformer(_dynamic_period_grouper),
+                                [
+                                    "match_date",
+                                    "player_character_1",
+                                    "player_character_2",
+                                ],
+                            ),
+                            (
+                                "p",
+                                "passthrough",
+                                [
+                                    "player_1",
+                                    "player_2",
+                                    "match_date",
+                                    "player_character_1",
+                                    "player_character_2",
+                                    "character_1",
+                                    "character_2",
+                                    "gem_1",
+                                    "gem_2",
+                                    "win",
+                                    "public",
+                                ],
+                            ),
+                        ],
+                    ),
+                ),
+                (
+                    "rename",
+                    FunctionTransformer(
+                        lambda X: X.rename(columns=lambda c: c.replace("p__", ""))
+                    ),
+                ),
                 (
                     "transform",
                     ColumnTransformer(
@@ -58,8 +122,14 @@ class Y2FullGlickoNoScale(PyMCModel):
                                     key2_field="player_2",
                                     timestamp_field="match_date",
                                     initial_ratings=glicko.rating_model.ratings,
+                                    rating_period_field="player__period_idx",
                                 ),
-                                ["player_1", "player_2", "match_date"],
+                                [
+                                    "player_1",
+                                    "player_2",
+                                    "match_date",
+                                    "player__period_idx",
+                                ],
                             ),
                             (
                                 "pc_glicko",
@@ -68,11 +138,13 @@ class Y2FullGlickoNoScale(PyMCModel):
                                     key2_field="player_character_2",
                                     timestamp_field="match_date",
                                     initial_ratings=pc_glicko.rating_model.ratings,
+                                    rating_period_field="player_character__period_idx",
                                 ),
                                 [
                                     "player_character_1",
                                     "player_character_2",
                                     "match_date",
+                                    "player_character__period_idx",
                                 ],
                             ),
                             (

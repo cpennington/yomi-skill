@@ -16,6 +16,14 @@
       "glickoRD": 40.0,
       "glickoV": 0.027
     },
+    "bigby": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
+      "glickoV": 0.027
+    },
     "degrey": {
       "elo": null,
       "elo_std": 1060,
@@ -60,8 +68,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 12,
-      "glickoR": 1499.525,
-      "glickoRD": 39.249,
+      "glickoR": 1481.95,
+      "glickoRD": 38.56,
       "glickoV": 0.027
     },
     "lum": {
@@ -92,8 +100,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 5,
-      "glickoR": 1496.375,
-      "glickoRD": 39.503,
+      "glickoR": 1496.15,
+      "glickoRD": 39.51,
       "glickoV": 0.027
     },
     "persephone": {
@@ -112,12 +120,20 @@
       "glickoRD": 40.0,
       "glickoV": 0.027
     },
+    "river": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
+      "glickoV": 0.027
+    },
     "rook": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 16,
-      "glickoR": 1480.958,
-      "glickoRD": 38.818,
+      "glickoR": 1494.78,
+      "glickoRD": 38.64,
       "glickoV": 0.027
     },
     "setsuki": {
@@ -132,15 +148,15 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 8,
-      "glickoR": 1496.463,
-      "glickoRD": 38.549,
+      "glickoR": 1496.01,
+      "glickoRD": 38.82,
       "glickoV": 0.027
     },
     "valerie": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 2,
-      "glickoR": 1495.429,
+      "glickoR": 1495.43,
       "glickoRD": 40.01,
       "glickoV": 0.027
     },
@@ -156,15 +172,15 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 4,
-      "glickoR": 1505.061,
-      "glickoRD": 40.012,
+      "glickoR": 1505.16,
+      "glickoRD": 40.01,
       "glickoV": 0.027
     }
   },
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 51,
-  "glickoR": 1430.933,
-  "glickoRD": 44.105,
+  "glickoR": 1440.0,
+  "glickoRD": 44.11,
   "glickoV": 0.059
 }

@@ -4,14 +4,22 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 19,
-      "glickoR": 1522.117,
-      "glickoRD": 37.77,
+      "glickoR": 1522.71,
+      "glickoRD": 37.79,
       "glickoV": 0.027
     },
     "bbb": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 1,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
+      "glickoV": 0.027
+    },
+    "bigby": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -76,24 +84,24 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 23,
-      "glickoR": 1479.24,
-      "glickoRD": 37.054,
+      "glickoR": 1476.56,
+      "glickoRD": 37.2,
       "glickoV": 0.027
     },
     "midori": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 56,
-      "glickoR": 1523.7,
-      "glickoRD": 32.976,
+      "glickoR": 1532.44,
+      "glickoRD": 34.09,
       "glickoV": 0.027
     },
     "onimaru": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 37,
-      "glickoR": 1537.922,
-      "glickoRD": 34.951,
+      "glickoR": 1540.11,
+      "glickoRD": 35.11,
       "glickoV": 0.027
     },
     "persephone": {
@@ -105,6 +113,14 @@
       "glickoV": 0.027
     },
     "quince": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
+      "glickoV": 0.027
+    },
+    "river": {
       "elo": null,
       "elo_std": 1060,
       "gamesPlayed": 0,
@@ -132,8 +148,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 26,
-      "glickoR": 1517.848,
-      "glickoRD": 36.62,
+      "glickoR": 1518.45,
+      "glickoRD": 36.81,
       "glickoV": 0.027
     },
     "valerie": {
@@ -156,15 +172,15 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 8,
-      "glickoR": 1489.766,
-      "glickoRD": 39.534,
+      "glickoR": 1490.13,
+      "glickoRD": 39.55,
       "glickoV": 0.027
     }
   },
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 182,
-  "glickoR": 1501.377,
-  "glickoRD": 42.991,
+  "glickoR": 1511.0,
+  "glickoRD": 43.0,
   "glickoV": 0.059
 }

@@ -12,6 +12,14 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 22,
+      "glickoR": 1494.55,
+      "glickoRD": 37.48,
+      "glickoV": 0.027
+    },
+    "bigby": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -44,8 +52,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 26,
-      "glickoR": 1501.86,
-      "glickoRD": 36.888,
+      "glickoR": 1502.16,
+      "glickoRD": 36.9,
       "glickoV": 0.027
     },
     "gwen": {
@@ -60,8 +68,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 11,
-      "glickoR": 1491.203,
-      "glickoRD": 39.249,
+      "glickoR": 1487.38,
+      "glickoRD": 38.33,
       "glickoV": 0.027
     },
     "lum": {
@@ -76,16 +84,16 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 40,
-      "glickoR": 1503.802,
-      "glickoRD": 33.295,
+      "glickoR": 1504.18,
+      "glickoRD": 33.92,
       "glickoV": 0.027
     },
     "midori": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 2,
-      "glickoR": 1500.0,
-      "glickoRD": 40.0,
+      "glickoR": 1504.57,
+      "glickoRD": 40.01,
       "glickoV": 0.027
     },
     "onimaru": {
@@ -108,6 +116,14 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 4,
+      "glickoR": 1509.04,
+      "glickoRD": 39.75,
+      "glickoV": 0.027
+    },
+    "river": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -132,8 +148,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 5,
-      "glickoR": 1500.0,
-      "glickoRD": 40.0,
+      "glickoR": 1500.11,
+      "glickoRD": 39.75,
       "glickoV": 0.027
     },
     "valerie": {
@@ -164,7 +180,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 123,
-  "glickoR": 1512.278,
-  "glickoRD": 35.951,
+  "glickoR": 1514.0,
+  "glickoRD": 35.95,
   "glickoV": 0.059
 }

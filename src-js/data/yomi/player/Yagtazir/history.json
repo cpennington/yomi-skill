@@ -26,7 +26,7 @@
     "player": "Yagtazir",
     "render__match_date": 1454716800000,
     "render__public": true,
-    "render__win": 0
+    "render__win": false
   },
   {
     "glicko__prob": 0.5,
@@ -55,7 +55,7 @@
     "player": "Yagtazir",
     "render__match_date": 1454716800000,
     "render__public": true,
-    "render__win": 0
+    "render__win": false
   },
   {
     "glicko__prob": 0.5,
@@ -84,7 +84,7 @@
     "player": "Yagtazir",
     "render__match_date": 1454716800000,
     "render__public": true,
-    "render__win": 0
+    "render__win": false
   },
   {
     "glicko__prob": 0.5,
@@ -113,7 +113,7 @@
     "player": "Yagtazir",
     "render__match_date": 1454716800000,
     "render__public": true,
-    "render__win": 0
+    "render__win": false
   },
   {
     "glicko__prob": 0.5,
@@ -142,7 +142,7 @@
     "player": "Yagtazir",
     "render__match_date": 1454716800000,
     "render__public": true,
-    "render__win": 1
+    "render__win": true
   },
   {
     "glicko__prob": 0.5,
@@ -171,6 +171,6 @@
     "player": "Yagtazir",
     "render__match_date": 1454716800000,
     "render__public": true,
-    "render__win": 1
+    "render__win": true
   }
 ]

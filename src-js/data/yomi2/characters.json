@@ -1,43 +1,43 @@
 [
   {
     "character": "grave",
-    "gamesRecorded": 57
+    "gamesRecorded": 60
   },
   {
     "character": "midori",
-    "gamesRecorded": 68
+    "gamesRecorded": 74
   },
   {
     "character": "rook",
-    "gamesRecorded": 85
+    "gamesRecorded": 94
   },
   {
     "character": "valerie",
-    "gamesRecorded": 39
+    "gamesRecorded": 45
   },
   {
     "character": "lum",
-    "gamesRecorded": 12
+    "gamesRecorded": 13
   },
   {
     "character": "jaina",
-    "gamesRecorded": 111
+    "gamesRecorded": 120
   },
   {
     "character": "setsuki",
-    "gamesRecorded": 77
+    "gamesRecorded": 80
   },
   {
     "character": "degrey",
-    "gamesRecorded": 51
+    "gamesRecorded": 61
   },
   {
     "character": "geiger",
-    "gamesRecorded": 36
+    "gamesRecorded": 39
   },
   {
     "character": "argagarg",
-    "gamesRecorded": 71
+    "gamesRecorded": 77
   },
   {
     "character": "quince",
@@ -49,7 +49,7 @@
   },
   {
     "character": "menelker",
-    "gamesRecorded": 15
+    "gamesRecorded": 16
   },
   {
     "character": "gloria",
@@ -61,11 +61,11 @@
   },
   {
     "character": "onimaru",
-    "gamesRecorded": 0
+    "gamesRecorded": 18
   },
   {
     "character": "troq",
-    "gamesRecorded": 0
+    "gamesRecorded": 31
   },
   {
     "character": "persephone",
@@ -78,5 +78,13 @@
   {
     "character": "zane",
     "gamesRecorded": 0
+  },
+  {
+    "character": "bigby",
+    "gamesRecorded": 8
+  },
+  {
+    "character": "river",
+    "gamesRecorded": 12
   }
 ]

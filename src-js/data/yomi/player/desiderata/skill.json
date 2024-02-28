@@ -16,12 +16,20 @@
       "glickoRD": 40.0,
       "glickoV": 0.027
     },
+    "bigby": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
+      "glickoV": 0.027
+    },
     "degrey": {
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 3,
-      "glickoR": 1501.126,
-      "glickoRD": 39.757,
+      "glickoR": 1501.17,
+      "glickoRD": 39.76,
       "glickoV": 0.027
     },
     "geiger": {
@@ -60,8 +68,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 6,
-      "glickoR": 1510.112,
-      "glickoRD": 39.249,
+      "glickoR": 1510.11,
+      "glickoRD": 39.25,
       "glickoV": 0.027
     },
     "lum": {
@@ -84,8 +92,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 14,
-      "glickoR": 1481.279,
-      "glickoRD": 37.993,
+      "glickoR": 1481.82,
+      "glickoRD": 38.0,
       "glickoV": 0.027
     },
     "onimaru": {
@@ -105,6 +113,14 @@
       "glickoV": 0.027
     },
     "quince": {
+      "elo": null,
+      "elo_std": 1060,
+      "gamesPlayed": 0,
+      "glickoR": 1500.0,
+      "glickoRD": 40.0,
+      "glickoV": 0.027
+    },
+    "river": {
       "elo": null,
       "elo_std": 1060,
       "gamesPlayed": 0,
@@ -140,8 +156,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 13,
-      "glickoR": 1481.216,
-      "glickoRD": 38.364,
+      "glickoR": 1481.65,
+      "glickoRD": 38.37,
       "glickoV": 0.027
     },
     "vendetta": {
@@ -164,7 +180,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 41,
-  "glickoR": 1496.02,
-  "glickoRD": 45.147,
+  "glickoR": 1500.0,
+  "glickoRD": 45.25,
   "glickoV": 0.059
 }

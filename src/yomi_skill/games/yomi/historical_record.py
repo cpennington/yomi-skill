@@ -24,11 +24,12 @@ def normalize_players(games: pandas.DataFrame):
         lambda v: re.sub(r"[^a-z0-9]", "", v.lower())
     )
 
+    all_players.groupby("normalized").player.agg(lambda x: len(x.mode()) or print(x))
     player_map = all_players.groupby("normalized").player.agg(
-        lambda x: pandas.Series.mode(x)[0]
+        lambda x: x.mode().iloc[0]
     )
-
     all_players["standardized"] = all_players.normalized.apply(lambda p: player_map[p])
+
     all_players = all_players.drop_duplicates().set_index(["player"])
 
     games.player_1 = games.player_1.apply(lambda p: all_players.standardized[p])
@@ -315,27 +316,23 @@ def sirlin_db() -> pandas.DataFrame:
         18: Character.Vendetta.value,
         19: Character.Zane.value,
     }
-    return (
-        normalize_players(
-            pandas.DataFrame(
-                {
-                    "player_1": df.p1name,
-                    "player_2": df.p2name,
-                    "character_1": df.p1char.astype("int")
-                    .map(char_map)
-                    .astype(character_category),
-                    "character_2": df.p2char.astype("int")
-                    .map(char_map)
-                    .astype(character_category),
-                    "win": df.result.map(parse_game_results),
-                    "match_date": pandas.to_datetime(df.start_time, utc=True),
-                    "public": False,
-                }
-            )
-        )
-        .dropna()
-        .astype({"win": "int8"})
-    )
+    return normalize_players(
+        pandas.DataFrame(
+            {
+                "player_1": df.p1name,
+                "player_2": df.p2name,
+                "character_1": df.p1char.astype("int")
+                .map(char_map)
+                .astype(character_category),
+                "character_2": df.p2char.astype("int")
+                .map(char_map)
+                .astype(character_category),
+                "win": df.result.map(parse_game_results),
+                "match_date": pandas.to_datetime(df.start_time, utc=True),
+                "public": False,
+            }
+        ).dropna()
+    ).astype({"win": "int8"})
 
 
 def augment_dataset(games):

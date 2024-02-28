@@ -9,8 +9,14 @@ from scipy.special import expit, logit
 from skelo.model.glicko2 import Glicko2Estimator
 from sklearn.compose import ColumnTransformer
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import FunctionTransformer
 
-from ..model import matchup_transformer, min_games_transformer, render_transformer
+from ..model import (
+    matchup_transformer,
+    min_games_transformer,
+    render_transformer,
+    _dynamic_period_grouper,
+)
 from .pymc_model import PyMCModel
 
 
@@ -23,6 +29,48 @@ class FullGlickoNoScale(PyMCModel):
         return Pipeline(
             [
                 (
+                    "rating_periods",
+                    ColumnTransformer(
+                        [
+                            (
+                                "player",
+                                FunctionTransformer(_dynamic_period_grouper),
+                                ["match_date", "player_1", "player_2"],
+                            ),
+                            (
+                                "player_character",
+                                FunctionTransformer(_dynamic_period_grouper),
+                                [
+                                    "match_date",
+                                    "player_character_1",
+                                    "player_character_2",
+                                ],
+                            ),
+                            (
+                                "p",
+                                "passthrough",
+                                [
+                                    "player_1",
+                                    "player_2",
+                                    "match_date",
+                                    "player_character_1",
+                                    "player_character_2",
+                                    "character_1",
+                                    "character_2",
+                                    "win",
+                                    "public",
+                                ],
+                            ),
+                        ],
+                    ),
+                ),
+                (
+                    "rename",
+                    FunctionTransformer(
+                        lambda X: X.rename(columns=lambda c: c.replace("p__", ""))
+                    ),
+                ),
+                (
                     "transform",
                     ColumnTransformer(
                         [
@@ -32,8 +80,14 @@ class FullGlickoNoScale(PyMCModel):
                                     key1_field="player_1",
                                     key2_field="player_2",
                                     timestamp_field="match_date",
+                                    rating_period_field="player__period_idx",
                                 ),
-                                ["player_1", "player_2", "match_date"],
+                                [
+                                    "player_1",
+                                    "player_2",
+                                    "match_date",
+                                    "player__period_idx",
+                                ],
                             ),
                             (
                                 "pc_glicko",
@@ -41,27 +95,39 @@ class FullGlickoNoScale(PyMCModel):
                                     key1_field="player_character_1",
                                     key2_field="player_character_2",
                                     timestamp_field="match_date",
+                                    rating_period_field="player_character__period_idx",
                                 ),
                                 [
                                     "player_character_1",
                                     "player_character_2",
                                     "match_date",
+                                    "player_character__period_idx",
                                 ],
                             ),
                             (
                                 "min_games",
                                 min_games_transformer,
-                                ["player_1", "player_2"],
+                                [
+                                    "player_1",
+                                    "player_2",
+                                ],
                             ),
                             (
                                 "matchup",
                                 matchup_transformer,
-                                ["character_1", "character_2"],
+                                [
+                                    "character_1",
+                                    "character_2",
+                                ],
                             ),
                             (
                                 "render",
                                 render_transformer,
-                                ["match_date", "win", "public"],
+                                [
+                                    "match_date",
+                                    "win",
+                                    "public",
+                                ],
                             ),
                         ],
                         remainder="drop",
@@ -71,7 +137,9 @@ class FullGlickoNoScale(PyMCModel):
             ],
             memory=memory,
             verbose=verbose,
-        ).set_params(**params)
+        ).set_params(
+            **params,
+        )
 
     @cached_property
     def model_(self):

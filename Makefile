@@ -28,3 +28,6 @@ new-matchups:
 		--samples 1000
 
 all-new-matchups: new-matchups
+
+yomi2-matchups:
+	yomi-skill yomi2 render --warmup 500 --samples 5000

@@ -1,9 +1,9 @@
 [
   {
-    "glicko__prob": 0.565,
-    "glicko__rdo": 38.432,
+    "glicko__prob": 0.563,
+    "glicko__rdo": 38.491,
     "glicko__rdp": 50.0,
-    "glicko__ro": 1453.783,
+    "glicko__ro": 1455.441,
     "glicko__rp": 1500.0,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -16,23 +16,23 @@
     "min_games__player_o": "MysticDeadman",
     "min_games__player_p": "Xanathor",
     "opponent": "MysticDeadman",
-    "pc_glicko__prob": 0.499,
-    "pc_glicko__rdo": 38.633,
+    "pc_glicko__prob": 0.506,
+    "pc_glicko__rdo": 38.864,
     "pc_glicko__rdp": 40.0,
-    "pc_glicko__ro": 1500.406,
+    "pc_glicko__ro": 1495.746,
     "pc_glicko__rp": 1500.0,
     "pc_glicko__vo": 0.027,
     "pc_glicko__vp": 0.027,
     "player": "Xanathor",
     "render__match_date": 1444435200000,
     "render__public": true,
-    "render__win": 0
+    "render__win": false
   },
   {
-    "glicko__prob": 0.565,
-    "glicko__rdo": 38.432,
+    "glicko__prob": 0.563,
+    "glicko__rdo": 38.491,
     "glicko__rdp": 50.0,
-    "glicko__ro": 1453.783,
+    "glicko__ro": 1455.441,
     "glicko__rp": 1500.0,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -45,16 +45,16 @@
     "min_games__player_o": "MysticDeadman",
     "min_games__player_p": "Xanathor",
     "opponent": "MysticDeadman",
-    "pc_glicko__prob": 0.493,
+    "pc_glicko__prob": 0.506,
     "pc_glicko__rdo": 40.009,
     "pc_glicko__rdp": 40.0,
-    "pc_glicko__ro": 1505.049,
+    "pc_glicko__ro": 1495.786,
     "pc_glicko__rp": 1500.0,
     "pc_glicko__vo": 0.027,
     "pc_glicko__vp": 0.027,
     "player": "Xanathor",
     "render__match_date": 1444435200000,
     "render__public": true,
-    "render__win": 0
+    "render__win": false
   }
 ]

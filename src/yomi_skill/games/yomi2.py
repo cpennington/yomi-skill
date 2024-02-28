@@ -35,6 +35,8 @@ class Gem(Enum):
     Black = "black"
     Purple = "purple"
     Green = "green"
+    Orange = "orange"
+    Diamond = "diamond"
 
     def __str__(self):
         return self.name
