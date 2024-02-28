@@ -93,7 +93,16 @@
                 field: "gem",
                 type: "nominal",
                 scale: {
-                  domain: ["red", "blue", "green", "purple", "white", "black"],
+                  domain: [
+                    "red",
+                    "blue",
+                    "green",
+                    "purple",
+                    "white",
+                    "black",
+                    "diamond",
+                    "orange",
+                  ],
                   range: [
                     "rgb(255, 0, 0)",
                     "rgb(0, 0, 255)",
@@ -101,6 +110,8 @@
                     "rgb(255, 0, 255)",
                     "rgb(200, 200, 200)",
                     "rgb(0, 0, 0)",
+                    "rgb(154, 184, 188)",
+                    "rgb(255, 181, 10)",
                   ],
                 },
               },
