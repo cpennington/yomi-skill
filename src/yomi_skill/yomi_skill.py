@@ -121,7 +121,9 @@ def render(min_games, model, warmup, samples):
     y1_games = yomi.augment_dataset(y1_games)
 
     y2_games = games_yomi2.latest_tournament_games()
-    y2_games = yomi.augment_dataset(y2_games)
+    y2_games = games_yomi2.augment_dataset(y2_games)
+
+    print(y2_games)
 
     pipeline = (
         MODELS[model]

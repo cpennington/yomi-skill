@@ -18,8 +18,8 @@
     },
     "bigby": {
       "elo": null,
-      "elo_std": 1060,
-      "gamesPlayed": 0,
+      "elo_std": null,
+      "gamesPlayed": 2,
       "glickoR": 1500.0,
       "glickoRD": 40.0,
       "glickoV": 0.027
@@ -68,7 +68,7 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 9,
-      "glickoR": 1484.49,
+      "glickoR": 1484.28,
       "glickoRD": 39.26,
       "glickoV": 0.027
     },
@@ -179,8 +179,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 17,
-  "glickoR": 1476.0,
-  "glickoRD": 49.92,
+  "gamesPlayed": 19,
+  "glickoR": 1487.0,
+  "glickoRD": 49.73,
   "glickoV": 0.059
 }

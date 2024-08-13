@@ -223,3 +223,17 @@ def cached_tournament_games() -> pandas.DataFrame:
     picked = cached[int(pick)]
     name, _ = os.path.splitext(picked)
     return pandas.read_parquet(f"{game_dir}/{picked}")
+
+
+def augment_dataset(games):
+    games = order_by_character(games)
+    games = normalize_players(games)
+    print("Constructing PC category")
+    games["player_character_1"] = games.apply(
+        lambda r: f"{r.player_1}-{r.character_1}", axis=1
+    ).astype("category")
+    games["player_character_2"] = games.apply(
+        lambda r: f"{r.player_2}-{r.character_2}", axis=1
+    ).astype("category")
+
+    return games.sort_values("match_date", kind="stable")

@@ -131,9 +131,9 @@
     "rook": {
       "elo": null,
       "elo_std": null,
-      "gamesPlayed": 6,
-      "glickoR": 1624.81,
-      "glickoRD": 23.27,
+      "gamesPlayed": 15,
+      "glickoR": 1621.97,
+      "glickoRD": 23.45,
       "glickoV": 0.027
     },
     "setsuki": {
@@ -179,8 +179,8 @@
   },
   "elo": null,
   "elo_std": null,
-  "gamesPlayed": 36,
-  "glickoR": 1662.0,
-  "glickoRD": 38.02,
+  "gamesPlayed": 45,
+  "glickoR": 1654.0,
+  "glickoRD": 38.61,
   "glickoV": 0.058
 }

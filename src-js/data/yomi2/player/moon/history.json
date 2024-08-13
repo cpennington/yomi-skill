@@ -82,10 +82,10 @@
     "gem__gem_p": "white",
     "gem__with_gem_o": "geiger-white",
     "gem__with_gem_p": "valerie-white",
-    "glicko__prob": 0.387,
-    "glicko__rdo": 44.438,
+    "glicko__prob": 0.401,
+    "glicko__rdo": 44.28,
     "glicko__rdp": 50.0,
-    "glicko__ro": 1581.352,
+    "glicko__ro": 1570.897,
     "glicko__rp": 1500.0,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -108,7 +108,7 @@
     "player": "moon",
     "render__match_date": 1694802790475,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   },
   {
     "gem__against_gem_o": "white-valerie",
@@ -119,10 +119,10 @@
     "gem__gem_p": "white",
     "gem__with_gem_o": "geiger-white",
     "gem__with_gem_p": "valerie-white",
-    "glicko__prob": 0.387,
-    "glicko__rdo": 44.438,
+    "glicko__prob": 0.401,
+    "glicko__rdo": 44.28,
     "glicko__rdp": 50.0,
-    "glicko__ro": 1581.352,
+    "glicko__ro": 1570.897,
     "glicko__rp": 1500.0,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -145,6 +145,6 @@
     "player": "moon",
     "render__match_date": 1694803434308,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   }
 ]

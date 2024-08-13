@@ -34,7 +34,7 @@
     "player": "darkness",
     "render__match_date": 1692403200000,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   },
   {
     "gem__against_gem_o": "purple-jaina",
@@ -148,18 +148,18 @@
     "render__win": 0
   },
   {
-    "gem__against_gem_o": "red-jaina",
-    "gem__against_gem_p": "green-geiger",
+    "gem__against_gem_o": "green-jaina",
+    "gem__against_gem_p": "red-geiger",
     "gem__character_o": "geiger",
     "gem__character_p": "jaina",
-    "gem__gem_o": "red",
-    "gem__gem_p": "green",
-    "gem__with_gem_o": "geiger-red",
-    "gem__with_gem_p": "jaina-green",
-    "glicko__prob": 0.356,
-    "glicko__rdo": 47.356,
+    "gem__gem_o": "green",
+    "gem__gem_p": "red",
+    "gem__with_gem_o": "geiger-green",
+    "gem__with_gem_p": "jaina-red",
+    "glicko__prob": 0.357,
+    "glicko__rdo": 47.34,
     "glicko__rdp": 45.46,
-    "glicko__ro": 1512.235,
+    "glicko__ro": 1511.682,
     "glicko__rp": 1407.219,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -182,21 +182,21 @@
     "player": "darkness",
     "render__match_date": 1695386263187,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   },
   {
-    "gem__against_gem_o": "red-jaina",
-    "gem__against_gem_p": "green-geiger",
+    "gem__against_gem_o": "green-jaina",
+    "gem__against_gem_p": "red-geiger",
     "gem__character_o": "geiger",
     "gem__character_p": "jaina",
-    "gem__gem_o": "red",
-    "gem__gem_p": "green",
-    "gem__with_gem_o": "geiger-red",
-    "gem__with_gem_p": "jaina-green",
-    "glicko__prob": 0.356,
-    "glicko__rdo": 47.356,
+    "gem__gem_o": "green",
+    "gem__gem_p": "red",
+    "gem__with_gem_o": "geiger-green",
+    "gem__with_gem_p": "jaina-red",
+    "glicko__prob": 0.357,
+    "glicko__rdo": 47.34,
     "glicko__rdp": 45.46,
-    "glicko__ro": 1512.235,
+    "glicko__ro": 1511.682,
     "glicko__rp": 1407.219,
     "glicko__vo": 0.059,
     "glicko__vp": 0.059,
@@ -219,6 +219,6 @@
     "player": "darkness",
     "render__match_date": 1695386967604,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   }
 ]

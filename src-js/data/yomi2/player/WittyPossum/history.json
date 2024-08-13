@@ -1,13 +1,13 @@
 [
   {
-    "gem__against_gem_o": "red-rook",
-    "gem__against_gem_p": "blue-setsuki",
+    "gem__against_gem_o": "blue-rook",
+    "gem__against_gem_p": "red-setsuki",
     "gem__character_o": "setsuki",
     "gem__character_p": "rook",
-    "gem__gem_o": "red",
-    "gem__gem_p": "blue",
-    "gem__with_gem_o": "setsuki-red",
-    "gem__with_gem_p": "rook-blue",
+    "gem__gem_o": "blue",
+    "gem__gem_p": "red",
+    "gem__with_gem_o": "setsuki-blue",
+    "gem__with_gem_p": "rook-red",
     "glicko__prob": 0.139,
     "glicko__rdo": 44.031,
     "glicko__rdp": 50.0,
@@ -34,17 +34,17 @@
     "player": "WittyPossum",
     "render__match_date": 1687651200000,
     "render__public": true,
-    "render__win": true
+    "render__win": 1
   },
   {
-    "gem__against_gem_o": "red-rook",
-    "gem__against_gem_p": "blue-setsuki",
+    "gem__against_gem_o": "blue-rook",
+    "gem__against_gem_p": "red-setsuki",
     "gem__character_o": "setsuki",
     "gem__character_p": "rook",
-    "gem__gem_o": "red",
-    "gem__gem_p": "blue",
-    "gem__with_gem_o": "setsuki-red",
-    "gem__with_gem_p": "rook-blue",
+    "gem__gem_o": "blue",
+    "gem__gem_p": "red",
+    "gem__with_gem_o": "setsuki-blue",
+    "gem__with_gem_p": "rook-red",
     "glicko__prob": 0.139,
     "glicko__rdo": 44.031,
     "glicko__rdp": 50.0,
@@ -71,17 +71,17 @@
     "player": "WittyPossum",
     "render__match_date": 1687651200000,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   },
   {
-    "gem__against_gem_o": "red-rook",
-    "gem__against_gem_p": "blue-setsuki",
+    "gem__against_gem_o": "blue-rook",
+    "gem__against_gem_p": "red-setsuki",
     "gem__character_o": "setsuki",
     "gem__character_p": "rook",
-    "gem__gem_o": "red",
-    "gem__gem_p": "blue",
-    "gem__with_gem_o": "setsuki-red",
-    "gem__with_gem_p": "rook-blue",
+    "gem__gem_o": "blue",
+    "gem__gem_p": "red",
+    "gem__with_gem_o": "setsuki-blue",
+    "gem__with_gem_p": "rook-red",
     "glicko__prob": 0.139,
     "glicko__rdo": 44.031,
     "glicko__rdp": 50.0,
@@ -108,6 +108,6 @@
     "player": "WittyPossum",
     "render__match_date": 1687651200000,
     "render__public": true,
-    "render__win": false
+    "render__win": 0
   }
 ]

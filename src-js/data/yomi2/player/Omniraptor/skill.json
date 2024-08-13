@@ -28,8 +28,8 @@
       "elo": null,
       "elo_std": null,
       "gamesPlayed": 5,
-      "glickoR": 1491.74,
-      "glickoRD": 39.76,
+      "glickoR": 1491.52,
+      "glickoRD": 39.75,
       "glickoV": 0.027
     },
     "geiger": {
@@ -180,7 +180,7 @@
   "elo": null,
   "elo_std": null,
   "gamesPlayed": 10,
-  "glickoR": 1501.0,
-  "glickoRD": 51.37,
+  "glickoR": 1486.0,
+  "glickoRD": 51.36,
   "glickoV": 0.059
 }
