@@ -435,7 +435,7 @@ tomli==2.0.1
     #   pyproject-hooks
 toposort==1.10
     # via yomi-skill (/code/pyproject.toml)
-tornado==6.3.2
+tornado==6.3.3
     # via
     #   ipykernel
     #   jupyter-client
